@@ -33,7 +33,6 @@ async function run(): Promise<void> {
     // 下载 Conda 安装程序
     core.startGroup('下载 Conda 安装程序');
     const soft = './soft/conda';
-    await exec.exec(`mkdir -p ${soft}`);
     const condaInstallerPath = await tc.downloadTool(condaUrl, soft);
     core.info(`Conda 安装程序已下载到: ${condaInstallerPath}`);
     core.endGroup();
