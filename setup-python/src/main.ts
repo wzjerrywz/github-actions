@@ -69,9 +69,14 @@ async function run(): Promise<void> {
     core.info(`Python ${pythonVersion} 已安装到环境 ${envName}`);
     core.endGroup();
 
+ // 激活环境并配置 PATH
+ const envBinDir = path.join(condaDir, 'envs', envName, 'bin');
+ 
+core.addPath(envBinDir);
+core.info(`已将 ${envBinDir} 添加到 PATH`);
+
     core.startGroup(`指定环境 ${envName} `);
-    await exec.exec('conda init bash', []);
-    await exec.exec('source ~/.bashrc', []);
+
     // conda 设置环境
     await exec.exec('conda', [
       'activate',

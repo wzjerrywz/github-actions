@@ -85,20 +85,27 @@ async function run() {
         await exec.exec('conda', [
             'create',
             '-y',
+            '-q',
             '-n',
             envName,
             `python=${pythonVersion}`
         ]);
         core.info(`Python ${pythonVersion} 已安装到环境 ${envName}`);
         core.endGroup();
-        // conda list 查看环境
+        // 激活环境并配置 PATH
+        const envBinDir = path_1.default.join(condaDir, 'envs', envName, 'bin');
+        core.addPath(envBinDir);
+        core.info(`已将 ${envBinDir} 添加到 PATH`);
+        core.startGroup(`指定环境 ${envName} `);
+        // conda 设置环境
         await exec.exec('conda', [
             'activate',
-            'github_actions_env'
+            envName
         ]);
         // 验证 Python 安装
         await exec.exec('python', ['--version']);
         await exec.exec('pip', ['--version']);
+        core.endGroup();
     }
     catch (error) {
         core.setFailed(String(error));
