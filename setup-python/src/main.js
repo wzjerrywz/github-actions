@@ -62,7 +62,8 @@ async function run() {
         const soft = '/soft/conda/Miniconda3.sh';
         const condaInstallerPath = await tc.downloadTool(condaUrl, '.' + soft);
         core.info(`Conda  ${condaVersion} 安装程序已下载到: ${condaInstallerPath}`);
-        await exec.exec('ls', ['-l', '.' + soft]);
+        const nowdir = await (0, cmd_1.getText)('pwd', []);
+        await exec.exec('ls', ['-l', nowdir + soft]);
         core.endGroup();
         // 安装 Conda
         core.startGroup('安装 Conda');
