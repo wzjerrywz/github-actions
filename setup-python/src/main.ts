@@ -70,7 +70,9 @@ async function run(): Promise<void> {
     core.endGroup();
 
     core.startGroup(`指定环境 ${envName} `);
-    // conda list 查看环境
+    await exec.exec('conda init bash', []);
+    await exec.exec('source ~/.bashrc', []);
+    // conda 设置环境
     await exec.exec('conda', [
       'activate',
         envName
