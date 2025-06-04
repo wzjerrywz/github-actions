@@ -61,6 +61,7 @@ async function run(): Promise<void> {
     await exec.exec('conda', [
       'create',
       '-y',
+      '-q',
       '-n', 
       envName,
       `python=${pythonVersion}`
@@ -68,16 +69,17 @@ async function run(): Promise<void> {
     core.info(`Python ${pythonVersion} 已安装到环境 ${envName}`);
     core.endGroup();
 
+    core.startGroup(`指定环境 ${envName} `);
     // conda list 查看环境
     await exec.exec('conda', [
       'activate',
-      'github_actions_env'
+        envName
     ]);
 
     // 验证 Python 安装
     await exec.exec('python', ['--version']);
     await exec.exec('pip', ['--version']);
-    
+    core.endGroup();
 
   } catch (error: any) {
        core.setFailed(String(error)) ;

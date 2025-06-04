@@ -85,17 +85,23 @@ async function run() {
         await exec.exec('conda', [
             'create',
             '-y',
+            '-q',
             '-n',
             envName,
             `python=${pythonVersion}`
         ]);
         core.info(`Python ${pythonVersion} 已安装到环境 ${envName}`);
         core.endGroup();
+        core.startGroup(`指定环境 ${envName} `);
         // conda list 查看环境
         await exec.exec('conda', [
-            'env',
-            'list'
+            'activate',
+            envName
         ]);
+        // 验证 Python 安装
+        await exec.exec('python', ['--version']);
+        await exec.exec('pip', ['--version']);
+        core.endGroup();
     }
     catch (error) {
         core.setFailed(String(error));

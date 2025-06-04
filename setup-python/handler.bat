@@ -9,6 +9,7 @@ rmdir /s /q .\dist\common-utils
 
 rmdir /s /q .\dist\setup-python
 
+echo ""
 
 rmdir /q /s .\dist
 
