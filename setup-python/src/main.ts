@@ -6,10 +6,8 @@ import * as exec from '@actions/exec'
 
 import {  getText } from './common/cmd';
 
-import { exec as exec2, execSync } from 'child_process';
-import { promisify } from 'util';
+import { exec as cpexe } from 'child_process';
 
-const execAsync = promisify(exec2);
 
 import path from 'path'
 import os from 'os'
@@ -27,14 +25,6 @@ function validateInputs(params: Partial<InputParams>): InputParams {
 
 async function initConda(): Promise<void> {
   try {
-    // 1. 执行 conda init 初始化 bash
-    console.log('正在初始化 Conda...');
-    await execAsync('conda init bash');
-    
-    // 2. 激活 Conda 环境
-    console.log('正在激活 Conda 环境...');
-    // 注意：在子进程中无法直接激活环境，需要通过 source 命令
-    // 这里使用 bash -c 执行一系列命令
     const commands = [
       'source ~/.bashrc',        // 加载 bash 配置
       'conda activate github_actions_env',  // 激活环境
@@ -42,7 +32,7 @@ async function initConda(): Promise<void> {
       'python --version'        // 验证 Python 版本
     ].join(' && ');
     
-    const { stdout, stderr } = await execAsync(`bash -c "${commands}"`);
+    const { stdout, stderr } = await cpexe(`bash -l -c "${commands}"`);
     console.log(stdout);
     
     if (stderr) {
