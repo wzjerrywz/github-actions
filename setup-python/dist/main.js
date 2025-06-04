@@ -52,6 +52,39 @@ function validateInputs(params) {
         throw new Error('nodejsVersion input is required');
     return params;
 }
+async function initConda() {
+    try {
+        // 1. 执行 conda init 初始化 bash
+        console.log('正在初始化 Conda...');
+        await execAsync('conda init bash');
+        // 2. 激活 Conda 环境
+        console.log('正在激活 Conda 环境...');
+        // 注意：在子进程中无法直接激活环境，需要通过 source 命令
+        // 这里使用 bash -c 执行一系列命令
+        const commands = [
+            'source ~/.bashrc', // 加载 bash 配置
+            'conda activate github_actions_env', // 激活环境
+            'conda info', // 验证环境
+            'python --version' // 验证 Python 版本
+        ].join(' && ');
+        const { stdout, stderr } = await execAsync(`bash -c "${commands}"`);
+        console.log(stdout);
+        if (stderr) {
+            console.warn('警告:', stderr);
+        }
+        console.log('Conda 环境已成功初始化并激活!');
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.error('初始化 Conda 时出错:', error.message);
+            throw error;
+        }
+        else {
+            console.error('未知错误:', error);
+            throw new Error(`初始化 Conda 失败: ${error}`);
+        }
+    }
+}
 async function run() {
     try {
         // const inputs = validateInputs({
@@ -101,22 +134,7 @@ async function run() {
         core.info(`已将 ${envBinDir} 添加到 PATH`);
         core.startGroup(`指定环境 ${envName} `);
         // conda 设置环境
-        await execAsync('conda init bash');
-        // 2. 激活 Conda 环境
-        console.log('正在激活 Conda 环境...');
-        // 注意：在子进程中无法直接激活环境，需要通过 source 命令
-        // 这里使用 bash -c 执行一系列命令
-        const commands = [
-            'source ~/.bashrc', // 加载 bash 配置
-            'conda activate github_actions_env', // 激活环境
-            'conda info', // 验证环境
-            'python --version' // 验证 Python 版本
-        ].join(' && ');
-        const { stdout, stderr } = await execAsync(`bash -c "${commands}"`);
-        console.log(stdout);
-        if (stderr) {
-            console.warn('警告:', stderr);
-        }
+        await initConda();
         console.log('Conda 环境已成功初始化并激活!');
         await exec.exec('conda', [
             'activate',
