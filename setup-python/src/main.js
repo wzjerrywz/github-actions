@@ -40,6 +40,7 @@ const core = __importStar(require("@actions/core"));
 const tc = __importStar(require("@actions/tool-cache"));
 const exec = __importStar(require("@actions/exec"));
 const cmd_1 = require("./common/cmd");
+const child_process_1 = require("child_process");
 const path_1 = __importDefault(require("path"));
 const os_1 = __importDefault(require("os"));
 function validateInputs(params) {
@@ -48,6 +49,32 @@ function validateInputs(params) {
     if (!params.nodejsVersion)
         throw new Error('nodejsVersion input is required');
     return params;
+}
+async function initConda() {
+    try {
+        const commands = [
+            'source ~/.bashrc', // 加载 bash 配置
+            'conda activate github_actions_env', // 激活环境
+            'conda info', // 验证环境
+            'python --version' // 验证 Python 版本
+        ].join(' && ');
+        const { stdout, stderr } = await (0, child_process_1.exec)(`bash -l -c "${commands}"`);
+        console.log(stdout);
+        if (stderr) {
+            console.warn('警告:', stderr);
+        }
+        console.log('Conda 环境已成功初始化并激活!');
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.error('初始化 Conda 时出错:', error.message);
+            throw error;
+        }
+        else {
+            console.error('未知错误:', error);
+            throw new Error(`初始化 Conda 失败: ${error}`);
+        }
+    }
 }
 async function run() {
     try {
@@ -98,10 +125,9 @@ async function run() {
         core.info(`已将 ${envBinDir} 添加到 PATH`);
         core.startGroup(`指定环境 ${envName} `);
         // conda 设置环境
-        await exec.exec('conda', [
-            'activate',
-            envName
-        ]);
+        // await initConda();
+        console.log('Conda 环境已成功初始化并激活!');
+        await exec.exec(`conda run -n ${envName} python --version`, []);
         // 验证 Python 安装
         await exec.exec('python', ['--version']);
         await exec.exec('pip', ['--version']);

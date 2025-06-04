@@ -110,14 +110,11 @@ core.info(`已将 ${envBinDir} 添加到 PATH`);
 
     // conda 设置环境
   
-    await initConda();
+    // await initConda();
     
     console.log('Conda 环境已成功初始化并激活!');
 
-    await exec.exec('conda', [
-      'activate',
-        envName
-    ]);
+    await exec.exec(`conda run -n ${envName} python --version`, [ ]);
 
     // 验证 Python 安装
     await exec.exec('python', ['--version']);
