@@ -2,8 +2,11 @@
 name: 'setup nodejs action'
 description: 'nodejs'
 inputs:
-  hello-world:
-    description: 'Text input example'
+  nvm-version:
+    description: 'nvm 版本'
+    required: true
+  nodejs-version:
+    description: 'nodejs 版本'
     required: true
 outputs:
   report:

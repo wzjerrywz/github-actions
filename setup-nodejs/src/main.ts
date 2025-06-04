@@ -8,34 +8,41 @@ import os from 'os'
 
 
 type InputParams = {
-  text: string
+  nvmVersion: string,
+  nodejsVersion: string,
 }
 
 function validateInputs(params: Partial<InputParams>): InputParams {
-  if (!params.text) throw new Error('Text input is required')
+  if (!params.nvmVersion) throw new Error('nvmVersion input is required') ;
+  if (!params.nodejsVersion) throw new Error('nodejsVersion input is required') ;
   return params as InputParams
 }
 
 async function run(): Promise<void> {
   try {
 
+    const inputs = validateInputs({
+      nvmVersion: core.getInput('nvm-version', { required: true }),
+      nodejsVersion: core.getInput('nodejs-version', { required: true }),
+    })
+
     const nvmDir = path.join(os.homedir(), '.nvm');
     core.exportVariable('NVM_DIR', nvmDir);
 
-    const nvm = 'curl -o install.sh https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh' ;
+    const nvm = `curl -o install.sh https://raw.githubusercontent.com/nvm-sh/nvm/v${inputs.nvmVersion}/install.sh` ;
     await exec.exec(nvm, []);
     await exec.exec('bash', ['install.sh']);
 
     // 加载 NVM 环境
     await exec.exec('bash', [
       '-c',
-      `. ${nvmDir}/nvm.sh && nvm install 18 && nvm use 18 `
+      `. ${nvmDir}/nvm.sh && nvm install ${inputs.nodejsVersion} && nvm use ${inputs.nodejsVersion} `
     ]);
     
     // 获取 Node.js 路径并添加到 PATH
     const nodePath = await exec.getExecOutput('bash', [
       '-c',
-      `. ${nvmDir}/nvm.sh && dirname $( nvm which 18 ) `
+      `. ${nvmDir}/nvm.sh && dirname $( nvm which ${inputs.nodejsVersion} ) `
     ], {
       silent: true
     });
@@ -74,16 +81,14 @@ async function run(): Promise<void> {
 
     // await exec.exec('npm', ['i', 'npm@latest'])
 
-    const inputs = validateInputs({
-      text: core.getInput('hello-world')
-    })
+  
 
     core.info(`Processing with: ${JSON.stringify(inputs)}`)
     
     const result = {
       original: inputs,
       processedAt: new Date().toISOString(),
-      message: `Received ${inputs.text} with 1 selection`
+      message: `Received ${inputs.nodejsVersion} with 1 selection`
     }
 
     core.setOutput('report', JSON.stringify(result))
@@ -91,7 +96,7 @@ async function run(): Promise<void> {
       .addHeading('Action Results')
       .addTable([
         ['Field', 'Value'],
-        ['Text', inputs.text]
+        ['nodejsVersion', inputs.nodejsVersion]
       ])
       .write()
   } catch (error: any) {
