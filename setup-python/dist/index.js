@@ -28234,9 +28234,15 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(4231));
 const tc = __importStar(__nccwpck_require__(8503));
+const exec = __importStar(__nccwpck_require__(5415));
+const path_1 = __importDefault(__nccwpck_require__(6928));
+const os_1 = __importDefault(__nccwpck_require__(857));
 function validateInputs(params) {
     if (!params.nvmVersion)
         throw new Error('nvmVersion input is required');
@@ -28256,8 +28262,19 @@ async function run() {
         core.startGroup('下载 Conda 安装程序');
         const soft = './soft/conda';
         const condaInstallerPath = await tc.downloadTool(condaUrl, soft);
-        core.info(`Conda 安装程序已下载到: ${condaInstallerPath}`);
+        core.info(`Conda  ${condaVersion} 安装程序已下载到: ${condaInstallerPath}`);
         core.endGroup();
+        // 安装 Conda
+        core.startGroup('安装 Conda');
+        const condaDir = path_1.default.join(os_1.default.homedir(), 'miniconda3');
+        await exec.exec('bash', [
+            condaInstallerPath,
+            '-b',
+            '-p',
+            condaDir
+        ]);
+        // 验证 Conda 安装
+        await exec.exec('conda', ['--version']);
     }
     catch (error) {
         core.setFailed(String(error));

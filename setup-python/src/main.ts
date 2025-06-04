@@ -34,9 +34,20 @@ async function run(): Promise<void> {
     core.startGroup('下载 Conda 安装程序');
     const soft = './soft/conda';
     const condaInstallerPath = await tc.downloadTool(condaUrl, soft);
-    core.info(`Conda 安装程序已下载到: ${condaInstallerPath}`);
+    core.info(`Conda  ${condaVersion} 安装程序已下载到: ${condaInstallerPath}`);
     core.endGroup();
 
+    // 安装 Conda
+    core.startGroup('安装 Conda');
+    const condaDir = path.join(os.homedir(), 'miniconda3');
+    await exec.exec('bash', [
+      condaInstallerPath,
+      '-b',
+      '-p', 
+      condaDir
+    ]);
+   // 验证 Conda 安装
+   await exec.exec('conda', ['--version']);
    
   } catch (error: any) {
        core.setFailed(String(error)) ;
