@@ -53,6 +53,27 @@ async function run(): Promise<void> {
    // 验证 Conda 安装
    await exec.exec('conda', ['--version']);
    
+
+   const pythonVersion = '3.9.18' ;
+ // 创建环境并安装指定版本的 Python
+    core.startGroup(`创建 Conda 环境并安装 Python ${pythonVersion}`);
+    const envName = 'github_actions_env';
+    await exec.exec('conda', [
+      'create',
+      '-y',
+      '-n', 
+      envName,
+      `python=${pythonVersion}`
+    ]);
+    core.info(`Python ${pythonVersion} 已安装到环境 ${envName}`);
+    core.endGroup();
+
+    // conda list 查看环境
+    await exec.exec('conda', [
+      'env',
+      'list'
+    ]);
+
   } catch (error: any) {
        core.setFailed(String(error)) ;
        throw new Error(error);
