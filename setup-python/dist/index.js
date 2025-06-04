@@ -28196,6 +28196,60 @@ module.exports = {
 
 /***/ }),
 
+/***/ 6444:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getText = getText;
+exports.capture = capture;
+const exec_1 = __nccwpck_require__(5415);
+async function getText(command, args = []) {
+    try {
+        const result = await (0, exec_1.getExecOutput)(command, args, {
+            silent: true,
+            ignoreReturnCode: true
+        });
+        if (result.exitCode !== 0) {
+            throw new Error(`命令执行失败，错误码: ${result.exitCode}, 错误信息: ${result.stderr.trim()}`);
+        }
+        return result.stdout.trim();
+    }
+    catch (error) {
+        console.error(`获取命令输出时出错:`, error);
+        throw error;
+    }
+}
+// 模拟 capture 功能
+async function capture(command, args) {
+    try {
+        let output = '';
+        const options = {
+            // 禁止自动打印输出到 GitHub Actions 日志
+            silent: false,
+            listeners: {
+                stdout: (data) => {
+                    output += data.toString();
+                }
+            }
+        };
+        const exitCode = await (0, exec_1.exec)(command, args, options);
+        if (exitCode !== 0) {
+            throw new Error(`Command failed with exit code ${exitCode}`);
+        }
+        return output.trim();
+    }
+    catch (error) {
+        console.error(`Error executing command: ${error.message}`);
+        args.unshift(command);
+        throw new Error(`执行命令异常！ \n 命令： \n  ${args.join(' ')} `); // 重新抛出错误，以便在测试中捕获
+    }
+}
+
+
+/***/ }),
+
 /***/ 4033:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -28241,6 +28295,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(4231));
 const tc = __importStar(__nccwpck_require__(8503));
 const exec = __importStar(__nccwpck_require__(5415));
+const cmd_1 = __nccwpck_require__(6444);
 const path_1 = __importDefault(__nccwpck_require__(6928));
 const os_1 = __importDefault(__nccwpck_require__(857));
 function validateInputs(params) {
@@ -28259,16 +28314,18 @@ async function run() {
         const condaVersion = 'py39_25.3.1-1';
         const condaUrl = `https://repo.anaconda.com/miniconda/Miniconda3-${condaVersion}-Linux-x86_64.sh`;
         // 下载 Conda 安装程序
-        core.startGroup('下载 Conda 安装程序');
+        core.startGroup('下载 Conda 安装程序 , 版本: ${condaVersion}');
         const soft = './soft/conda';
+        await exec.exec('ls', ['-l', soft]);
         const condaInstallerPath = await tc.downloadTool(condaUrl, soft);
         core.info(`Conda  ${condaVersion} 安装程序已下载到: ${condaInstallerPath}`);
         core.endGroup();
         // 安装 Conda
         core.startGroup('安装 Conda');
+        const down = (0, cmd_1.getText)('pwd', []) + '/soft/conda';
         const condaDir = path_1.default.join(os_1.default.homedir(), 'miniconda3');
         await exec.exec('bash', [
-            condaInstallerPath,
+            down,
             '-b',
             '-p',
             condaDir
