@@ -59,7 +59,7 @@ async function run() {
         const condaUrl = `https://repo.anaconda.com/miniconda/Miniconda3-${condaVersion}-Linux-x86_64.sh`;
         // 下载 Conda 安装程序
         core.startGroup('下载 Conda 安装程序 ,  版本: ${condaVersion}');
-        const soft = 'soft/conda';
+        const soft = 'soft/conda.sh';
         const condaInstallerPath = await tc.downloadTool(condaUrl, './' + soft);
         core.info(`Conda  ${condaVersion} 安装程序已下载到 :   ${condaInstallerPath}`);
         const nowdir = await (0, cmd_1.getText)('pwd', []);
@@ -78,6 +78,27 @@ async function run() {
         ]);
         // 验证 Conda 安装
         await exec.exec('conda', ['--version']);
+        const pythonVersion = '3.9.18';
+        // 创建环境并安装指定版本的 Python
+        core.startGroup(`创建 Conda 环境并安装 Python ${pythonVersion}`);
+        const envName = 'github_actions_env';
+        await exec.exec('conda', [
+            'create',
+            '-y',
+            '-n',
+            envName,
+            `python=${pythonVersion}`
+        ]);
+        core.info(`Python ${pythonVersion} 已安装到环境 ${envName}`);
+        core.endGroup();
+        // conda list 查看环境
+        await exec.exec('conda', [
+            'activate',
+            'github_actions_env'
+        ]);
+        // 验证 Python 安装
+        await exec.exec('python', ['--version']);
+        await exec.exec('pip', ['--version']);
     }
     catch (error) {
         core.setFailed(String(error));

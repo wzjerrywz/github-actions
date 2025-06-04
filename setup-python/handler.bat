@@ -1,8 +1,3 @@
-rmdir /q /s .\dist
-
-tsc --build
-
-ncc build src/main.ts -o dist
 
 md .\dist\common
 
@@ -13,6 +8,13 @@ copy .\dist\setup-python\src\main.js .\dist\
 rmdir /s /q .\dist\common-utils
 
 rmdir /s /q .\dist\setup-python
+
+
+rmdir /q /s .\dist
+
+tsc --build
+
+ncc build src/main.ts -o dist
 
 git add .
 

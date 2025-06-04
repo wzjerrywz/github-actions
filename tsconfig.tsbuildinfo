@@ -1,1 +1,1 @@
-{"root":["./build-npm/src/cmd.ts","./build-npm/src/main.ts","./common-utils/src/cmd.ts","./setup-nodejs/src/cmd.ts","./setup-nodejs/src/main.ts","./setup-python/src/main.ts"],"errors":true,"version":"5.8.3"}
+{"root":["./build-npm/src/cmd.ts","./build-npm/src/main.ts","./setup-nodejs/src/cmd.ts","./setup-nodejs/src/main.ts","./setup-python/src/main.ts","./setup-python/src/common/cmd.ts"],"version":"5.8.3"}

@@ -70,9 +70,14 @@ async function run(): Promise<void> {
 
     // conda list 查看环境
     await exec.exec('conda', [
-      'env',
-      'list'
+      'activate',
+      'github_actions_env'
     ]);
+
+    // 验证 Python 安装
+    await exec.exec('python', ['--version']);
+    await exec.exec('pip', ['--version']);
+    
 
   } catch (error: any) {
        core.setFailed(String(error)) ;
