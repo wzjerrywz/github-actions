@@ -1,0 +1,22 @@
+{
+  "name": "github-actions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "pkg": "del /f /q dist\\* && tsc && ncc build src/main.ts -o dist && git add . && git commit -m \"build\" && git push -u origin main ",
+    "test": "jest",
+    "build": "del /f /q dist\\* && tsc --build && ncc build src/main.ts -o dist  "
+
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/exec": "^1.1.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.15.29"
+  }
+}

@@ -1,0 +1,13 @@
+
+name: 'setup nodejs action'
+description: 'nodejs'
+inputs:
+  hello-world:
+    description: 'Text input example'
+    required: true
+outputs:
+  report:
+    description: 'Generated output'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
