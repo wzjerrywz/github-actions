@@ -99,6 +99,9 @@ async function run() {
         core.startGroup(`指定环境 ${envName} `);
         // conda 设置环境
         await exec.exec('conda', [
+            'init'
+        ]);
+        await exec.exec('conda', [
             'activate',
             envName
         ]);

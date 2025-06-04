@@ -79,6 +79,9 @@ core.info(`已将 ${envBinDir} 添加到 PATH`);
 
     // conda 设置环境
     await exec.exec('conda', [
+      'init'
+    ]);
+    await exec.exec('conda', [
       'activate',
         envName
     ]);
