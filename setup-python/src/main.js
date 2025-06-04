@@ -58,10 +58,10 @@ async function run() {
         const condaVersion = 'py39_25.3.1-1';
         const condaUrl = `https://repo.anaconda.com/miniconda/Miniconda3-${condaVersion}-Linux-x86_64.sh`;
         // 下载 Conda 安装程序
-        core.startGroup('下载 Conda 安装程序 , 版本: ${condaVersion}');
+        core.startGroup('下载 Conda 安装程序 ,  版本: ${condaVersion}');
         const soft = 'soft/conda/Miniconda3.sh';
         const condaInstallerPath = await tc.downloadTool(condaUrl, './' + soft);
-        core.info(`Conda  ${condaVersion} 安装程序已下载到: ${condaInstallerPath}`);
+        core.info(`Conda  ${condaVersion} 安装程序已下载到 :   ${condaInstallerPath}`);
         const nowdir = await (0, cmd_1.getText)('pwd', []);
         core.info(`当前目录 nowdir : ${nowdir}`);
         await exec.exec('ls', ['-l', nowdir + '/' + soft]);
