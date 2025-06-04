@@ -6,6 +6,11 @@ import * as exec from '@actions/exec'
 
 import {  getText } from './common/cmd';
 
+import { exec as exec2, execSync } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec2);
+
 import path from 'path'
 import os from 'os'
 
@@ -78,9 +83,29 @@ core.info(`已将 ${envBinDir} 添加到 PATH`);
     core.startGroup(`指定环境 ${envName} `);
 
     // conda 设置环境
-    await exec.exec('conda', [
-      'init'
-    ]);
+  
+    await execAsync('conda init bash');
+    
+    // 2. 激活 Conda 环境
+    console.log('正在激活 Conda 环境...');
+    // 注意：在子进程中无法直接激活环境，需要通过 source 命令
+    // 这里使用 bash -c 执行一系列命令
+    const commands = [
+      'source ~/.bashrc',        // 加载 bash 配置
+      'conda activate github_actions_env',  // 激活环境
+      'conda info',             // 验证环境
+      'python --version'        // 验证 Python 版本
+    ].join(' && ');
+    
+    const { stdout, stderr } = await execAsync(`bash -c "${commands}"`);
+    console.log(stdout);
+    
+    if (stderr) {
+      console.warn('警告:', stderr);
+    }
+    
+    console.log('Conda 环境已成功初始化并激活!');
+
     await exec.exec('conda', [
       'activate',
         envName

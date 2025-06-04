@@ -28296,6 +28296,9 @@ const core = __importStar(__nccwpck_require__(4231));
 const tc = __importStar(__nccwpck_require__(8503));
 const exec = __importStar(__nccwpck_require__(5415));
 const cmd_1 = __nccwpck_require__(2222);
+const child_process_1 = __nccwpck_require__(5317);
+const util_1 = __nccwpck_require__(9023);
+const execAsync = (0, util_1.promisify)(child_process_1.exec);
 const path_1 = __importDefault(__nccwpck_require__(6928));
 const os_1 = __importDefault(__nccwpck_require__(857));
 function validateInputs(params) {
@@ -28354,9 +28357,23 @@ async function run() {
         core.info(`已将 ${envBinDir} 添加到 PATH`);
         core.startGroup(`指定环境 ${envName} `);
         // conda 设置环境
-        await exec.exec('conda', [
-            'init'
-        ]);
+        await execAsync('conda init bash');
+        // 2. 激活 Conda 环境
+        console.log('正在激活 Conda 环境...');
+        // 注意：在子进程中无法直接激活环境，需要通过 source 命令
+        // 这里使用 bash -c 执行一系列命令
+        const commands = [
+            'source ~/.bashrc', // 加载 bash 配置
+            'conda activate github_actions_env', // 激活环境
+            'conda info', // 验证环境
+            'python --version' // 验证 Python 版本
+        ].join(' && ');
+        const { stdout, stderr } = await execAsync(`bash -c "${commands}"`);
+        console.log(stdout);
+        if (stderr) {
+            console.warn('警告:', stderr);
+        }
+        console.log('Conda 环境已成功初始化并激活!');
         await exec.exec('conda', [
             'activate',
             envName
