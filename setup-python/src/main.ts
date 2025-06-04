@@ -42,7 +42,7 @@ async function run(): Promise<void> {
 
     // 安装 Conda
     core.startGroup('安装 Conda');
-    const down = await getText('pwd', []) + soft;
+    const down = await getText('pwd', []) + '/' + soft;
     const condaDir = path.join(os.homedir(), 'miniconda3');
     await exec.exec('bash', [
       down,

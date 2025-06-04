@@ -28196,7 +28196,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 6574:
+/***/ 2222:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -28295,7 +28295,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(4231));
 const tc = __importStar(__nccwpck_require__(8503));
 const exec = __importStar(__nccwpck_require__(5415));
-const cmd_1 = __nccwpck_require__(6574);
+const cmd_1 = __nccwpck_require__(2222);
 const path_1 = __importDefault(__nccwpck_require__(6928));
 const os_1 = __importDefault(__nccwpck_require__(857));
 function validateInputs(params) {
@@ -28324,7 +28324,7 @@ async function run() {
         core.endGroup();
         // 安装 Conda
         core.startGroup('安装 Conda');
-        const down = await (0, cmd_1.getText)('pwd', []) + soft;
+        const down = await (0, cmd_1.getText)('pwd', []) + '/' + soft;
         const condaDir = path_1.default.join(os_1.default.homedir(), 'miniconda3');
         await exec.exec('bash', [
             down,
