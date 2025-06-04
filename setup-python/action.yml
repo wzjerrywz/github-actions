@@ -1,13 +1,13 @@
 
-name: 'setup nodejs action'
-description: 'nodejs'
+name: 'setup python action'
+description: 'python'
 inputs:
-  nvm-version:
-    description: 'nvm 版本'
+  conda-version:
+    description: 'conda 版本'
     required: true
-  nodejs-version:
-    description: 'nodejs 版本'
-    required: true
+  python-version:
+    description: 'python 版本'
+    required: false
 outputs:
   report:
     description: 'Generated output'
