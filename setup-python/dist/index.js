@@ -28196,7 +28196,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 6444:
+/***/ 6574:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -28295,7 +28295,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(4231));
 const tc = __importStar(__nccwpck_require__(8503));
 const exec = __importStar(__nccwpck_require__(5415));
-const cmd_1 = __nccwpck_require__(6444);
+const cmd_1 = __nccwpck_require__(6574);
 const path_1 = __importDefault(__nccwpck_require__(6928));
 const os_1 = __importDefault(__nccwpck_require__(857));
 function validateInputs(params) {
@@ -28314,11 +28314,13 @@ async function run() {
         const condaVersion = 'py39_25.3.1-1';
         const condaUrl = `https://repo.anaconda.com/miniconda/Miniconda3-${condaVersion}-Linux-x86_64.sh`;
         // 下载 Conda 安装程序
-        core.startGroup('下载 Conda 安装程序 , 版本: ${condaVersion}');
-        const soft = '/soft/conda/Miniconda3.sh';
-        const condaInstallerPath = await tc.downloadTool(condaUrl, '.' + soft);
-        core.info(`Conda  ${condaVersion} 安装程序已下载到: ${condaInstallerPath}`);
-        await exec.exec('ls', ['-l', soft]);
+        core.startGroup('下载 Conda 安装程序 ,  版本: ${condaVersion}');
+        const soft = 'soft/conda';
+        const condaInstallerPath = await tc.downloadTool(condaUrl, './' + soft);
+        core.info(`Conda  ${condaVersion} 安装程序已下载到 :   ${condaInstallerPath}`);
+        const nowdir = await (0, cmd_1.getText)('pwd', []);
+        core.info(`当前目录 nowdir : ${nowdir}`);
+        await exec.exec('ls', ['-l', nowdir + '/' + soft]);
         core.endGroup();
         // 安装 Conda
         core.startGroup('安装 Conda');

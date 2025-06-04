@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const tc = __importStar(require("@actions/tool-cache"));
 const exec = __importStar(require("@actions/exec"));
-const cmd_1 = require("@common/cmd");
+const cmd_1 = require("./common/cmd");
 const path_1 = __importDefault(require("path"));
 const os_1 = __importDefault(require("os"));
 function validateInputs(params) {
@@ -58,11 +58,13 @@ async function run() {
         const condaVersion = 'py39_25.3.1-1';
         const condaUrl = `https://repo.anaconda.com/miniconda/Miniconda3-${condaVersion}-Linux-x86_64.sh`;
         // 下载 Conda 安装程序
-        core.startGroup('下载 Conda 安装程序 , 版本: ${condaVersion}');
-        const soft = '/soft/conda/Miniconda3.sh';
-        const condaInstallerPath = await tc.downloadTool(condaUrl, '.' + soft);
-        core.info(`Conda  ${condaVersion} 安装程序已下载到: ${condaInstallerPath}`);
-        await exec.exec('ls', ['-l', soft]);
+        core.startGroup('下载 Conda 安装程序 ,  版本: ${condaVersion}');
+        const soft = 'soft/conda';
+        const condaInstallerPath = await tc.downloadTool(condaUrl, './' + soft);
+        core.info(`Conda  ${condaVersion} 安装程序已下载到 :   ${condaInstallerPath}`);
+        const nowdir = await (0, cmd_1.getText)('pwd', []);
+        core.info(`当前目录 nowdir : ${nowdir}`);
+        await exec.exec('ls', ['-l', nowdir + '/' + soft]);
         core.endGroup();
         // 安装 Conda
         core.startGroup('安装 Conda');
