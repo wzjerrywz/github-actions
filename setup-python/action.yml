@@ -1,0 +1,16 @@
+
+name: 'setup nodejs action'
+description: 'nodejs'
+inputs:
+  nvm-version:
+    description: 'nvm 版本'
+    required: true
+  nodejs-version:
+    description: 'nodejs 版本'
+    required: true
+outputs:
+  report:
+    description: 'Generated output'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
