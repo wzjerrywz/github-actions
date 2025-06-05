@@ -115,7 +115,9 @@ async function run() {
             '-q',
             '-n',
             envName,
-            `python=${pythonVersion}`
+            `python=${pythonVersion}`,
+            '>/dev/null',
+            '2>&1'
         ]);
         core.info(`Python ${pythonVersion} 已安装到环境 ${envName}`);
         core.endGroup();
@@ -127,10 +129,9 @@ async function run() {
         // conda 设置环境
         // await initConda();
         console.log('Conda 环境已成功初始化并激活!');
-        await exec.exec(`conda run -n ${envName} python --version`, []);
         // 验证 Python 安装
-        await exec.exec('python', ['--version']);
-        await exec.exec('pip', ['--version']);
+        await exec.exec(`conda run -n ${envName} python --version`, []);
+        await exec.exec(`conda run -n ${envName} pip --version`, []);
         core.endGroup();
     }
     catch (error) {
