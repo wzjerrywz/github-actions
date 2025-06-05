@@ -25,17 +25,13 @@ async function run(): Promise<void> {
     const inputs = validateInputs({
           gitVersion: core.getInput('git-version', { required: true })
     })
-    const gitDownloadUrl = `https://www.kernel.org/pub/software/scm/git/git-${inputs.gitVersion}.tar.gz` ;
 
-    // 下载 git.tar.gz
-    core.startGroup(`下载 git.tar.gz ,  版本: ${inputs.gitVersion}`);
-    const gitFilePath = await tc.downloadTool(gitDownloadUrl, './soft/git.tar.gz');
-    core.info(`git  ${inputs.gitVersion} 安装程序已下载到 :   ./soft/git.tar.gz `);
-    // 解压
-    const gitDir = await tc.extractTar(gitFilePath, './soft/');
-    core.info(`git  ${inputs.gitVersion} 安装程序已解压到 :  ${gitDir} `);
+    // 安装 git
+    core.startGroup(`安装git ,  版本: ${inputs.gitVersion}`);
+    await exec.exec('sudo', ['apt-get', 'install', '-y', 'git=1:2.34.1-1ubuntu1']);
+
+    await exec.exec('git', ['--version']);
     
-    await exec.exec(`ls -l ${gitDir}`, []);
     core.endGroup();
 
   } catch (error: any) {

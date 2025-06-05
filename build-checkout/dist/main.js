@@ -34,7 +34,6 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
-const tc = __importStar(require("@actions/tool-cache"));
 const exec = __importStar(require("@actions/exec"));
 function validateInputs(params) {
     if (!params.gitVersion)
@@ -46,15 +45,10 @@ async function run() {
         const inputs = validateInputs({
             gitVersion: core.getInput('git-version', { required: true })
         });
-        const gitDownloadUrl = `https://www.kernel.org/pub/software/scm/git/git-${inputs.gitVersion}.tar.gz`;
-        // 下载 git.tar.gz
-        core.startGroup(`下载 git.tar.gz ,  版本: ${inputs.gitVersion}`);
-        const gitFilePath = await tc.downloadTool(gitDownloadUrl, './soft/git.tar.gz');
-        core.info(`git  ${inputs.gitVersion} 安装程序已下载到 :   ./soft/git.tar.gz `);
-        // 解压
-        const gitDir = await tc.extractTar(gitFilePath, './soft/');
-        core.info(`git  ${inputs.gitVersion} 安装程序已解压到 :  ${gitDir} `);
-        await exec.exec(`ls -l ${gitDir}`, []);
+        // 安装 git
+        core.startGroup(`安装git ,  版本: ${inputs.gitVersion}`);
+        await exec.exec('sudo', ['apt-get', 'install', '-y', 'git=1:2.34.1-1ubuntu1']);
+        await exec.exec('git', ['--version']);
         core.endGroup();
     }
     catch (error) {
