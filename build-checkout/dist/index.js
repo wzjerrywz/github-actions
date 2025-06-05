@@ -25697,7 +25697,8 @@ async function run() {
         // 安装 git
         await exec.exec('sudo apt-cache madison git', []);
         core.startGroup(`安装git ,  版本: ${inputs.gitVersion}`);
-        await exec.exec('sudo', ['apt-get', 'install', '-y', 'git']);
+        await exec.exec('sudo', ['apt-get', 'install', '-y', 'git=' + inputs.gitVersion]);
+        core.endGroup();
         await exec.exec('git', ['--version']);
         core.endGroup();
     }
