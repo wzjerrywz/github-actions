@@ -41,6 +41,10 @@ async function run(): Promise<void> {
     core.endGroup();
 
     core.startGroup(`安装 dotnet 版本: ${inputs.dotnetVersion} `);
+    //  sudo apt-get remove --purge dotnet-host-8.0 dotnet-sdk-8.0 -y
+    //  sudo apt-get autoremove -y
+    await exec.exec(`sudo apt-get remove --purge dotnet-host-8.0 dotnet-sdk-8.0 -y`, []);
+    await exec.exec(`sudo apt-get autoremove -y`, []);
     await exec.exec(`sudo apt-get install -y dotnet-sdk-${inputs.dotnetVersion}`, []);
     // 验证版本
     await exec.exec(`dotnet --version`, []);
