@@ -10,5 +10,5 @@ outputs:
   report:
     description: 'Generated output'
 runs:
-  using: 'node20'
+  using: 'node16'
   main: 'dist/index.js'
