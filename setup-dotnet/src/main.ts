@@ -28,11 +28,10 @@ async function run(): Promise<void> {
 
     const url = 'https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb';
 
-    core.startGroup(`下载安装 dotnet ,  版本: ${inputs.dotnetVersion} `);
+    core.startGroup(`依赖配置`);
     const soft = 'packages-microsoft-prod.deb';
     const installerPath = await tc.downloadTool(url, './' + soft);
     core.info(` dotnet  ${inputs.dotnetVersion} 安装程序已下载到 :   ${installerPath}`);
-
     // 
     await exec.exec(`sudo dpkg -i ${soft} `, []);
     await exec.exec(`rm ${soft}`, []);
@@ -41,6 +40,11 @@ async function run(): Promise<void> {
     core.info(` dotnet  ${inputs.dotnetVersion} 安装完成 `);
     core.endGroup();
 
+    core.startGroup(`安装 dotnet 版本: ${inputs.dotnetVersion} `);
+    await exec.exec(`sudo apt-get install -y dotnet-sdk-${inputs.dotnetVersion}`, []);
+    // 验证版本
+    await exec.exec(`dotnet --version`, []);
+    core.endGroup();
   } catch (error: any) {
        core.setFailed(String(error)) ;
        throw new Error(error);
