@@ -46,8 +46,9 @@ async function run() {
             gitVersion: core.getInput('git-version', { required: true })
         });
         // 安装 git
+        await exec.exec('sudo apt-cache madison git', []);
         core.startGroup(`安装git ,  版本: ${inputs.gitVersion}`);
-        await exec.exec('sudo', ['apt-get', 'install', '-y', 'git=1:2.34.1-1ubuntu1']);
+        await exec.exec('sudo', ['apt-get', 'install', '-y', 'git']);
         await exec.exec('git', ['--version']);
         core.endGroup();
     }
