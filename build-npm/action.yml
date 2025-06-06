@@ -6,6 +6,10 @@ inputs:
     description: '项目路径'
     required: true
     default: './react-web'
+  build-command:
+    description: '构建命令'
+    required: true
+    default: 'build'  
 outputs:
   report:
     description: 'Generated output'

@@ -8,7 +8,8 @@ import os from 'os'
 
 
 type InputParams = {
-  projectPath: string
+  projectPath: string,
+  buildCommand: string,
 }
 
 function validateInputs(params: Partial<InputParams>): InputParams {
@@ -19,11 +20,16 @@ async function run(): Promise<void> {
   try {
 
     const inputs = validateInputs({
-      projectPath: core.getInput('project-path', { required: true })
+      projectPath: core.getInput('project-path', { required: true }),
+      buildCommand: core.getInput('build-command', { required: true })
     }) ;
 
     const nvmDir = path.resolve(inputs.projectPath);
     process.chdir(nvmDir);
+
+   
+
+    await exec.exec('npm', ['run', `${inputs.buildCommand}`]);
 
     await exec.exec('ls', ['-l', './']);
 

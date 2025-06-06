@@ -25694,10 +25694,12 @@ function validateInputs(params) {
 async function run() {
     try {
         const inputs = validateInputs({
-            projectPath: core.getInput('project-path', { required: true })
+            projectPath: core.getInput('project-path', { required: true }),
+            buildCommand: core.getInput('build-command', { required: true })
         });
         const nvmDir = path_1.default.resolve(inputs.projectPath);
         process.chdir(nvmDir);
+        await exec.exec('npm', ['run', `${inputs.buildCommand}`]);
         await exec.exec('ls', ['-l', './']);
     }
     catch (error) {
