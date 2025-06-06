@@ -25692,7 +25692,9 @@ function validateInputs(params) {
 async function run() {
     try {
         const inputs = validateInputs({
-            gitVersion: core.getInput('git-version', { required: true })
+            gitVersion: core.getInput('git-version', { required: true }),
+            gitUrl: core.getInput('git-url', { required: true }),
+            branchName: core.getInput('branch-name', { required: true })
         });
         await ubuntu.installGit(inputs);
     }
@@ -25747,6 +25749,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.installGit = installGit;
+exports.gitClone = gitClone;
 const core = __importStar(__nccwpck_require__(6618));
 const exec = __importStar(__nccwpck_require__(3274));
 // step1. 安装 git 
@@ -25757,6 +25760,14 @@ async function installGit(inputs) {
     core.endGroup();
     // 验证安装是否成功
     await exec.exec('git', ['--version']);
+}
+// step2. git clone
+async function gitClone(inputs) {
+    core.startGroup(` git clone `);
+    await exec.exec('git clone', ['-b', `${inputs.branchName}`, `${inputs.gitUrl}`]);
+    core.endGroup();
+    // 验证安装是否成功
+    await exec.exec('ls', ['-l', './']);
 }
 
 

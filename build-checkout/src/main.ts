@@ -15,7 +15,9 @@ function validateInputs(params: Partial<InputParamsType>): InputParamsType {
 async function run(): Promise<void> {
   try {
     const inputs = validateInputs({
-          gitVersion: core.getInput('git-version', { required: true })
+          gitVersion: core.getInput('git-version', { required: true }),
+          gitUrl: core.getInput('git-url', { required: true }),
+          branchName: core.getInput('branch-name', { required: true })
     }) ;
     await ubuntu.installGit(inputs) ;
   } catch (error: any) {

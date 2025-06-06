@@ -43,7 +43,9 @@ function validateInputs(params) {
 async function run() {
     try {
         const inputs = validateInputs({
-            gitVersion: core.getInput('git-version', { required: true })
+            gitVersion: core.getInput('git-version', { required: true }),
+            gitUrl: core.getInput('git-url', { required: true }),
+            branchName: core.getInput('branch-name', { required: true })
         });
         await ubuntu.installGit(inputs);
     }

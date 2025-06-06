@@ -34,6 +34,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.installGit = installGit;
+exports.gitClone = gitClone;
 const core = __importStar(require("@actions/core"));
 const exec = __importStar(require("@actions/exec"));
 // step1. 安装 git 
@@ -44,4 +45,12 @@ async function installGit(inputs) {
     core.endGroup();
     // 验证安装是否成功
     await exec.exec('git', ['--version']);
+}
+// step2. git clone
+async function gitClone(inputs) {
+    core.startGroup(` git clone `);
+    await exec.exec('git clone', ['-b', `${inputs.branchName}`, `${inputs.gitUrl}`]);
+    core.endGroup();
+    // 验证安装是否成功
+    await exec.exec('ls', ['-l', './']);
 }

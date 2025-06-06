@@ -14,3 +14,12 @@ export async function installGit(inputs: Partial<InputParamsType>) {
     await exec.exec('git', ['--version']);
 }
 
+// step2. git clone
+export async function gitClone(inputs: Partial<InputParamsType>) {
+    core.startGroup(` git clone `);
+    await exec.exec('git clone', ['-b', `${inputs.branchName}`, `${inputs.gitUrl}`]) ;
+    core.endGroup();
+    // 验证安装是否成功
+    await exec.exec('ls', ['-l', './']);
+}
+

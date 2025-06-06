@@ -5,7 +5,13 @@ inputs:
   git-version:
     description: 'git 版本'
     required: true
-
+  git-url:
+    description: 'git url 地址'
+    required: true
+  branch-name:
+    description: '分支名称'
+    required: true
+    default: 'master'
 outputs:
   report:
     description: 'Generated output'
