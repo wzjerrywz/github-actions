@@ -25643,7 +25643,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 4761:
+/***/ 737:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -25741,7 +25741,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(6618));
 const exec = __importStar(__nccwpck_require__(3274));
-const cmd_1 = __nccwpck_require__(4761);
+const cmd_1 = __nccwpck_require__(737);
 const path_1 = __importDefault(__nccwpck_require__(6928));
 const os_1 = __importDefault(__nccwpck_require__(857));
 function validateInputs(params) {
@@ -25777,36 +25777,12 @@ async function run() {
         console.log(`nodePath: ${nodePath.stdout}`);
         const nodeBinPath = path_1.default.join(nodePath.stdout.trim(), 'bin');
         core.addPath(nodeBinPath);
+        core.exportVariable('NODE_HOME', nodePath.stdout.trim());
+        await exec.exec(nodeBinPath + '/' + 'node', ['-v']);
+        core.info('###################################################################');
         const textGet = await (0, cmd_1.getText)('node', ['-v']);
-        console.log(textGet);
         core.info(`Node.js Of by GetText:   ` + textGet);
         await exec.exec('node', ['-v']);
-        // const url = 'https://download.java.net/java/GA/jdk17/0d483333a00540d886896bac774ff48b/35/GPL/openjdk-17_linux-x64_bin.tar.gz';
-        // await exec.exec('wget', ['-q', url]);
-        // await exec.exec('tar', ['-xf', 'openjdk-17_linux-x64_bin.tar.gz', '-C', './']);
-        // const jdkHome = await capture('pwd', [])  + '/jdk-17' ;
-        // await exec.exec('chmod', ['+x', `${jdkHome}/bin/java`]);
-        // 设置 JAVA_HOME 环境变量
-        // core.exportVariable('JAVA_HOME', jdkHome);
-        // 设置其他变量（如 PATH）
-        // core.exportVariable('PATH', `${jdkHome}/bin:${process.env.PATH}`);
-        // await exec.exec('java', ['-version']);
-        // await exec.exec('ls', ['./'])
-        // await exec.exec('npm', ['i', 'npm@latest'])
-        core.info(`Processing with: ${JSON.stringify(inputs)}`);
-        const result = {
-            original: inputs,
-            processedAt: new Date().toISOString(),
-            message: `Received ${inputs.nodejsVersion} with 1 selection`
-        };
-        core.setOutput('report', JSON.stringify(result));
-        core.summary
-            .addHeading('Action Results')
-            .addTable([
-            ['Field', 'Value'],
-            ['nodejsVersion', inputs.nodejsVersion]
-        ])
-            .write();
     }
     catch (error) {
         core.setFailed(error instanceof Error ? error.message : 'Unknown error');
