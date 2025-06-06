@@ -1,5 +1,7 @@
  import * as core from '@actions/core'
 
+ import * as tc from '@actions/tool-cache'
+
 import * as exec from '@actions/exec'
 import {  getText } from './cmd'
 import path from 'path'
@@ -27,11 +29,13 @@ async function run(): Promise<void> {
     const nvmDir = path.resolve(inputs.projectPath);
     process.chdir(nvmDir);
 
-   
-
     await exec.exec('npm', ['install']);
     await exec.exec('npm', ['run', `${inputs.buildCommand}`]);
 
+    // tc 压缩目录  build  到文件   dist.tar.gz
+    // tar -czvf archive.tar.gz mydir
+    await exec.exec('tar', ['-czvf', 'build.tar.gz', './build']);
+    
     await exec.exec('ls', ['-l', './']);
 
   } catch (error: any) {
