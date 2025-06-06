@@ -23,8 +23,9 @@ async function run(): Promise<void> {
     }) ;
 
     const nvmDir = path.resolve(inputs.projectPath);
-    core.info(`projectPath:  ${nvmDir}`);
+    process.chdir(nvmDir);
 
+    await exec.exec('ls', ['-l', './']);
 
   } catch (error: any) {
        core.setFailed(error instanceof Error ? error.message : 'Unknown error') ;

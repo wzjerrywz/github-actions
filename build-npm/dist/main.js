@@ -37,6 +37,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
+const exec = __importStar(require("@actions/exec"));
 const path_1 = __importDefault(require("path"));
 function validateInputs(params) {
     return params;
@@ -47,7 +48,8 @@ async function run() {
             projectPath: core.getInput('project-path', { required: true })
         });
         const nvmDir = path_1.default.resolve(inputs.projectPath);
-        core.info(`projectPath:  ${nvmDir}`);
+        process.chdir(nvmDir);
+        await exec.exec('ls', ['-l', './']);
     }
     catch (error) {
         core.setFailed(error instanceof Error ? error.message : 'Unknown error');
