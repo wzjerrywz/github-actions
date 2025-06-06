@@ -34,7 +34,7 @@ async function run(): Promise<void> {
 
     // tc 压缩目录  build  到文件   dist.tar.gz
     // tar -czvf archive.tar.gz mydir
-    await exec.exec('tar', ['-czvf', 'build.tar.gz', './build']);
+    await exec.exec('tar', ['-czvf', './build.tar.gz', './build']);
     
     await exec.exec('ls', ['-l', './']);
 
