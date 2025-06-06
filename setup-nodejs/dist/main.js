@@ -72,9 +72,8 @@ async function run() {
             silent: true
         });
         console.log(`nodePath: ${nodePath.stdout}`);
-        const nodeBinPath = path_1.default.join(nodePath.stdout.trim(), 'bin');
+        const nodeBinPath = path_1.default.join(nodePath.stdout.trim(), '');
         core.addPath(nodeBinPath);
-        core.exportVariable('NODE_HOME', nodePath.stdout.trim());
         await exec.exec(nodeBinPath + '/' + 'node', ['-v']);
         core.info('###################################################################');
         const textGet = await (0, cmd_1.getText)('node', ['-v']);

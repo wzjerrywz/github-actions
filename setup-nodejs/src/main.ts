@@ -48,9 +48,8 @@ async function run(): Promise<void> {
     });
     console.log(`nodePath: ${nodePath.stdout}`);
     
-    const nodeBinPath = path.join(nodePath.stdout.trim(), 'bin');
+    const nodeBinPath = path.join(nodePath.stdout.trim(), '');
     core.addPath(nodeBinPath);
-    core.exportVariable('NODE_HOME', nodePath.stdout.trim());
 
     await exec.exec(nodeBinPath + '/' + 'node', ['-v']);
 
