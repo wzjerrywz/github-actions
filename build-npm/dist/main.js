@@ -50,6 +50,7 @@ async function run() {
         });
         const nvmDir = path_1.default.resolve(inputs.projectPath);
         process.chdir(nvmDir);
+        await exec.exec('npm', ['install']);
         await exec.exec('npm', ['run', `${inputs.buildCommand}`]);
         await exec.exec('ls', ['-l', './']);
     }
