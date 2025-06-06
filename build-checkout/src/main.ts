@@ -20,6 +20,10 @@ async function run(): Promise<void> {
           branchName: core.getInput('branch-name', { required: true })
     }) ;
     await ubuntu.installGit(inputs) ;
+
+    //
+    await ubuntu.gitClone(inputs) ;
+
   } catch (error: any) {
        core.setFailed(String(error)) ;
        throw new Error(error);

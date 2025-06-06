@@ -48,6 +48,8 @@ async function run() {
             branchName: core.getInput('branch-name', { required: true })
         });
         await ubuntu.installGit(inputs);
+        //
+        await ubuntu.gitClone(inputs);
     }
     catch (error) {
         core.setFailed(String(error));
