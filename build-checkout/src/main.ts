@@ -1,34 +1,23 @@
 import * as core from '@actions/core'
 
 import * as exec from '@actions/exec'
+import { InputParamsType } from './types/InputParamsType';
 
-type InputParams = {
-  gitVersion: string,
-}
+import * as ubuntu from './step/Ubuntu' ;
 
-function validateInputs(params: Partial<InputParams>): InputParams {
-  if (!params.gitVersion) throw new Error('gitVersion input is required') ;
-  return params as InputParams
+
+function validateInputs(params: Partial<InputParamsType>): InputParamsType {
+      if (!params.gitVersion) throw new Error('gitVersion input is required') ;
+      return params as InputParamsType ;
 }
 
 
 async function run(): Promise<void> {
   try {
-
     const inputs = validateInputs({
           gitVersion: core.getInput('git-version', { required: true })
-    })
-
-    // 安装 git
-    await exec.exec('sudo apt-cache madison git', []);
-    core.startGroup(`安装git ,  版本: ${inputs.gitVersion}`);
-    await exec.exec('sudo', ['apt-get', 'install', '-y', 'git']);
-    core.endGroup();
-
-    await exec.exec('git', ['--version']);
-    
-    core.endGroup();
-
+    }) ;
+    await ubuntu.installGit(inputs) ;
   } catch (error: any) {
        core.setFailed(String(error)) ;
        throw new Error(error);

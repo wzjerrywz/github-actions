@@ -33,24 +33,15 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.installGit = installGit;
 const core = __importStar(require("@actions/core"));
-const ubuntu = __importStar(require("./step/Ubuntu"));
-function validateInputs(params) {
-    if (!params.gitVersion)
-        throw new Error('gitVersion input is required');
-    return params;
+const exec = __importStar(require("@actions/exec"));
+// step1. 安装 git 
+async function installGit(inputs) {
+    // 安装 git
+    core.startGroup(`安装git ,  版本: ${inputs.gitVersion}`);
+    await exec.exec('sudo', ['apt-get', 'install', '-y', 'git']);
+    core.endGroup();
+    // 验证安装是否成功
+    await exec.exec('git', ['--version']);
 }
-async function run() {
-    try {
-        const inputs = validateInputs({
-            gitVersion: core.getInput('git-version', { required: true })
-        });
-        await ubuntu.installGit(inputs);
-    }
-    catch (error) {
-        core.setFailed(String(error));
-        throw new Error(error);
-    }
-}
-// run
-run();
