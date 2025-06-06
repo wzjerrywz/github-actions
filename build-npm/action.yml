@@ -2,9 +2,10 @@
 name: 'build npm action'
 description: 'npm'
 inputs:
-  npm-version:
-    description: 'npm 版本'
+  project-path:
+    description: '项目路径'
     required: true
+    default: './react-web'
 outputs:
   report:
     description: 'Generated output'
