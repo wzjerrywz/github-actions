@@ -2,16 +2,22 @@
 name: 'build checkout action'
 description: 'checkout'
 inputs:
-  git-version:
-    description: 'git 版本'
-    required: true
-  git-url:
-    description: 'git url 地址'
-    required: true
   branch-name:
     description: '分支名称'
     required: true
     default: 'master'
+  token:
+    description: 'token'
+    required: true
+    default: 'bc53e10960aa138d07e15d7eb95e6acf'
+  owner:
+    description: 'owner'
+    required: true
+    default: 'openwz'
+  project-name:
+    description: '项目名称'
+    required: true
+    default: 'react-web'
 outputs:
   report:
     description: 'Generated output'

@@ -36,16 +36,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const ubuntu = __importStar(require("./step/Ubuntu"));
 function validateInputs(params) {
-    if (!params.gitVersion)
-        throw new Error('gitVersion input is required');
     return params;
 }
 async function run() {
     try {
         const inputs = validateInputs({
-            gitVersion: core.getInput('git-version', { required: true }),
-            gitUrl: core.getInput('git-url', { required: true }),
-            branchName: core.getInput('branch-name', { required: true })
+            branchName: core.getInput('branch-name', { required: true }),
+            token: core.getInput('token', { required: true }),
+            owner: core.getInput('owner', { required: true }),
+            projectName: core.getInput('project-name', { required: true }),
         });
         await ubuntu.installGit(inputs);
         //

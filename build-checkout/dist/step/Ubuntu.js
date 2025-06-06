@@ -40,7 +40,7 @@ const exec = __importStar(require("@actions/exec"));
 // step1. 安装 git 
 async function installGit(inputs) {
     // 安装 git
-    core.startGroup(`安装git ,  版本: ${inputs.gitVersion}`);
+    core.startGroup(`安装git软件： apt-get install -y git`);
     await exec.exec('sudo', ['apt-get', 'install', '-y', 'git']);
     core.endGroup();
     // 验证安装是否成功
@@ -48,8 +48,9 @@ async function installGit(inputs) {
 }
 // step2. git clone
 async function gitClone(inputs) {
-    core.startGroup(` git clone `);
-    await exec.exec('git clone', ['-b', `${inputs.branchName}`, `${inputs.gitUrl}`]);
+    const url = `https://oauth2:${inputs.token}@gitee.com/${inputs.owner}/${inputs.projectName}.git`;
+    core.startGroup(` git clone -b ${inputs.branchName} ${url} `);
+    await exec.exec('git', ['clone', '-b', `${inputs.branchName}`, url]);
     core.endGroup();
     // 验证安装是否成功
     await exec.exec('ls', ['-l', './']);

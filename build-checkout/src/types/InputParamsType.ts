@@ -1,5 +1,6 @@
 export type InputParamsType = {
-    gitVersion: string,
-    gitUrl: string,
     branchName: string,
+    token: string,
+    owner: string,
+    projectName: string,
 }

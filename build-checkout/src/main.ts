@@ -7,7 +7,6 @@ import * as ubuntu from './step/Ubuntu' ;
 
 
 function validateInputs(params: Partial<InputParamsType>): InputParamsType {
-      if (!params.gitVersion) throw new Error('gitVersion input is required') ;
       return params as InputParamsType ;
 }
 
@@ -15,9 +14,10 @@ function validateInputs(params: Partial<InputParamsType>): InputParamsType {
 async function run(): Promise<void> {
   try {
     const inputs = validateInputs({
-          gitVersion: core.getInput('git-version', { required: true }),
-          gitUrl: core.getInput('git-url', { required: true }),
-          branchName: core.getInput('branch-name', { required: true })
+          branchName: core.getInput('branch-name', { required: true }),
+          token: core.getInput('token', { required: true }),
+          owner: core.getInput('owner', { required: true }),
+          projectName: core.getInput('project-name', { required: true }),
     }) ;
     await ubuntu.installGit(inputs) ;
 
