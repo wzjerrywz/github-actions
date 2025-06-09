@@ -35,9 +35,9 @@ async function run(): Promise<void> {
     const envName = 'github_actions_env';
   
     
-    console.log('验证!');
+    console.log('验证! 版本：\n');
 
-        // 验证 Python 安装
+   // 验证 Python 安装
     await exec.exec(`conda run -n ${envName} python --version`, [ ]);
     await exec.exec(`conda run -n ${envName} pip --version`, [ ]);
 

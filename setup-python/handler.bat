@@ -13,9 +13,9 @@ echo ""
 
 rmdir /q /s .\dist
 
-tsc --build
+npx tsc --build
 
-ncc build src/main.ts -o dist
+npx ncc build src/main.ts -o dist
 
 git add .
 
