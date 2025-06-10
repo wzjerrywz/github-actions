@@ -39,6 +39,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.downloadConda = downloadConda;
 exports.configConda = configConda;
 exports.createVirtualEnv = createVirtualEnv;
+exports.activateEnv = activateEnv;
+exports.validVersion = validVersion;
 const core = __importStar(require("@actions/core"));
 const tc = __importStar(require("@actions/tool-cache"));
 const exec = __importStar(require("@actions/exec"));
@@ -90,5 +92,26 @@ async function createVirtualEnv() {
     core.addPath(envBinDir);
     core.info(`已将 ${envBinDir} 添加到 PATH`);
     // end 
+    core.endGroup();
+}
+async function activateEnv() {
+    const envName = 'github_actions_env';
+    // 切换虚拟环境
+    core.startGroup(`切换虚拟环境 `);
+    await exec.exec('conda', [
+        'activate',
+        envName
+    ]);
+    // end 
+    core.endGroup();
+}
+async function validVersion() {
+    const envName = 'github_actions_env';
+    core.startGroup('验证 Python 版本 和 pip 版本');
+    // 验证 Python 安装
+    // await exec.exec(`conda run -n ${envName} python --version`, [ ]);
+    // await exec.exec(`conda run -n ${envName} pip --version`, [ ]);
+    await exec.exec(`python --version`, []);
+    await exec.exec(`pip --version`, []);
     core.endGroup();
 }

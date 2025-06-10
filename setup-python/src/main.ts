@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 
 import * as exec from '@actions/exec'
 
-import { downloadConda, configConda, createVirtualEnv } from './step/Step';
+import { downloadConda, configConda, createVirtualEnv , activateEnv, validVersion } from './step/Step';
 
 type InputParams = {
   condaVersion: string,
@@ -31,15 +31,11 @@ async function run(): Promise<void> {
     // step3. 创建虚拟环境
     await createVirtualEnv();
    
-    const envName = 'github_actions_env';
-  
-    
-    console.log('验证! 版本：\n');
+    // step4. 激活虚拟环境
+    await activateEnv();
 
-   // 验证 Python 安装
-    await exec.exec(`conda run -n ${envName} python --version`, [ ]);
-    await exec.exec(`conda run -n ${envName} pip --version`, [ ]);
-
+    // step5. 验证版本
+    await validVersion();
 
   } catch (error: any) {
        core.setFailed(String(error)) ;
@@ -49,4 +45,4 @@ async function run(): Promise<void> {
 
 
 // run
-run()
+run() ;

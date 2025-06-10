@@ -57,3 +57,32 @@ export async function createVirtualEnv() {
         // end 
        core.endGroup();
 }
+
+
+export async function activateEnv() {
+  const envName = 'github_actions_env';
+
+  // 切换虚拟环境
+     core.startGroup(`切换虚拟环境 `);
+     await exec.exec('conda', [
+      'activate',
+      envName
+     ]);
+      // end 
+     core.endGroup();
+}
+
+export async function validVersion() {
+  const envName = 'github_actions_env';
+  
+  core.startGroup('验证 Python 版本 和 pip 版本');
+
+ // 验证 Python 安装
+  // await exec.exec(`conda run -n ${envName} python --version`, [ ]);
+  // await exec.exec(`conda run -n ${envName} pip --version`, [ ]);
+
+  await exec.exec(`python --version`, [ ]);
+  await exec.exec(`pip --version`, [ ]);
+
+  core.endGroup();
+}

@@ -34,7 +34,6 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
-const exec = __importStar(require("@actions/exec"));
 const Step_1 = require("./step/Step");
 function validateInputs(params) {
     return params;
@@ -52,11 +51,10 @@ async function run() {
         await (0, Step_1.configConda)();
         // step3. 创建虚拟环境
         await (0, Step_1.createVirtualEnv)();
-        const envName = 'github_actions_env';
-        console.log('验证! 版本：\n');
-        // 验证 Python 安装
-        await exec.exec(`conda run -n ${envName} python --version`, []);
-        await exec.exec(`conda run -n ${envName} pip --version`, []);
+        // step4. 激活虚拟环境
+        await (0, Step_1.activateEnv)();
+        // step5. 验证版本
+        await (0, Step_1.validVersion)();
     }
     catch (error) {
         core.setFailed(String(error));
