@@ -63,8 +63,7 @@ export async function activateEnv() {
   const envName = 'github_actions_env';
 
   // init conda 
-  const condaDir = path.join(os.homedir(), 'miniconda3');
-  await exec.exec('source ' + condaDir + '/bin/activate', []);
+  await exec.exec('ls', ['-l', '/home/runner/miniconda3/envs/github_actions_env/bin']);
 
 
   // 切换虚拟环境
