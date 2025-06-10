@@ -18,10 +18,11 @@ function validateInputs(params: Partial<InputParams>): InputParams {
 async function run(): Promise<void> {
   try {
 
-    // const inputs = validateInputs({
-    //   nvmVersion: core.getInput('nvm-version', { required: true }),
-    //   nodejsVersion: core.getInput('nodejs-version', { required: true }),
-    // })
+    const inputs = validateInputs({
+      nvmVersion: core.getInput('nvm-version', { required: true }),
+      nodejsVersion: core.getInput('nodejs-version', { required: true }),
+    })
+    console.log(inputs);
 
     // step1 下载安装包
     await downloadConda();
