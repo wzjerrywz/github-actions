@@ -5,13 +5,11 @@ import * as exec from '@actions/exec'
 import { downloadConda, configConda, createVirtualEnv } from './step/Step';
 
 type InputParams = {
-  nvmVersion: string,
-  nodejsVersion: string,
+  condaVersion: string,
+  pythonVersion: string,
 }
 
 function validateInputs(params: Partial<InputParams>): InputParams {
-  if (!params.nvmVersion) throw new Error('nvmVersion input is required') ;
-  if (!params.nodejsVersion) throw new Error('nodejsVersion input is required') ;
   return params as InputParams
 }
 
@@ -19,8 +17,8 @@ async function run(): Promise<void> {
   try {
 
     const inputs = validateInputs({
-      nvmVersion: core.getInput('nvm-version', { required: true }),
-      nodejsVersion: core.getInput('nodejs-version', { required: true }),
+      condaVersion: core.getInput('conda-version', { required: true }),
+      pythonVersion: core.getInput('python-version', { required: true }),
     })
     console.log(inputs);
 

@@ -37,17 +37,13 @@ const core = __importStar(require("@actions/core"));
 const exec = __importStar(require("@actions/exec"));
 const Step_1 = require("./step/Step");
 function validateInputs(params) {
-    if (!params.nvmVersion)
-        throw new Error('nvmVersion input is required');
-    if (!params.nodejsVersion)
-        throw new Error('nodejsVersion input is required');
     return params;
 }
 async function run() {
     try {
         const inputs = validateInputs({
-            nvmVersion: core.getInput('nvm-version', { required: true }),
-            nodejsVersion: core.getInput('nodejs-version', { required: true }),
+            condaVersion: core.getInput('conda-version', { required: true }),
+            pythonVersion: core.getInput('python-version', { required: true }),
         });
         console.log(inputs);
         // step1 下载安装包
