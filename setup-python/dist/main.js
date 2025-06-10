@@ -45,10 +45,11 @@ function validateInputs(params) {
 }
 async function run() {
     try {
-        // const inputs = validateInputs({
-        //   nvmVersion: core.getInput('nvm-version', { required: true }),
-        //   nodejsVersion: core.getInput('nodejs-version', { required: true }),
-        // })
+        const inputs = validateInputs({
+            nvmVersion: core.getInput('nvm-version', { required: true }),
+            nodejsVersion: core.getInput('nodejs-version', { required: true }),
+        });
+        console.log(inputs);
         // step1 下载安装包
         await (0, Step_1.downloadConda)();
         // step2 安装 nvm

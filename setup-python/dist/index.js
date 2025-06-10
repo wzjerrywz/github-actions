@@ -28247,10 +28247,11 @@ function validateInputs(params) {
 }
 async function run() {
     try {
-        // const inputs = validateInputs({
-        //   nvmVersion: core.getInput('nvm-version', { required: true }),
-        //   nodejsVersion: core.getInput('nodejs-version', { required: true }),
-        // })
+        const inputs = validateInputs({
+            nvmVersion: core.getInput('nvm-version', { required: true }),
+            nodejsVersion: core.getInput('nodejs-version', { required: true }),
+        });
+        console.log(inputs);
         // step1 下载安装包
         await (0, Step_1.downloadConda)();
         // step2 安装 nvm
@@ -28328,7 +28329,7 @@ async function downloadConda() {
     const condaVersion = 'py39_25.3.1-1';
     const condaUrl = `https://repo.anaconda.com/miniconda/Miniconda3-${condaVersion}-Linux-x86_64.sh`;
     // 下载 Conda 安装程序
-    core.startGroup('下载 Conda 安装程序 ,  版本: ${condaVersion}');
+    core.startGroup(`下载 Conda 安装程序 ,  版本: ${condaVersion} `);
     const soft = 'soft/conda.sh';
     const condaInstallerPath = await tc.downloadTool(condaUrl, './' + soft);
     core.info(`Conda  ${condaVersion} 安装程序已下载到 :   ${condaInstallerPath}`);
@@ -28361,9 +28362,7 @@ async function createVirtualEnv() {
         '-q',
         '-n',
         envName,
-        `python=${pythonVersion}`,
-        '>/dev/null',
-        '2>&1'
+        `python=${pythonVersion}`
     ]);
     core.info(`Python ${pythonVersion} 已安装到环境 ${envName}`);
     // 激活环境并配置 PATH
