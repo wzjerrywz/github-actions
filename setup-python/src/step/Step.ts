@@ -64,7 +64,7 @@ export async function activateEnv() {
 
   // init conda 
   const condaDir = path.join(os.homedir(), 'miniconda3');
-  await exec.exec('bash', ['-c', `source ${path.join(condaDir, 'etc/profile.d/conda.sh')}`]);
+  await exec.exec('source ' + condaDir + '/bin/activate', []);
 
 
   // 切换虚拟环境
