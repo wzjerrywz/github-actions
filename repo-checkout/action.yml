@@ -1,0 +1,29 @@
+
+name: 'build checkout action'
+description: 'checkout'
+inputs:
+  repo-name:
+    description: '1@checkout. 仓库名称'
+    required: true
+    type: choice
+    default: 'gitee/demo-vue3-npm'
+    options:
+      - gitee/demo-vue3-npm
+      - gitee/demo-vue3-yarn
+      - gitee/demo-python312-pip
+      - gitee/demo-dotnet-nuget
+  branch-name:
+    description: '1@checkout. 分支名称'
+    required: true
+    type: choice
+    default: 'master'
+    options:
+      - master
+      - dev
+      - test   
+outputs:
+  report:
+    description: 'Generated output'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
