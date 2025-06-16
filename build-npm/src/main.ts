@@ -47,6 +47,25 @@ async function run(): Promise<void> {
       buildCommand: core.getInput('build-command', { required: true })
     }) ;
 
+
+   //  安装指定的 npm 版本
+   const npmVersion = '8.4.1';
+   await exec.exec('npm', ['install', '-g', `npm@${npmVersion}`]);
+
+   // 查看 npm 版本
+   await exec.exec('npm', ['-v']);
+
+
+   // 安装 nrm
+   await exec.exec('npm', ['install', '-g', 'nrm']);
+
+   // 配置 nrm
+   const speed = 'taobao';
+   await exec.exec('nrm', ['use', speed]);
+
+   // 查看 nrm 配置
+   await exec.exec('nrm', ['ls']);
+
     const projectPath = path.resolve(inputs.projectPath);
 
     console.log(`projectPath: ${projectPath}`);
