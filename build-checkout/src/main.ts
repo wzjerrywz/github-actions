@@ -28,7 +28,10 @@ async function run(): Promise<void> {
     await process.chdir(inputs.projectName) ;
 
     // 查看当前目录
-    await exec.exec('ls', ['-l', './']) ;
+    await exec.exec('pwd', []) ;
+
+    // 查看 node 版本
+    await exec.exec('node', ['-v']) ;
 
   } catch (error: any) {
        core.setFailed(String(error)) ;
