@@ -2,6 +2,7 @@
 
  import * as tc from '@actions/tool-cache'
 
+
 import * as exec from '@actions/exec'
 import {  getText } from './cmd'
 import path from 'path'
@@ -36,7 +37,8 @@ async function run(): Promise<void> {
 
     // tc 压缩目录  build  到文件   dist.tar.gz
     // tar -czvf archive.tar.gz mydir
-    await exec.exec('tar', ['-czvf', './build.tar.gz', './build']);
+    // await exec.exec('tar', ['-czvf', './build.tar.gz', './build']);
+    await (tc as any).createArchive(projectPath, 'build.tar.gz', 'tgz');
     
     await exec.exec('ls', ['-l', './']);
 

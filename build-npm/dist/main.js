@@ -37,6 +37,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
+const tc = __importStar(require("@actions/tool-cache"));
 const exec = __importStar(require("@actions/exec"));
 const path_1 = __importDefault(require("path"));
 function validateInputs(params) {
@@ -55,7 +56,8 @@ async function run() {
         await exec.exec('npm', ['run', `${inputs.buildCommand}`]);
         // tc 压缩目录  build  到文件   dist.tar.gz
         // tar -czvf archive.tar.gz mydir
-        await exec.exec('tar', ['-czvf', './build.tar.gz', './build']);
+        // await exec.exec('tar', ['-czvf', './build.tar.gz', './build']);
+        await tc.createArchive(projectPath, 'build.tar.gz', 'tgz');
         await exec.exec('ls', ['-l', './']);
     }
     catch (error) {
