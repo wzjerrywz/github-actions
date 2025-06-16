@@ -1,12 +1,32 @@
- import * as core from '@actions/core'
+import * as core from '@actions/core'
 
- import * as tc from '@actions/tool-cache'
+import * as tc from '@actions/tool-cache'
+
+import * as fs from 'fs';
+
+import archiver from 'archiver';
 
 
 import * as exec from '@actions/exec'
 import {  getText } from './cmd'
 import path from 'path'
 import os from 'os'
+
+
+async function createTarGz(sourceDir: string, outPath: string) {
+  const archive = archiver('tar', { gzip: true });
+  const stream = fs.createWriteStream(outPath);
+
+  return new Promise((resolve, reject) => {
+    archive
+      .directory(sourceDir, false)
+      .on('error', (err: any) => reject(err))
+      .pipe(stream);
+
+    stream.on('close', () => resolve(outPath));
+    archive.finalize();
+  });
+}
 
 
 
@@ -38,7 +58,8 @@ async function run(): Promise<void> {
     // tc 压缩目录  build  到文件   dist.tar.gz
     // tar -czvf archive.tar.gz mydir
     // await exec.exec('tar', ['-czvf', './build.tar.gz', './build']);
-    await (tc as any).createArchive(projectPath, 'build.tar.gz', 'tgz');
+    // await (tc as any).createArchive(projectPath, 'build.tar.gz', 'tgz');
+    await createTarGz(projectPath, 'build.tar.gz');
     
     await exec.exec('ls', ['-l', './']);
 

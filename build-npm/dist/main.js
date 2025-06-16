@@ -37,9 +37,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
-const tc = __importStar(require("@actions/tool-cache"));
+const fs = __importStar(require("fs"));
+const archiver_1 = __importDefault(require("archiver"));
 const exec = __importStar(require("@actions/exec"));
 const path_1 = __importDefault(require("path"));
+async function createTarGz(sourceDir, outPath) {
+    const archive = (0, archiver_1.default)('tar', { gzip: true });
+    const stream = fs.createWriteStream(outPath);
+    return new Promise((resolve, reject) => {
+        archive
+            .directory(sourceDir, false)
+            .on('error', (err) => reject(err))
+            .pipe(stream);
+        stream.on('close', () => resolve(outPath));
+        archive.finalize();
+    });
+}
 function validateInputs(params) {
     return params;
 }
@@ -57,7 +70,8 @@ async function run() {
         // tc 压缩目录  build  到文件   dist.tar.gz
         // tar -czvf archive.tar.gz mydir
         // await exec.exec('tar', ['-czvf', './build.tar.gz', './build']);
-        await tc.createArchive(projectPath, 'build.tar.gz', 'tgz');
+        // await (tc as any).createArchive(projectPath, 'build.tar.gz', 'tgz');
+        await createTarGz(projectPath, 'build.tar.gz');
         await exec.exec('ls', ['-l', './']);
     }
     catch (error) {
