@@ -40,7 +40,7 @@ const core = __importStar(require("@actions/core"));
 const fs = __importStar(require("fs"));
 const archiver_1 = __importDefault(require("archiver"));
 const exec = __importStar(require("@actions/exec"));
-const path_1 = __importDefault(require("path"));
+const path_1 = __importStar(require("path"));
 async function createTarGz(sourceDir, outPath) {
     const archive = (0, archiver_1.default)('tar', { gzip: true });
     const stream = fs.createWriteStream(outPath);
@@ -71,7 +71,7 @@ async function run() {
         // tar -czvf archive.tar.gz mydir
         // await exec.exec('tar', ['-czvf', './build.tar.gz', './build']);
         // await (tc as any).createArchive(projectPath, 'build.tar.gz', 'tgz');
-        await createTarGz(projectPath, 'build.tar.gz');
+        await createTarGz(projectPath + path_1.sep + 'build', 'build.tar.gz');
         await exec.exec('ls', ['-l', './']);
     }
     catch (error) {

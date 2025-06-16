@@ -9,7 +9,7 @@ import archiver from 'archiver';
 
 import * as exec from '@actions/exec'
 import {  getText } from './cmd'
-import path from 'path'
+import path, { sep } from 'path'
 import os from 'os'
 
 
@@ -59,7 +59,7 @@ async function run(): Promise<void> {
     // tar -czvf archive.tar.gz mydir
     // await exec.exec('tar', ['-czvf', './build.tar.gz', './build']);
     // await (tc as any).createArchive(projectPath, 'build.tar.gz', 'tgz');
-    await createTarGz(projectPath, 'build.tar.gz');
+    await createTarGz(projectPath + sep + 'build', 'build.tar.gz');
     
     await exec.exec('ls', ['-l', './']);
 

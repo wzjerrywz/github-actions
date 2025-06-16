@@ -55230,7 +55230,7 @@ const core = __importStar(__nccwpck_require__(6618));
 const fs = __importStar(__nccwpck_require__(9896));
 const archiver_1 = __importDefault(__nccwpck_require__(430));
 const exec = __importStar(__nccwpck_require__(3274));
-const path_1 = __importDefault(__nccwpck_require__(6928));
+const path_1 = __importStar(__nccwpck_require__(6928));
 async function createTarGz(sourceDir, outPath) {
     const archive = (0, archiver_1.default)('tar', { gzip: true });
     const stream = fs.createWriteStream(outPath);
@@ -55261,7 +55261,7 @@ async function run() {
         // tar -czvf archive.tar.gz mydir
         // await exec.exec('tar', ['-czvf', './build.tar.gz', './build']);
         // await (tc as any).createArchive(projectPath, 'build.tar.gz', 'tgz');
-        await createTarGz(projectPath, 'build.tar.gz');
+        await createTarGz(projectPath + path_1.sep + 'build', 'build.tar.gz');
         await exec.exec('ls', ['-l', './']);
     }
     catch (error) {
