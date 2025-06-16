@@ -14,6 +14,7 @@ function validateInputs(params: Partial<InputParamsType>): InputParamsType {
 
 export async function run(): Promise<void> {
   try {
+    // 验证输入
     const inputs = validateInputs({
       branchName: core.getInput('branch-name', { required: true }),
       repoName: core.getInput('repo-name', { required: true }),
