@@ -55250,18 +55250,19 @@ async function run() {
     try {
         const inputs = validateInputs({
             projectPath: core.getInput('project-path', { required: true }),
-            buildCommand: core.getInput('build-command', { required: true })
+            buildCommand: core.getInput('build-command', { required: true }),
+            npmVersion: core.getInput('npm-version', { required: true }),
+            nrmVersion: core.getInput('nrm-version', { required: true }),
+            nrmSpeed: core.getInput('nrm-speed', { required: true }),
         });
         //  安装指定的 npm 版本
-        const npmVersion = '8.4.1';
-        await exec.exec('npm', ['install', '-g', `npm@${npmVersion}`]);
+        await exec.exec('npm', ['install', '-g', `npm@${inputs.npmVersion}`]);
         // 查看 npm 版本
         await exec.exec('npm', ['-v']);
         // 安装 nrm
-        await exec.exec('npm', ['install', '-g', 'nrm']);
+        await exec.exec('npm', ['install', '-g', `nrm@${inputs.nrmVersion}`]);
         // 配置 nrm
-        const speed = 'taobao';
-        await exec.exec('nrm', ['use', speed]);
+        await exec.exec('nrm', ['use', inputs.nrmSpeed]);
         // 查看 nrm 配置
         await exec.exec('nrm', ['ls']);
         const projectPath = path_1.default.resolve(inputs.projectPath);
