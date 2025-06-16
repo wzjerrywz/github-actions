@@ -29,7 +29,7 @@ async function run(): Promise<void> {
     const nvmDir = path.join(os.homedir(), '.nvm');
     core.exportVariable('NVM_DIR', nvmDir);
 
-    const nvm = `curl -o install.sh https://raw.githubusercontent.com/nvm-sh/nvm/v${inputs.nvmVersion}/install.sh` ;
+    const nvm = `curl -o install.sh https://gitee.com/mirrors/nvm/raw/v${inputs.nvmVersion}/install.sh` ;
     await exec.exec(nvm, []);
     await exec.exec('bash', ['install.sh']);
 

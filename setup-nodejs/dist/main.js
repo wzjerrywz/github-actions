@@ -56,7 +56,7 @@ async function run() {
         });
         const nvmDir = path_1.default.join(os_1.default.homedir(), '.nvm');
         core.exportVariable('NVM_DIR', nvmDir);
-        const nvm = `curl -o install.sh https://raw.githubusercontent.com/nvm-sh/nvm/v${inputs.nvmVersion}/install.sh`;
+        const nvm = `curl -o install.sh https://gitee.com/mirrors/nvm/raw/v${inputs.nvmVersion}/install.sh`;
         await exec.exec(nvm, []);
         await exec.exec('bash', ['install.sh']);
         // 加载 NVM 环境
