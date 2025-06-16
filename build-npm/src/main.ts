@@ -26,8 +26,6 @@ async function run(): Promise<void> {
       buildCommand: core.getInput('build-command', { required: true })
     }) ;
 
-    const nvmDir = path.resolve(inputs.projectPath);
-    process.chdir(nvmDir);
 
     await exec.exec('npm', ['install']);
     await exec.exec('npm', ['run', `${inputs.buildCommand}`]);
