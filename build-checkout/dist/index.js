@@ -25683,6 +25683,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(6618));
+const exec = __importStar(__nccwpck_require__(3274));
 const ubuntu = __importStar(__nccwpck_require__(2693));
 function validateInputs(params) {
     return params;
@@ -25698,6 +25699,10 @@ async function run() {
         await ubuntu.installGit(inputs);
         //
         await ubuntu.gitClone(inputs);
+        // 切换到 项目目录
+        await process.chdir(inputs.projectName);
+        // 查看当前目录
+        await exec.exec('ls', ['-l', './']);
     }
     catch (error) {
         core.setFailed(String(error));

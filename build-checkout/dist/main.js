@@ -34,6 +34,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
+const exec = __importStar(require("@actions/exec"));
 const ubuntu = __importStar(require("./step/Ubuntu"));
 function validateInputs(params) {
     return params;
@@ -49,6 +50,10 @@ async function run() {
         await ubuntu.installGit(inputs);
         //
         await ubuntu.gitClone(inputs);
+        // 切换到 项目目录
+        await process.chdir(inputs.projectName);
+        // 查看当前目录
+        await exec.exec('ls', ['-l', './']);
     }
     catch (error) {
         core.setFailed(String(error));

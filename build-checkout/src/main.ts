@@ -24,6 +24,12 @@ async function run(): Promise<void> {
     //
     await ubuntu.gitClone(inputs) ;
 
+    // 切换到 项目目录
+    await process.chdir(inputs.projectName) ;
+
+    // 查看当前目录
+    await exec.exec('ls', ['-l', './']) ;
+
   } catch (error: any) {
        core.setFailed(String(error)) ;
        throw new Error(error);
