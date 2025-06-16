@@ -25688,7 +25688,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(6618));
 const exec = __importStar(__nccwpck_require__(3274));
 const path_1 = __importDefault(__nccwpck_require__(6928));
-const os_1 = __importDefault(__nccwpck_require__(857));
 function validateInputs(params) {
     return params;
 }
@@ -25698,7 +25697,7 @@ async function run() {
             projectPath: core.getInput('project-path', { required: true }),
             buildCommand: core.getInput('build-command', { required: true })
         });
-        const projectPath = path_1.default.resolve(os_1.default.homedir(), inputs.projectPath);
+        const projectPath = path_1.default.resolve(inputs.projectPath);
         console.log(`projectPath: ${projectPath}`);
         process.chdir(projectPath);
         await exec.exec('npm', ['install']);

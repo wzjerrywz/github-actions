@@ -26,7 +26,7 @@ async function run(): Promise<void> {
       buildCommand: core.getInput('build-command', { required: true })
     }) ;
 
-    const projectPath = path.resolve(os.homedir(), inputs.projectPath);
+    const projectPath = path.resolve(inputs.projectPath);
 
     console.log(`projectPath: ${projectPath}`);
     process.chdir(projectPath);
