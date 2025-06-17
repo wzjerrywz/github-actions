@@ -35,6 +35,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = run;
 const core = __importStar(require("@actions/core"));
+const path = __importStar(require("path"));
 const exec = __importStar(require("@actions/exec"));
 const Step_1 = require("./step/Step");
 const Const_1 = require("./common/Const");
@@ -51,8 +52,10 @@ async function run() {
         });
         const step = new Step_1.Step();
         await step.downloadGradle(inputs);
+        await step.tarForEnv(inputs);
         // 查看目录
         await exec.exec('ls', ['-l', inputs.installPath]);
+        await exec.exec('ls', ['-l', path.resolve(inputs.installPath, `g${inputs.gradleVersion}`)]);
         // 查看版本
         await exec.exec('gradle', ['-v']);
     }

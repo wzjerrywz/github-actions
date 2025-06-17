@@ -45,13 +45,13 @@ export class Step {
     async tarForEnv(inputs: Partial<InputParamsType>) {
         const title = `解压并配置环境变量` ;
         await this.groupWrapper(inputs, title, async ({ gradleVersion, installPath }) => {
-              const tarName = `openjdk-${gradleVersion!}_linux-x64_bin.tar.gz` ;
-              await exec.exec(`sudo tar -zxvf ${path.resolve(installPath!, tarName)} -C ${installPath!}`);
+              const tarName = `gradle-${gradleVersion!}_-bin.zip` ;
+              await exec.exec(`sudo unzip -v ${path.resolve(installPath!, tarName)} -d ${installPath!}/g${gradleVersion}`);
               // 配置环境变量
-              const javaHome = path.resolve(installPath!, `jdk-${gradleVersion}`);
-              core.exportVariable('JAVA_HOME', javaHome);
+              const gradleHome = path.resolve(installPath!, `g${gradleVersion}`);
+              core.exportVariable('GRADLE_HOME', gradleHome);
               // path
-              core.addPath(path.join(javaHome, 'bin'));
+              core.addPath(path.join(gradleHome, 'bin'));
         });
     };
 
