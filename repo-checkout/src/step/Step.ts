@@ -53,6 +53,9 @@ export class Step {
                 
                 await exec.exec('git', ['clone', '-b', `${inputs.branchName}`, gitUrl]);
                 await exec.exec('ls', ['-l', './']);
+                // 查看目录位置
+                core.info(`当前目录: ${process.cwd()}`);
+                await exec.exec('pwd');
         });
     };
 
