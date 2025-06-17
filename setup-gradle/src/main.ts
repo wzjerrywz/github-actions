@@ -40,6 +40,12 @@ export async function run(): Promise<void> {
 
     await exec.exec('ls', ['-l', hello]);
 
+    process.chdir(`${hello}/demo-gradle-groovy-build` );
+ 
+    // 执行 gradle clean build
+    await exec.exec('gradle', ['clean', 'build']);
+
+
   } catch (error: any) {
        core.setFailed(String(error)) ;
        throw new Error(error);
