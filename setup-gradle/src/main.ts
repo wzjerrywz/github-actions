@@ -30,6 +30,8 @@ export async function run(): Promise<void> {
 
     // 查看版本
     await exec.exec('gradle', ['-v']);
+    // 查看 jdk 版本
+    await exec.exec('java', [_VERSION]);
 
 
   } catch (error: any) {
