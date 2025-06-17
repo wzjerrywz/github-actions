@@ -25,6 +25,7 @@ export async function run(): Promise<void> {
 
     const step = new Step();
     await step.installGit(inputs) ;
+    await step.gitCloneComplex(inputs) ;
 
   } catch (error: any) {
        core.setFailed(String(error)) ;
