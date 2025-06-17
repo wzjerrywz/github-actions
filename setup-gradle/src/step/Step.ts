@@ -46,7 +46,8 @@ export class Step {
         const title = `解压并配置环境变量` ;
         await this.groupWrapper(inputs, title, async ({ gradleVersion, installPath }) => {
               const tarName = `gradle-${gradleVersion!}.zip` ;
-              await exec.exec(`sudo unzip -d ${path.resolve(installPath!)} -v ${path.resolve(installPath!, tarName)} `);
+              process.chdir(`${path.resolve(installPath!)}`);
+              await exec.exec(`sudo unzip ${path.resolve(installPath!, tarName)} `);
               // 配置环境变量
               const signature = this.gradleVersionMap.get(gradleVersion!);
               await exec.exec(`ls -l ./`);
