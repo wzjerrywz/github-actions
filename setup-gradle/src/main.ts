@@ -27,8 +27,6 @@ export async function run(): Promise<void> {
     await step.downloadGradle(inputs) ;
     await step.tarForEnv(inputs) ;
 
-    // 查看目录
-    await exec.exec('ls', ['-l', inputs.installPath!]);
 
     // 查看版本
     await exec.exec('gradle', ['-v']);
