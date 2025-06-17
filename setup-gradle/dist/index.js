@@ -28355,7 +28355,7 @@ class Step {
             // 目录授权
             await exec.exec(`sudo chmod -R 777 ${installPath}`);
             // 下载
-            const tarName = `gradle-${gradleVersion}_-bin.zip`;
+            const tarName = `gradle-${gradleVersion}.zip`;
             await tc.downloadTool(url, path.resolve(installPath, tarName));
         });
     }
@@ -28364,8 +28364,8 @@ class Step {
     async tarForEnv(inputs) {
         const title = `解压并配置环境变量`;
         await this.groupWrapper(inputs, title, async ({ gradleVersion, installPath }) => {
-            const tarName = `gradle-${gradleVersion}_-bin.zip`;
-            await exec.exec(`sudo unzip -v ${path.resolve(installPath, tarName)} -d ${installPath}`);
+            const tarName = `gradle-${gradleVersion}.zip`;
+            await exec.exec(`sudo unzip ${path.resolve(installPath, tarName)} `);
             // 配置环境变量
             const signature = this.gradleVersionMap.get(gradleVersion);
             await exec.exec(`ls -l ${installPath}`);
