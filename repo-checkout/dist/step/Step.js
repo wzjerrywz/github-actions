@@ -54,7 +54,6 @@ class Step {
     async gitCloneComplex(inputs) {
         const title = `git clone 复杂操作`;
         await this.groupWrapper(inputs, title, async (inputs) => {
-            process.chdir("./repo");
             const [owner, repo] = inputs.repoName.split('/');
             console.log(`owner: ${owner}, repo: ${repo}`);
             let USERNAME = '';
