@@ -61,13 +61,13 @@ class Step {
             let URL = '';
             switch (owner) {
                 case 'gitee':
-                    USERNAME = process.env.GITEE_USERNAME || '';
-                    TOKEN = process.env.GITEE_TOKEN || '';
+                    USERNAME = inputs.giteeUsername || '';
+                    TOKEN = inputs.giteeToken || '';
                     URL = 'https://oauth2:<TOKEN>@gitee.com/<USERNAME>/<REPOSITORY>.git';
                     break;
                 case 'github':
-                    USERNAME = process.env.GITHUB_USERNAME || '';
-                    TOKEN = process.env.GITHUB_TOKEN || '';
+                    USERNAME = inputs.giteeUsername || '';
+                    TOKEN = inputs.giteeToken || '';
                     URL = 'git@github.com:<USERNAME>/<REPOSITORY>.git';
                     break;
                 case 'gitlab':
