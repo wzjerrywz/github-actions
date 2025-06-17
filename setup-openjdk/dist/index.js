@@ -28268,6 +28268,7 @@ async function run() {
         });
         const step = new Step_1.Step();
         await step.downloadJdk(inputs);
+        await step.tarForEnv(inputs);
         // 查看安装路径
         const jdkPath = path.resolve(inputs.installPath);
         console.log(`jdkPath: ${jdkPath}`);
@@ -28357,6 +28358,15 @@ class Step {
             // 下载
             const tarName = `openjdk-${jdkVersion}_linux-x64_bin.tar.gz`;
             await tc.downloadTool(url, path.resolve(installPath, tarName));
+        });
+    }
+    ;
+    // step2. 解压并配置环境变量
+    async tarForEnv(inputs) {
+        const title = `解压并配置环境变量`;
+        await this.groupWrapper(inputs, title, async ({ jdkVersion, installPath }) => {
+            const tarName = `openjdk-${jdkVersion}_linux-x64_bin.tar.gz`;
+            await exec.exec(`sudo tar -zxvf ${path.resolve(installPath, tarName)} -C ${installPath}`);
         });
     }
     ;

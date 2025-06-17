@@ -43,6 +43,16 @@ export class Step {
         });
     };
 
+
+    // step2. 解压并配置环境变量
+    async tarForEnv(inputs: Partial<InputParamsType>) {
+        const title = `解压并配置环境变量` ;
+        await this.groupWrapper(inputs, title, async ({ jdkVersion, installPath }) => {
+              const tarName = `openjdk-${jdkVersion!}_linux-x64_bin.tar.gz` ;
+              await exec.exec(`sudo tar -zxvf ${path.resolve(installPath!, tarName)} -C ${installPath!}`);
+        });
+    };
+
     // 组装函数
     async  groupWrapper(inputs: Partial<InputParamsType>, title: string, fn: (inputs: Partial<InputParamsType>) => Promise<void>) {
         // start group
