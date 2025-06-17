@@ -28325,8 +28325,8 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Step = void 0;
-const child_process = __importStar(__nccwpck_require__(5317));
 const core = __importStar(__nccwpck_require__(6618));
+const exec = __importStar(__nccwpck_require__(3274));
 const tc = __importStar(__nccwpck_require__(486));
 const path = __importStar(__nccwpck_require__(6928));
 const Const_1 = __nccwpck_require__(1560);
@@ -28350,8 +28350,10 @@ class Step {
             const signature = this.jdkVersionMap.get(jdkVersion);
             const url = this.URL_TEMPLATE.replaceAll('<VERSION>', jdkVersion)
                 .replaceAll('<SIGNURE>', signature);
+            // 创建目录
+            await exec.exec(`mkdir -p ${installPath}`);
             // 目录授权
-            child_process.execSync(`chmod -R 777 ${installPath}`);
+            await exec.exec(`chmod -R 777 ${installPath}`);
             // 下载
             const tarName = `openjdk-${jdkVersion}_linux-x64_bin.tar.gz`;
             await tc.downloadTool(url, path.resolve(installPath, tarName));

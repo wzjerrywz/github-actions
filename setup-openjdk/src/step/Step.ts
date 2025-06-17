@@ -33,8 +33,10 @@ export class Step {
               const signature = this.jdkVersionMap.get(jdkVersion!);
               const url = this.URL_TEMPLATE.replaceAll('<VERSION>', jdkVersion!)
                                       .replaceAll('<SIGNURE>', signature!);
+              // 创建目录
+              await exec.exec(`mkdir -p ${installPath!}`);
               // 目录授权
-              child_process.execSync(`chmod -R 777 ${installPath!}`);
+              await exec.exec(`chmod -R 777 ${installPath!}`);
               // 下载
               const tarName = `openjdk-${jdkVersion!}_linux-x64_bin.tar.gz` ;
               await tc.downloadTool(url, path.resolve(installPath!, tarName));
