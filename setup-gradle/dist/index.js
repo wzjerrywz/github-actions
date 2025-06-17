@@ -28254,7 +28254,6 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
 const core = __importStar(__nccwpck_require__(6618));
-const path = __importStar(__nccwpck_require__(6928));
 const exec = __importStar(__nccwpck_require__(3274));
 const Step_1 = __nccwpck_require__(3460);
 const Const_1 = __nccwpck_require__(1560);
@@ -28274,7 +28273,6 @@ async function run() {
         await step.tarForEnv(inputs);
         // 查看目录
         await exec.exec('ls', ['-l', inputs.installPath]);
-        await exec.exec('ls', ['-l', path.resolve(inputs.installPath, `g${inputs.gradleVersion}`)]);
         // 查看版本
         await exec.exec('gradle', ['-v']);
     }
@@ -28367,9 +28365,10 @@ class Step {
         const title = `解压并配置环境变量`;
         await this.groupWrapper(inputs, title, async ({ gradleVersion, installPath }) => {
             const tarName = `gradle-${gradleVersion}_-bin.zip`;
-            await exec.exec(`sudo unzip -v ${path.resolve(installPath, tarName)} -d ${installPath}/g${gradleVersion}`);
+            await exec.exec(`sudo unzip -v ${path.resolve(installPath, tarName)} -d ${installPath}`);
             // 配置环境变量
-            const gradleHome = path.resolve(installPath, `g${gradleVersion}`);
+            const signature = this.gradleVersionMap.get(gradleVersion);
+            const gradleHome = path.resolve(installPath, `gradle-${gradleVersion}-${signature}+0000`);
             core.exportVariable('GRADLE_HOME', gradleHome);
             // path
             core.addPath(path.join(gradleHome, 'bin'));
