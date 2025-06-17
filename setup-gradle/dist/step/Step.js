@@ -74,7 +74,7 @@ class Step {
             await exec.exec(`sudo unzip -v ${path.resolve(installPath, tarName)} -d ${path.resolve(installPath)}`);
             // 配置环境变量
             const signature = this.gradleVersionMap.get(gradleVersion);
-            await exec.exec(`ls -l ${path.resolve(installPath)}`);
+            await exec.exec(`ls -l ./`);
             const gradleHome = path.resolve(installPath, `gradle-${gradleVersion}-${signature}+0000`);
             core.info(`gradleHome: ${gradleHome}`);
             core.exportVariable('GRADLE_HOME', gradleHome);
