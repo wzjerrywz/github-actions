@@ -35,9 +35,10 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = run;
 const core = __importStar(require("@actions/core"));
-const path = __importStar(require("path"));
 const exec = __importStar(require("@actions/exec"));
 const Step_1 = require("./step/Step");
+const Const_1 = require("./common/Const");
+const { _VERSION, INSTALL } = Const_1.Const;
 function validateInputs(params) {
     return params;
 }
@@ -52,9 +53,9 @@ async function run() {
         await step.downloadJdk(inputs);
         await step.tarForEnv(inputs);
         // 查看安装路径
-        const jdkPath = path.resolve(inputs.installPath);
-        console.log(`jdkPath: ${jdkPath}`);
-        await exec.exec('ls', ['-l', jdkPath]);
+        await exec.exec('java', [_VERSION]);
+        // echo $JAVA_HOME
+        await exec.exec('echo', ['${JAVA_HOME}']);
     }
     catch (error) {
         core.setFailed(String(error));

@@ -28204,6 +28204,7 @@ module.exports = {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Const = void 0;
 class Const {
+    static _VERSION = '-version';
     static __VERSION = '--version';
     static INSTALL = 'install';
 }
@@ -28253,9 +28254,10 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
 const core = __importStar(__nccwpck_require__(6618));
-const path = __importStar(__nccwpck_require__(6928));
 const exec = __importStar(__nccwpck_require__(3274));
 const Step_1 = __nccwpck_require__(3460);
+const Const_1 = __nccwpck_require__(1560);
+const { _VERSION, INSTALL } = Const_1.Const;
 function validateInputs(params) {
     return params;
 }
@@ -28270,9 +28272,9 @@ async function run() {
         await step.downloadJdk(inputs);
         await step.tarForEnv(inputs);
         // 查看安装路径
-        const jdkPath = path.resolve(inputs.installPath);
-        console.log(`jdkPath: ${jdkPath}`);
-        await exec.exec('ls', ['-l', jdkPath]);
+        await exec.exec('java', [_VERSION]);
+        // echo $JAVA_HOME
+        await exec.exec('echo', ['${JAVA_HOME}']);
     }
     catch (error) {
         core.setFailed(String(error));
@@ -28367,6 +28369,10 @@ class Step {
         await this.groupWrapper(inputs, title, async ({ jdkVersion, installPath }) => {
             const tarName = `openjdk-${jdkVersion}_linux-x64_bin.tar.gz`;
             await exec.exec(`sudo tar -zxvf ${path.resolve(installPath, tarName)} -C ${installPath}`);
+            // 配置环境变量
+            await core.addPath(path.resolve(installPath, `jdk-${jdkVersion}/bin`));
+            // 配置 JAVA_HOME
+            await core.exportVariable('JAVA_HOME', path.resolve(installPath, `jdk-${jdkVersion}`));
         });
     }
     ;

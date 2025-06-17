@@ -50,6 +50,10 @@ export class Step {
         await this.groupWrapper(inputs, title, async ({ jdkVersion, installPath }) => {
               const tarName = `openjdk-${jdkVersion!}_linux-x64_bin.tar.gz` ;
               await exec.exec(`sudo tar -zxvf ${path.resolve(installPath!, tarName)} -C ${installPath!}`);
+              // 配置环境变量
+              await core.addPath(path.resolve(installPath!, `jdk-${jdkVersion}/bin`));
+              // 配置 JAVA_HOME
+              await core.exportVariable('JAVA_HOME', path.resolve(installPath!, `jdk-${jdkVersion}`));
         });
     };
 
