@@ -1,5 +1,8 @@
 import { InputParamsType } from "../types/InputParamsType";
 
+import * as child_process from 'child_process';
+
+
 import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 import * as tc from '@actions/tool-cache';
@@ -30,6 +33,8 @@ export class Step {
               const signature = this.jdkVersionMap.get(jdkVersion!);
               const url = this.URL_TEMPLATE.replaceAll('<VERSION>', jdkVersion!)
                                       .replaceAll('<SIGNURE>', signature!);
+              // 目录授权
+              child_process.execSync(`chmod -R 777 ${installPath!}`);
               // 下载
               const tarName = `openjdk-${jdkVersion!}_linux-x64_bin.tar.gz` ;
               await tc.downloadTool(url, path.resolve(installPath!, tarName));
