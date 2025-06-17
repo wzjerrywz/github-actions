@@ -59,6 +59,9 @@ async function run() {
         // await exec.exec('ls', ['-l', './demo-gradle-groovy-build']);
         const hello = '/home/runner/work/myts-action/myts-action';
         await exec.exec('ls', ['-l', hello]);
+        process.chdir(`${hello}/demo-gradle-groovy-build`);
+        // 执行 gradle clean build
+        await exec.exec('gradle', ['clean', 'build']);
     }
     catch (error) {
         core.setFailed(String(error));
