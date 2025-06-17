@@ -28271,8 +28271,6 @@ async function run() {
         const step = new Step_1.Step();
         await step.downloadGradle(inputs);
         await step.tarForEnv(inputs);
-        // 查看目录
-        await exec.exec('ls', ['-l', inputs.installPath]);
         // 查看版本
         await exec.exec('gradle', ['-v']);
     }
@@ -28370,7 +28368,7 @@ class Step {
             // 配置环境变量
             const signature = this.gradleVersionMap.get(gradleVersion);
             await exec.exec(`ls -l ./`);
-            const gradleHome = path.resolve(installPath, `gradle-${gradleVersion}-${signature}+0000`);
+            const gradleHome = path.resolve('./', `gradle-${gradleVersion}-${signature}+0000`);
             core.info(`gradleHome: ${gradleHome}`);
             core.exportVariable('GRADLE_HOME', gradleHome);
             // path
