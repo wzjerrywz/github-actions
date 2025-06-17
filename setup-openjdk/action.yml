@@ -1,0 +1,18 @@
+
+name: 'setup openjdk'
+description: 'openjdk'
+inputs:
+  jdk-version:
+    description: 'jdk 版本号'
+    required: true
+    default: '17.0.2'
+  install-path:
+    description: '安装路径'
+    required: true
+    default: './'
+outputs:
+  report:
+    description: 'Generated output'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
