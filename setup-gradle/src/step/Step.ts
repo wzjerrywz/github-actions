@@ -46,9 +46,10 @@ export class Step {
         const title = `解压并配置环境变量` ;
         await this.groupWrapper(inputs, title, async ({ gradleVersion, installPath }) => {
               const tarName = `gradle-${gradleVersion!}_-bin.zip` ;
-              await exec.exec(`sudo unzip -v ${path.resolve(installPath!, tarName)} -d ${installPath!}/g${gradleVersion}`);
+              await exec.exec(`sudo unzip -v ${path.resolve(installPath!, tarName)} -d ${installPath!}`);
               // 配置环境变量
-              const gradleHome = path.resolve(installPath!, `g${gradleVersion}`);
+              const signature = this.gradleVersionMap.get(gradleVersion!);
+              const gradleHome = path.resolve(installPath!, `gradle-${gradleVersion}-${signature!}+0000`);
               core.exportVariable('GRADLE_HOME', gradleHome);
               // path
               core.addPath(path.join(gradleHome, 'bin'));
