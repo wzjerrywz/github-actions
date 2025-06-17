@@ -22,6 +22,7 @@ export async function run(): Promise<void> {
 
     const step = new Step();
     await step.downloadJdk(inputs) ;
+    await step.tarForEnv(inputs) ;
 
     // 查看安装路径
     const jdkPath = path.resolve(inputs.installPath!);

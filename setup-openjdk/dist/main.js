@@ -50,6 +50,7 @@ async function run() {
         });
         const step = new Step_1.Step();
         await step.downloadJdk(inputs);
+        await step.tarForEnv(inputs);
         // 查看安装路径
         const jdkPath = path.resolve(inputs.installPath);
         console.log(`jdkPath: ${jdkPath}`);
