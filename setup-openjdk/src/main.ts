@@ -6,6 +6,9 @@ import { InputParamsType } from './types/InputParamsType';
 
 import { Step } from './step/Step';
 
+import { Const } from './common/Const';
+
+const { _VERSION, INSTALL } = Const;
 
 function validateInputs(params: Partial<InputParamsType>): InputParamsType {
       return params as InputParamsType ;
@@ -25,9 +28,9 @@ export async function run(): Promise<void> {
     await step.tarForEnv(inputs) ;
 
     // 查看安装路径
-    const jdkPath = path.resolve(inputs.installPath!);
-    console.log(`jdkPath: ${jdkPath}`);
-    await exec.exec('ls', ['-l', jdkPath]);
+    await exec.exec('java', [_VERSION]);
+    // echo $JAVA_HOME
+    await exec.exec('echo', ['${JAVA_HOME}']);
 
   } catch (error: any) {
        core.setFailed(String(error)) ;
