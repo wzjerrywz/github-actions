@@ -56,8 +56,10 @@ async function run() {
         await exec.exec('gradle', ['-v']);
         // 查看 jdk 版本
         await exec.exec('java', [_VERSION]);
-        await exec.exec('ls', ['-l', './']);
         // await exec.exec('ls', ['-l', './demo-gradle-groovy-build']);
+        const hello = '/home/runner/work/myts-action/myts-action';
+        process.chdir(hello);
+        await exec.exec('ls', ['-l', './']);
     }
     catch (error) {
         core.setFailed(String(error));
