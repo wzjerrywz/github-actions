@@ -1,0 +1,18 @@
+
+name: 'setup gradle'
+description: 'gradle'
+inputs:
+  gradle-version:
+    description: 'gradle 版本号'
+    required: true
+    default: '9.1.0'
+  install-path:
+    description: '安装路径'
+    required: true
+    default: './soft/gradle'
+outputs:
+  report:
+    description: 'Generated output'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
