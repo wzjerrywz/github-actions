@@ -18,7 +18,12 @@ export async function run(): Promise<void> {
     const inputs = validateInputs({
       branchName: core.getInput('branch-name', { required: true }),
       repoName: core.getInput('repo-name', { required: true }),
+      giteeUsername: core.getInput('gitee-username', { required: true }),
+      giteeToken: core.getInput('gitee-token', { required: true }),
     }) ;
+
+    core.info(inputs.giteeUsername);
+    core.info(inputs.giteeToken);
 
     const [owner, repo] = inputs.repoName.split('/');
     console.log(`owner: ${owner}, repo: ${repo}`);

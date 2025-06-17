@@ -22,6 +22,13 @@ inputs:
       - master
       - dev
       - test   
+  gitee-username:
+    description: '1@checkout. gitee 用户名'
+    required: true
+    type: string
+  gitee-token:
+    description: '1@checkout. gitee 密码'
+    required: true
 outputs:
   report:
     description: 'Generated output'
