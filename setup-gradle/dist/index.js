@@ -28276,7 +28276,7 @@ async function run() {
         // 查看 jdk 版本
         await exec.exec('java', [_VERSION]);
         await exec.exec('ls', ['-l', './']);
-        await exec.exec('ls', ['-l', './demo-gradle-groovy-build']);
+        // await exec.exec('ls', ['-l', './demo-gradle-groovy-build']);
     }
     catch (error) {
         core.setFailed(String(error));

@@ -35,7 +35,7 @@ export async function run(): Promise<void> {
 
     await exec.exec('ls', ['-l', './']);
 
-    await exec.exec('ls', ['-l', './demo-gradle-groovy-build']);
+    // await exec.exec('ls', ['-l', './demo-gradle-groovy-build']);
 
 
   } catch (error: any) {
