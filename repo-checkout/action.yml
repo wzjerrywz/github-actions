@@ -2,10 +2,6 @@
 name: 'build checkout action'
 description: 'checkout'
 
-env:
-  GITEE_USERNAME: ${{ secrets.GITEE_USERNAME }}
-  GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
-
 inputs:
   repo-name:
     description: '1@checkout. 仓库名称'
