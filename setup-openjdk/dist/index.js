@@ -28273,8 +28273,6 @@ async function run() {
         await step.tarForEnv(inputs);
         // 查看安装路径
         await exec.exec('java', [_VERSION]);
-        // echo $JAVA_HOME
-        await exec.exec('echo', ['${JAVA_HOME}']);
     }
     catch (error) {
         core.setFailed(String(error));
@@ -28370,9 +28368,10 @@ class Step {
             const tarName = `openjdk-${jdkVersion}_linux-x64_bin.tar.gz`;
             await exec.exec(`sudo tar -zxvf ${path.resolve(installPath, tarName)} -C ${installPath}`);
             // 配置环境变量
-            await core.addPath(path.resolve(installPath, `jdk-${jdkVersion}/bin`));
-            // 配置 JAVA_HOME
-            await core.exportVariable('JAVA_HOME', path.resolve(installPath, `jdk-${jdkVersion}`));
+            const javaHome = path.resolve(installPath, `jdk-${jdkVersion}`);
+            core.exportVariable('JAVA_HOME', javaHome);
+            // path
+            core.addPath(path.join(javaHome, 'bin'));
         });
     }
     ;

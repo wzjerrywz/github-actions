@@ -54,8 +54,6 @@ async function run() {
         await step.tarForEnv(inputs);
         // 查看安装路径
         await exec.exec('java', [_VERSION]);
-        // echo $JAVA_HOME
-        await exec.exec('echo', ['${JAVA_HOME}']);
     }
     catch (error) {
         core.setFailed(String(error));
