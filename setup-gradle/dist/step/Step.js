@@ -75,6 +75,8 @@ class Step {
             // 配置环境变量
             const signature = this.gradleVersionMap.get(gradleVersion);
             const gradleHome = path.resolve(installPath, `gradle-${gradleVersion}-${signature}+0000`);
+            core.info(`gradleHome: ${gradleHome}`);
+            await exec.exec(`ls -l ${gradleHome}`);
             core.exportVariable('GRADLE_HOME', gradleHome);
             // path
             core.addPath(path.join(gradleHome, 'bin'));
