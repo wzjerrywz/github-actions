@@ -26,7 +26,7 @@ export async function run(): Promise<void> {
     const step = new Step();
    
     // 
-    process.chdir(path.resolve('./'));
+    process.chdir(path.resolve(inputs.workDir));
 
     // 查看当前目录
     await exec.exec('pwd');
