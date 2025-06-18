@@ -32,27 +32,10 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
-const fs = __importStar(require("fs"));
-const archiver_1 = __importDefault(require("archiver"));
 const exec = __importStar(require("@actions/exec"));
-const path_1 = __importStar(require("path"));
-async function createTarGz(sourceDir, outPath) {
-    const archive = (0, archiver_1.default)('tar', { gzip: true });
-    const stream = fs.createWriteStream(outPath);
-    return new Promise((resolve, reject) => {
-        archive
-            .directory(sourceDir, false)
-            .on('error', (err) => reject(err))
-            .pipe(stream);
-        stream.on('close', () => resolve(outPath));
-        archive.finalize();
-    });
-}
+const Step_1 = require("./step/Step");
 function validateInputs(params) {
     return params;
 }
@@ -65,27 +48,26 @@ async function run() {
             nrmVersion: core.getInput('nrm-version', { required: true }),
             nrmSpeed: core.getInput('nrm-speed', { required: true }),
         });
-        //  安装指定的 npm 版本
-        await exec.exec('npm', ['install', '-g', `npm@${inputs.npmVersion}`]);
+        const step = new Step_1.Step();
+        await step.npmVersion(inputs);
         // 查看 npm 版本
         await exec.exec('npm', ['-v']);
-        // 安装 nrm
-        await exec.exec('npm', ['install', '-g', `nrm@${inputs.nrmVersion}`]);
-        // 配置 nrm
-        await exec.exec('nrm', ['use', inputs.nrmSpeed]);
-        // 查看 nrm 配置
-        await exec.exec('nrm', ['ls']);
-        const projectPath = path_1.default.resolve(inputs.projectPath);
-        console.log(`projectPath: ${projectPath}`);
-        process.chdir(projectPath);
-        await exec.exec('npm', ['install']);
-        await exec.exec('npm', ['run', `${inputs.buildCommand}`]);
-        // tc 压缩目录  build  到文件   dist.tar.gz
-        // tar -czvf archive.tar.gz mydir
-        // await exec.exec('tar', ['-czvf', './build.tar.gz', './build']);
-        // await (tc as any).createArchive(projectPath, 'build.tar.gz', 'tgz');
-        await createTarGz(projectPath + path_1.sep + 'build', 'build.tar.gz');
-        await exec.exec('ls', ['-l', './']);
+        //  //  安装指定的 npm 版本
+        //  await exec.exec('npm', ['install', '-g', `npm@${inputs.npmVersion}`]);
+        //  // 查看 npm 版本
+        //  await exec.exec('npm', ['-v']);
+        //  // 安装 nrm
+        //  await exec.exec('npm', ['install', '-g', `nrm@${inputs.nrmVersion}`]);
+        //  // 配置 nrm
+        //  await exec.exec('nrm', ['use', inputs.nrmSpeed]);
+        //  // 查看 nrm 配置
+        //  await exec.exec('nrm', ['ls']);
+        //   const projectPath = path.resolve(inputs.projectPath);
+        //   console.log(`projectPath: ${projectPath}`);
+        //   process.chdir(projectPath);
+        //   await exec.exec('npm', ['install']);
+        //   await exec.exec('npm', ['run', `${inputs.buildCommand}`]);
+        //   await exec.exec('ls', ['-l', './']);
     }
     catch (error) {
         core.setFailed(error instanceof Error ? error.message : 'Unknown error');
