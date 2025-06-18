@@ -54,7 +54,7 @@ class Step {
             // 查看当前目录
             await exec.exec('pwd');
             // 查看当前目录下的文件
-            await exec.exec('ls', ['-l', './']);
+            await exec.exec('ls', ['-lh', './']);
         });
     }
     ;
