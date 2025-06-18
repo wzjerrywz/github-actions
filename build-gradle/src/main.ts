@@ -24,15 +24,7 @@ export async function run(): Promise<void> {
     }) ;
 
     const step = new Step();
-   
-    // 
-    process.chdir(path.resolve(inputs.workDir));
-
-    // 查看当前目录
-    await exec.exec('pwd');
-
-    // 查看当前目录下的文件
-    await exec.exec('ls', ['-l', './']);
+    await step.init0(inputs);
 
   } catch (error: any) {
        core.setFailed(String(error)) ;
