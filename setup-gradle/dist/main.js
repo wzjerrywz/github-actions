@@ -55,13 +55,14 @@ async function run() {
         // 查看版本
         await exec.exec('gradle', ['-v']);
         // 查看 jdk 版本
-        await exec.exec('java', [_VERSION]);
+        // await exec.exec('java', [_VERSION]);
         // await exec.exec('ls', ['-l', './demo-gradle-groovy-build']);
-        const hello = '/home/runner/work/myts-action/myts-action';
-        await exec.exec('ls', ['-l', hello]);
-        process.chdir(`${hello}/demo-gradle-groovy-build`);
+        // const hello = '/home/runner/work/myts-action/myts-action';
+        // 查看当前目录
+        // await exec.exec('ls', ['-l', hello]);
+        // process.chdir(`${hello}/demo-gradle-groovy-build` );
         // 执行 gradle clean build
-        await exec.exec('gradle', ['clean', 'build']);
+        // await exec.exec('gradle', ['clean', 'build']);
     }
     catch (error) {
         core.setFailed(String(error));
