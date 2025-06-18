@@ -20,6 +20,9 @@ export async function run(): Promise<void> {
     // 验证输入
     const inputs = validateInputs({
         workDir: core.getInput('work-dir', { required: true }),
+        compressedName: core.getInput('compressed-name', { required: true }),
+        needDir: core.getInput('need-dir', { required: true }),
+        format: core.getInput('format', { required: true }),
     }) ;
 
     const step = new Step();
