@@ -23,9 +23,16 @@ export class Step {
             // const compressedName = 'archive';  // 压缩之后的文件名， 不带后缀
             // const needDir = './src';  // 需要被压缩的目录， 多个使用空格分开
 
+            const formatMap: Map<string, string> = new Map([
+                ['tar.gz', 'tar -zcvf'],
+                ['rar', 'rar a'],
+                ['zip', 'zip -r']
+            ]);
+
+            // 查看当前目录
             // 压缩格式
             // const format = 'tar.gz';
-            await exec.exec('sudo ' +  'tar -zcvf', [`${compressedName}.${format}`, needDir!]);
+            await exec.exec('sudo ' + formatMap.get(format!) , [`${compressedName}.${format}`, needDir!]);
 
             // 查看当前目录
             await exec.exec('pwd');
