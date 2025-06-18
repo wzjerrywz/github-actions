@@ -31,19 +31,19 @@ export async function run(): Promise<void> {
     // 查看版本
     await exec.exec('gradle', ['-v']);
     // 查看 jdk 版本
-    await exec.exec('java', [_VERSION]);
+    // await exec.exec('java', [_VERSION]);
 
    
 
     // await exec.exec('ls', ['-l', './demo-gradle-groovy-build']);
-    const hello = '/home/runner/work/myts-action/myts-action';
+    // const hello = '/home/runner/work/myts-action/myts-action';
 
-    await exec.exec('ls', ['-l', hello]);
+    // await exec.exec('ls', ['-l', hello]);
 
-    process.chdir(`${hello}/demo-gradle-groovy-build` );
+    // process.chdir(`${hello}/demo-gradle-groovy-build` );
  
     // 执行 gradle clean build
-    await exec.exec('gradle', ['clean', 'build']);
+    // await exec.exec('gradle', ['clean', 'build']);
 
 
   } catch (error: any) {
