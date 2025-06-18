@@ -49,7 +49,7 @@ async function run() {
             buildCmd: core.getInput('build-cmd', { required: true }),
         });
         const step = new Step_1.Step();
-        await step.init0(inputs);
+        await step.build(inputs);
     }
     catch (error) {
         core.setFailed(String(error));

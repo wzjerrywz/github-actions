@@ -24,12 +24,28 @@ export class Step {
     ]);
 
 
-    async init0(inputs: Partial<InputParamsType>) {
-        const title = `init0：` ;
-        await this.groupWrapper(inputs, title, async ({ }) => {
-              process.chdir(path.resolve(inputs.workDir!));
-              await exec.exec('pwd');
-              await exec.exec('ls', ['-l', './']);
+    async build(inputs: Partial<InputParamsType>) {
+        const title = `build： ${JSON.stringify(inputs)} ` ;
+        await this.groupWrapper(inputs, title, async ({ workDir, buildCmd, skipTest, otherParams }) => {
+            // 切换指定工作目录  
+            process.chdir(path.resolve(inputs.workDir!));
+            // 组装参数
+            const params = ['clean', buildCmd!];
+            // 跳过测试
+            if (skipTest) {
+                params.push('-x');
+                params.push('test');
+            }
+            // 补充参数
+            if (otherParams && otherParams.trim() !== '') {
+                // 任意多个空格分隔
+                const otherArr = otherParams.split(/\s+/);
+                params.push(...otherArr);
+            }
+            // 查看参数
+            core.info(`gradle// ${params.join(' ')}`);
+            // 执行构建
+            await exec.exec('gradle', params);
         });
     };
 
