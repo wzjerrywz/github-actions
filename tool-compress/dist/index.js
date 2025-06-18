@@ -25779,6 +25779,8 @@ class Step {
         await this.groupWrapper(inputs, '压缩目录或文件', async ({ workDir }) => {
             // 切换指定工作目录  
             process.chdir(path.resolve(workDir));
+            // 压缩 src 目录 
+            await exec.exec('sudo tar', ['-zcvf', 'src.tar.gz', './src']);
             // 查看当前目录
             await exec.exec('pwd');
             // 查看当前目录下的文件
