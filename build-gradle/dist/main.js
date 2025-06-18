@@ -47,6 +47,8 @@ async function run() {
         const inputs = validateInputs({
             workDir: core.getInput('work-dir', { required: true }),
             buildCmd: core.getInput('build-cmd', { required: true }),
+            skipTest: Boolean(core.getInput('skip-test', { required: true })),
+            otherParams: core.getInput('other-params', { required: false }),
         });
         const step = new Step_1.Step();
         await step.build(inputs);

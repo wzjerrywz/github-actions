@@ -25713,6 +25713,8 @@ async function run() {
         const inputs = validateInputs({
             workDir: core.getInput('work-dir', { required: true }),
             buildCmd: core.getInput('build-cmd', { required: true }),
+            skipTest: Boolean(core.getInput('skip-test', { required: true })),
+            otherParams: core.getInput('other-params', { required: false }),
         });
         const step = new Step_1.Step();
         await step.build(inputs);
@@ -25787,7 +25789,7 @@ class Step {
         const title = `build： ${JSON.stringify(inputs)} `;
         await this.groupWrapper(inputs, title, async ({ workDir, buildCmd, skipTest, otherParams }) => {
             // 切换指定工作目录  
-            process.chdir(path.resolve(inputs.workDir));
+            process.chdir(path.resolve(workDir));
             // 组装参数
             const params = ['clean', buildCmd];
             // 跳过测试
