@@ -77,7 +77,7 @@ class Step {
     async see(inputs) {
         await this.groupWrapper(inputs, '查看当前目录', async ({ workDir }) => {
             // 切换指定工作目录  
-            process.chdir(path.resolve(workDir));
+            process.chdir(path.resolve('./'));
             // 查看当前目录
             await exec.exec('pwd');
             // 查看当前目录下的文件
