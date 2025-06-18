@@ -1,5 +1,5 @@
 
 export interface InputParamsType {
-    gradleVersion: string,
-    installPath: string,
+    workDir: string,
+    buildCmd: string,
 }
