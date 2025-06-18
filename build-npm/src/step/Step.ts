@@ -55,8 +55,6 @@ export class Step {
     async build(inputs: Partial<InputParamsType>) {
         const title = ` 项目打包 ： npm run ${inputs.buildCommand} ` ;
         await this.groupWrapper(inputs, title, async ({ projectPath, buildCommand }) => {
-            // 切换到项目目录
-            process.chdir(path.resolve(projectPath!));
             // 项目打包
             await exec.exec('npm', [ 'run', buildCommand! ]);
         });
