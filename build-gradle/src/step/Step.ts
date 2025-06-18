@@ -28,7 +28,7 @@ export class Step {
         const title = `build： ${JSON.stringify(inputs)} ` ;
         await this.groupWrapper(inputs, title, async ({ workDir, buildCmd, skipTest, otherParams }) => {
             // 切换指定工作目录  
-            process.chdir(path.resolve(inputs.workDir!));
+            process.chdir(path.resolve(workDir!));
             // 组装参数
             const params = ['clean', buildCmd!];
             // 跳过测试
