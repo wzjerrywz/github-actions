@@ -48,12 +48,28 @@ class Step {
         ['7.6.5', '20250614030244'],
         ['7.6.4', '20250526080545']
     ]);
-    async init0(inputs) {
-        const title = `init0：`;
-        await this.groupWrapper(inputs, title, async ({}) => {
+    async build(inputs) {
+        const title = `build： ${JSON.stringify(inputs)} `;
+        await this.groupWrapper(inputs, title, async ({ workDir, buildCmd, skipTest, otherParams }) => {
+            // 切换指定工作目录  
             process.chdir(path.resolve(inputs.workDir));
-            await exec.exec('pwd');
-            await exec.exec('ls', ['-l', './']);
+            // 组装参数
+            const params = ['clean', buildCmd];
+            // 跳过测试
+            if (skipTest) {
+                params.push('-x');
+                params.push('test');
+            }
+            // 补充参数
+            if (otherParams && otherParams.trim() !== '') {
+                // 任意多个空格分隔
+                const otherArr = otherParams.split(/\s+/);
+                params.push(...otherArr);
+            }
+            // 查看参数
+            core.info(`gradle// ${params.join(' ')}`);
+            // 执行构建
+            await exec.exec('gradle', params);
         });
     }
     ;

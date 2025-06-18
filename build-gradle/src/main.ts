@@ -24,7 +24,7 @@ export async function run(): Promise<void> {
     }) ;
 
     const step = new Step();
-    await step.init0(inputs);
+    await step.build(inputs);
 
   } catch (error: any) {
        core.setFailed(String(error)) ;
