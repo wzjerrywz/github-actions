@@ -15,12 +15,17 @@ export class Step {
 
     // step1. 压缩目录或文件
     async compress(inputs: Partial<InputParamsType>) {
-        await this.groupWrapper(inputs, '压缩目录或文件', async ({ workDir }) => {
+        await this.groupWrapper(inputs, '压缩目录或文件', async ({ workDir, compressedName, needDir, format }) => {
               // 切换指定工作目录  
             process.chdir(path.resolve(workDir!));
 
             // 压缩 src 目录 
-            await exec.exec('sudo tar', ['-zcvf', 'src.tar.gz', './src']);
+            // const compressedName = 'archive';  // 压缩之后的文件名， 不带后缀
+            // const needDir = './src';  // 需要被压缩的目录， 多个使用空格分开
+
+            // 压缩格式
+            // const format = 'tar.gz';
+            await exec.exec('sudo ' +  'tar -zcvf', [`${compressedName}.${format}`, needDir!]);
 
             // 查看当前目录
             await exec.exec('pwd');

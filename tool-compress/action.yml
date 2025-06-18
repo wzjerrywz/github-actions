@@ -6,6 +6,18 @@ inputs:
     description: '工作目录'
     required: true
     default: './'       
+  compressed-name:
+    description: '压缩之后的文件名'
+    required: true
+    default: 'archive'
+  need-dir:
+    description: '需要被压缩的目录'
+    required: true
+    default: './src'
+  format:
+    description: '压缩格式'
+    required: true
+    default: 'tar.gz'
 outputs:
   report:
     description: 'Generated output'

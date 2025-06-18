@@ -46,6 +46,9 @@ async function run() {
         // 验证输入
         const inputs = validateInputs({
             workDir: core.getInput('work-dir', { required: true }),
+            compressedName: core.getInput('compressed-name', { required: true }),
+            needDir: core.getInput('need-dir', { required: true }),
+            format: core.getInput('format', { required: true }),
         });
         const step = new Step_1.Step();
         await step.compress(inputs);
