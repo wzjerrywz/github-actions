@@ -25790,6 +25790,8 @@ class Step {
             await exec.exec('sudo ' + 'tar -zcvf', [`${compressedName}.${format}`, needDir]);
             // 查看当前目录
             await exec.exec('pwd');
+            // du -sh
+            await exec.exec('du', ['-sh', needDir]);
             // 查看当前目录下的文件
             await exec.exec('ls', ['-lh', './']);
         });
