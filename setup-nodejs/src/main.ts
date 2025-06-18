@@ -1,21 +1,14 @@
  import * as core from '@actions/core'
 
 import * as exec from '@actions/exec'
-import {  getText } from './cmd'
-import path from 'path'
-import os from 'os'
+import { Step } from './step/Step';
+import { InputParamsType } from './type/InputParamsType';
 
 
-
-type InputParams = {
-  nvmVersion: string,
-  nodejsVersion: string,
-}
-
-function validateInputs(params: Partial<InputParams>): InputParams {
+function validateInputs(params: Partial<InputParamsType>): InputParamsType {
   if (!params.nvmVersion) throw new Error('nvmVersion input is required') ;
   if (!params.nodejsVersion) throw new Error('nodejsVersion input is required') ;
-  return params as InputParams
+  return params as InputParamsType
 }
 
 async function run(): Promise<void> {
@@ -26,41 +19,12 @@ async function run(): Promise<void> {
       nodejsVersion: core.getInput('nodejs-version', { required: true }),
     })
 
-    const nvmDir = path.join(os.homedir(), '.nvm');
-    core.exportVariable('NVM_DIR', nvmDir);
+    const step = new Step();
+    await step.installNvm(inputs);
+    await step.installNodejs(inputs);
 
-    const nvm = `curl -o install.sh https://gitee.com/mirrors/nvm/raw/v${inputs.nvmVersion}/install.sh` ;
-    await exec.exec(nvm, []);
-    await exec.exec('bash', ['install.sh']);
-
-    // 加载 NVM 环境
-    await exec.exec('bash', [
-      '-c',
-      `. ${nvmDir}/nvm.sh && nvm install ${inputs.nodejsVersion} && nvm use ${inputs.nodejsVersion} `
-    ]);
-    
-    // 获取 Node.js 路径并添加到 PATH
-    const nodePath = await exec.getExecOutput('bash', [
-      '-c',
-      `. ${nvmDir}/nvm.sh && dirname $( nvm which ${inputs.nodejsVersion} ) `
-    ], {
-      silent: true
-    });
-    console.log(`nodePath: ${nodePath.stdout}`);
-    
-    const nodeBinPath = path.join(nodePath.stdout.trim(), '');
-    core.addPath(nodeBinPath);
-
-    await exec.exec(nodeBinPath + '/' + 'node', ['-v']);
-
-    core.info('###################################################################');
-
-    const textGet = await getText('node', ['-v']);
-
-    core.info(`Node.js Of by GetText:   ` + textGet);
-
+    // 查看 node 版本
     await exec.exec('node', ['-v']);
-
     
   } catch (error: any) {
        core.setFailed(error instanceof Error ? error.message : 'Unknown error') ;

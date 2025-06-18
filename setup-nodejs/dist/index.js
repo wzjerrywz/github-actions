@@ -25643,56 +25643,106 @@ module.exports = {
 
 /***/ }),
 
-/***/ 737:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ 1560:
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getText = getText;
-exports.capture = capture;
-const exec_1 = __nccwpck_require__(3274);
-async function getText(command, args = []) {
-    try {
-        const result = await (0, exec_1.getExecOutput)(command, args, {
-            silent: true,
-            ignoreReturnCode: true
-        });
-        if (result.exitCode !== 0) {
-            throw new Error(`命令执行失败，错误码: ${result.exitCode}, 错误信息: ${result.stderr.trim()}`);
-        }
-        return result.stdout.trim();
-    }
-    catch (error) {
-        console.error(`获取命令输出时出错:`, error);
-        throw error;
-    }
+exports.Const = void 0;
+class Const {
+    static _VERSION = '-version';
+    static __VERSION = '--version';
+    static INSTALL = 'install';
+    static NVM_DIR = 'NVM_DIR';
 }
-// 模拟 capture 功能
-async function capture(command, args) {
-    try {
-        let output = '';
-        const options = {
-            // 禁止自动打印输出到 GitHub Actions 日志
-            silent: false,
-            listeners: {
-                stdout: (data) => {
-                    output += data.toString();
+exports.Const = Const;
+
+
+/***/ }),
+
+/***/ 2892:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.FileSystem = void 0;
+const fs = __importStar(__nccwpck_require__(1943));
+const path = __importStar(__nccwpck_require__(6928));
+class FileSystem {
+    static async deleteDirectoryOrFile(path) {
+        try {
+            // 递归删除目录（force 选项允许删除非空目录）
+            await fs.rm(path, { recursive: true, force: true });
+            console.log(`目录已删除: ${path}`);
+        }
+        catch (error) {
+            console.error(`删除目录失败: ${error}`);
+        }
+    }
+    static async createDir(path) {
+        try {
+            await fs.mkdir(path, { recursive: true });
+            console.log(`目录创建成功: ${path}`);
+        }
+        catch (error) {
+            console.error(`创建目录失败: ${error}`);
+        }
+    }
+    static async listDir(dirPath = '.') {
+        try {
+            const entries = await fs.readdir(dirPath, { withFileTypes: true });
+            for (const entry of entries) {
+                const fullPath = path.join(dirPath, entry.name);
+                if (entry.isDirectory()) {
+                    console.log(`📁 目录: ${fullPath}`);
+                }
+                else {
+                    console.log(`📄 文件: ${fullPath}`);
                 }
             }
-        };
-        const exitCode = await (0, exec_1.exec)(command, args, options);
-        if (exitCode !== 0) {
-            throw new Error(`Command failed with exit code ${exitCode}`);
         }
-        return output.trim();
-    }
-    catch (error) {
-        console.error(`Error executing command: ${error.message}`);
-        args.unshift(command);
-        throw new Error(`执行命令异常！ \n 命令： \n  ${args.join(' ')} `); // 重新抛出错误，以便在测试中捕获
+        catch (error) {
+            console.error(`读取目录失败: ${error}`);
+        }
     }
 }
+exports.FileSystem = FileSystem;
+;
 
 
 /***/ }),
@@ -25735,15 +25785,10 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(6618));
 const exec = __importStar(__nccwpck_require__(3274));
-const cmd_1 = __nccwpck_require__(737);
-const path_1 = __importDefault(__nccwpck_require__(6928));
-const os_1 = __importDefault(__nccwpck_require__(857));
+const Step_1 = __nccwpck_require__(3460);
 function validateInputs(params) {
     if (!params.nvmVersion)
         throw new Error('nvmVersion input is required');
@@ -25757,30 +25802,10 @@ async function run() {
             nvmVersion: core.getInput('nvm-version', { required: true }),
             nodejsVersion: core.getInput('nodejs-version', { required: true }),
         });
-        const nvmDir = path_1.default.join(os_1.default.homedir(), '.nvm');
-        core.exportVariable('NVM_DIR', nvmDir);
-        const nvm = `curl -o install.sh https://gitee.com/mirrors/nvm/raw/v${inputs.nvmVersion}/install.sh`;
-        await exec.exec(nvm, []);
-        await exec.exec('bash', ['install.sh']);
-        // 加载 NVM 环境
-        await exec.exec('bash', [
-            '-c',
-            `. ${nvmDir}/nvm.sh && nvm install ${inputs.nodejsVersion} && nvm use ${inputs.nodejsVersion} `
-        ]);
-        // 获取 Node.js 路径并添加到 PATH
-        const nodePath = await exec.getExecOutput('bash', [
-            '-c',
-            `. ${nvmDir}/nvm.sh && dirname $( nvm which ${inputs.nodejsVersion} ) `
-        ], {
-            silent: true
-        });
-        console.log(`nodePath: ${nodePath.stdout}`);
-        const nodeBinPath = path_1.default.join(nodePath.stdout.trim(), '');
-        core.addPath(nodeBinPath);
-        await exec.exec(nodeBinPath + '/' + 'node', ['-v']);
-        core.info('###################################################################');
-        const textGet = await (0, cmd_1.getText)('node', ['-v']);
-        core.info(`Node.js Of by GetText:   ` + textGet);
+        const step = new Step_1.Step();
+        await step.installNvm(inputs);
+        await step.installNodejs(inputs);
+        // 查看 node 版本
         await exec.exec('node', ['-v']);
     }
     catch (error) {
@@ -25790,6 +25815,115 @@ async function run() {
 }
 // run
 run();
+
+
+/***/ }),
+
+/***/ 3460:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Step = void 0;
+const core = __importStar(__nccwpck_require__(6618));
+const exec = __importStar(__nccwpck_require__(3274));
+const path = __importStar(__nccwpck_require__(6928));
+const os = __importStar(__nccwpck_require__(857));
+const Const_1 = __nccwpck_require__(1560);
+const { __VERSION, INSTALL, NVM_DIR } = Const_1.Const;
+const FileSystem_1 = __nccwpck_require__(2892);
+class Step {
+    async installNvm(inputs) {
+        const title = `安装 nvm : ${inputs.nvmVersion}`;
+        await this.groupWrapper(inputs, title, async ({ nvmVersion }) => {
+            const nvmDownloadDir = path.resolve('./soft/nvm');
+            // 创建目录
+            await FileSystem_1.FileSystem.createDir(nvmDownloadDir);
+            // 切换指定工作目录  
+            process.chdir(nvmDownloadDir);
+            // 下载 nvm
+            const nvm = `curl -o install.sh https://gitee.com/mirrors/nvm/raw/v${nvmVersion}/install.sh`;
+            await exec.exec(nvm, []);
+            await exec.exec('bash', ['install.sh']);
+            // env
+            const nvmDir = path.join(os.homedir(), '.nvm');
+            core.exportVariable(NVM_DIR, nvmDir);
+            // 查看路径位置
+            await exec.exec('pwd');
+        });
+    }
+    ;
+    async installNodejs(inputs) {
+        const title = `安装 nodejs : ${inputs.nodejsVersion}`;
+        await this.groupWrapper(inputs, title, async ({ nodejsVersion }) => {
+            // nvmDir
+            const nvmDir = path.join(os.homedir(), '.nvm');
+            // 加载 NVM 环境
+            await exec.exec('bash', [
+                '-c',
+                `. ${nvmDir}/nvm.sh && nvm install ${nodejsVersion} && nvm use ${nodejsVersion} `
+            ]);
+            // 获取 Node.js 路径并添加到 PATH
+            const nodePath = await exec.getExecOutput('bash', [
+                '-c',
+                `. ${nvmDir}/nvm.sh && dirname $( nvm which ${nodejsVersion} ) `
+            ], {
+                silent: true
+            });
+            console.log(`nodePath: ${nodePath.stdout}`);
+            const nodeBinPath = path.join(nodePath.stdout.trim(), '');
+            core.addPath(nodeBinPath);
+            // NODEJS_HOME 导出
+            core.exportVariable('NODEJS_HOME', nodeBinPath);
+        });
+    }
+    ;
+    // 组装函数
+    async groupWrapper(inputs, title, fn) {
+        // start group
+        core.startGroup(title);
+        // 执行函数
+        await fn(inputs);
+        // end group
+        core.endGroup();
+    }
+    ;
+}
+exports.Step = Step;
 
 
 /***/ }),
@@ -25863,6 +25997,14 @@ module.exports = require("events");
 
 "use strict";
 module.exports = require("fs");
+
+/***/ }),
+
+/***/ 1943:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("fs/promises");
 
 /***/ }),
 
