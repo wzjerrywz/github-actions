@@ -16,6 +16,8 @@ import { FileSystem } from '../common/FileSystem';
 
 export class Step {
 
+    URL_NVM = 'https://gitee.com/mirrors/nvm/raw/v<VERSION>/install.sh';
+
     async installNvm(inputs: Partial<InputParamsType>) {
         const title = `安装 nvm : ${inputs.nvmVersion}` ;
         await this.groupWrapper(inputs, title, async ({ nvmVersion }) => {
@@ -25,7 +27,8 @@ export class Step {
                 // 切换指定工作目录  
                 process.chdir(nvmDownloadDir);
                 // 下载 nvm
-                const nvm = `curl -o install.sh https://gitee.com/mirrors/nvm/raw/v${nvmVersion}/install.sh` ;
+                const url = this.URL_NVM.replace('<VERSION>', nvmVersion!);
+                const nvm = `curl -o install.sh ${url}` ;
                 await exec.exec(nvm, []);
                 await exec.exec('bash', ['install.sh']);
                 // env
