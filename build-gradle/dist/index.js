@@ -25810,17 +25810,15 @@ class Step {
         });
     }
     ;
-    // step1. 下载 gradle
-    async downloadGradle(inputs) {
-        const title = `下载 gradle , 版本号：`;
-        await this.groupWrapper(inputs, title, async ({}) => {
-        });
-    }
-    ;
-    // step2. 解压并配置环境变量
-    async tarForEnv(inputs) {
-        const title = `解压并配置环境变量`;
-        await this.groupWrapper(inputs, title, async ({}) => {
+    // step1. 查看
+    async see(inputs) {
+        await this.groupWrapper(inputs, '查看当前目录', async ({ workDir }) => {
+            // 切换指定工作目录  
+            process.chdir(path.resolve(workDir));
+            // 查看当前目录
+            await exec.exec('pwd');
+            // 查看当前目录下的文件
+            await exec.exec('ls', ['-l', './']);
         });
     }
     ;
