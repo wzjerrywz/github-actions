@@ -31,7 +31,7 @@ async function run(): Promise<void> {
     await step.build(inputs);
 
     // 查看项目目录
-    await exec.exec('ls', ['-l', path.resolve(inputs.projectPath!)]);
+    await exec.exec('ls', ['-l', './']);
 
   } catch (error: any) {
        core.setFailed(error instanceof Error ? error.message : 'Unknown error') ;

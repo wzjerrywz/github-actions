@@ -25699,14 +25699,10 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(6618));
 const exec = __importStar(__nccwpck_require__(3274));
 const Step_1 = __nccwpck_require__(3460);
-const path_1 = __importDefault(__nccwpck_require__(6928));
 function validateInputs(params) {
     return params;
 }
@@ -25725,7 +25721,7 @@ async function run() {
         await step.projectInstall(inputs);
         await step.build(inputs);
         // 查看项目目录
-        await exec.exec('ls', ['-l', path_1.default.resolve(inputs.projectPath)]);
+        await exec.exec('ls', ['-l', './']);
     }
     catch (error) {
         core.setFailed(error instanceof Error ? error.message : 'Unknown error');

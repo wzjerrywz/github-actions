@@ -32,14 +32,10 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const exec = __importStar(require("@actions/exec"));
 const Step_1 = require("./step/Step");
-const path_1 = __importDefault(require("path"));
 function validateInputs(params) {
     return params;
 }
@@ -58,7 +54,7 @@ async function run() {
         await step.projectInstall(inputs);
         await step.build(inputs);
         // 查看项目目录
-        await exec.exec('ls', ['-l', path_1.default.resolve(inputs.projectPath)]);
+        await exec.exec('ls', ['-l', './']);
     }
     catch (error) {
         core.setFailed(error instanceof Error ? error.message : 'Unknown error');
