@@ -25788,8 +25788,18 @@ class Step {
             const formatMap = new Map([
                 ['tar.gz', 'tar -zcvf'],
                 ['rar', 'rar a'],
-                ['zip', 'zip -r']
+                ['zip', 'zip -r'],
+                ['xz', 'tar -Jcvf']
             ]);
+            // 安装 rar
+            switch (format) {
+                case 'rar':
+                    await exec.exec('sudo apt-get install rar');
+                    break;
+                case 'xz':
+                    await exec.exec('sudo apt-get install xz-utils');
+                    break;
+            }
             // 查看当前目录
             // 压缩格式
             // const format = 'tar.gz';
