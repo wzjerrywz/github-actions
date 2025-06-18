@@ -1,1 +1,1 @@
-{"root":["./src/main.ts","./src/common/cmd.ts","./src/common/const.ts","./src/common/filesystem.ts","./src/step/step.ts","./src/types/inputparamstype.ts"],"errors":true,"version":"5.8.3"}
+{"root":["./src/main.ts","./src/common/cmd.ts","./src/common/const.ts","./src/common/filesystem.ts","./src/step/step.ts","./src/types/inputparamstype.ts"],"version":"5.8.3"}
