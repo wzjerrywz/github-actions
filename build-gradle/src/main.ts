@@ -19,32 +19,20 @@ export async function run(): Promise<void> {
   try {
     // 验证输入
     const inputs = validateInputs({
-      gradleVersion: core.getInput('gradle-version', { required: true }),
-      installPath: core.getInput('install-path', { required: true }),
+        workDir: core.getInput('work-dir', { required: true }),
+        buildCmd: core.getInput('build-cmd', { required: true }),
     }) ;
 
     const step = new Step();
-    await step.downloadGradle(inputs) ;
-    await step.tarForEnv(inputs) ;
-
-
-    // 查看版本
-    await exec.exec('gradle', ['-v']);
-    // 查看 jdk 版本
-    await exec.exec('java', [_VERSION]);
-
    
+    // 
+    process.chdir(path.resolve('./'));
 
-    // await exec.exec('ls', ['-l', './demo-gradle-groovy-build']);
-    const hello = '/home/runner/work/myts-action/myts-action';
+    // 查看当前目录
+    await exec.exec('pwd');
 
-    await exec.exec('ls', ['-l', hello]);
-
-    process.chdir(`${hello}/demo-gradle-groovy-build` );
- 
-    // 执行 gradle clean build
-    await exec.exec('gradle', ['clean', 'build']);
-
+    // 查看当前目录下的文件
+    await exec.exec('ls', ['-l', './']);
 
   } catch (error: any) {
        core.setFailed(String(error)) ;

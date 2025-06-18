@@ -2,14 +2,14 @@
 name: 'build gradle'
 description: 'buildgradle'
 inputs:
-  gradle-version:
-    description: 'gradle 版本号'
+  work-dir:
+    description: '工作目录'
     required: true
-    default: '9.1.0'
-  install-path:
-    description: '安装路径'
+    default: './'
+  build-cmd:
+    description: '构建指令'
     required: true
-    default: './soft/gradle'
+    default: 'clean build'
 outputs:
   report:
     description: 'Generated output'
