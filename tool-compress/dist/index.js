@@ -25789,14 +25789,14 @@ class Step {
                 ['tar.gz', 'tar -zcvf'],
                 ['rar', 'rar a'],
                 ['zip', 'zip -r'],
-                ['xz', 'tar -Jcvf']
+                ['tar.xz', 'tar -Jcvf']
             ]);
             // 安装 rar
             switch (format) {
                 case 'rar':
                     await exec.exec('sudo apt-get install rar');
                     break;
-                case 'xz':
+                case 'tar.xz':
                     await exec.exec('sudo apt-get install xz-utils');
                     break;
             }
