@@ -19,7 +19,7 @@ inputs:
     description: '补充参数'
     required: false
     type: string
-    default: '--debug --stacktrace'        
+    default: ''        
 outputs:
   report:
     description: 'Generated output'
