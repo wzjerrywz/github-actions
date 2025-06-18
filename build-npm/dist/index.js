@@ -25699,10 +25699,14 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(6618));
 const exec = __importStar(__nccwpck_require__(3274));
 const Step_1 = __nccwpck_require__(3460);
+const path_1 = __importDefault(__nccwpck_require__(6928));
 function validateInputs(params) {
     return params;
 }
@@ -25718,21 +25722,10 @@ async function run() {
         const step = new Step_1.Step();
         await step.npmVersion(inputs);
         await step.nrmInstall(inputs);
-        // 查看 npm 版本
-        await exec.exec('npm', ['-v']);
-        // 查看 nrm 配置
-        await exec.exec('nrm', ['ls']);
-        //  // 安装 nrm
-        //  // 配置 nrm
-        //  await exec.exec('nrm', ['use', inputs.nrmSpeed]);
-        //  // 查看 nrm 配置
-        //  await exec.exec('nrm', ['ls']);
-        //   const projectPath = path.resolve(inputs.projectPath);
-        //   console.log(`projectPath: ${projectPath}`);
-        //   process.chdir(projectPath);
-        //   await exec.exec('npm', ['install']);
-        //   await exec.exec('npm', ['run', `${inputs.buildCommand}`]);
-        //   await exec.exec('ls', ['-l', './']);
+        await step.projectInstall(inputs);
+        await step.build(inputs);
+        // 查看项目目录
+        await exec.exec('ls', ['-l', path_1.default.resolve(inputs.projectPath)]);
     }
     catch (error) {
         core.setFailed(error instanceof Error ? error.message : 'Unknown error');
@@ -25787,6 +25780,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Step = void 0;
 const core = __importStar(__nccwpck_require__(6618));
 const exec = __importStar(__nccwpck_require__(3274));
+const path = __importStar(__nccwpck_require__(6928));
 const Const_1 = __nccwpck_require__(1560);
 const { __VERSION, INSTALL } = Const_1.Const;
 class Step {
@@ -25813,6 +25807,26 @@ class Step {
             });
             // 配置 nrm
             await exec.exec('nrm', ['use', nrmSpeed]);
+        });
+    }
+    ;
+    async projectInstall(inputs) {
+        const title = ` 项目安装依赖 ： npm install `;
+        await this.groupWrapper(inputs, title, async ({ projectPath }) => {
+            // 切换到项目目录
+            process.chdir(path.resolve(projectPath));
+            // 安装依赖
+            await exec.exec('npm', [INSTALL]);
+        });
+    }
+    ;
+    async build(inputs) {
+        const title = ` 项目打包 ： npm run ${inputs.buildCommand} `;
+        await this.groupWrapper(inputs, title, async ({ projectPath, buildCommand }) => {
+            // 切换到项目目录
+            process.chdir(path.resolve(projectPath));
+            // 项目打包
+            await exec.exec('npm', ['run', buildCommand]);
         });
     }
     ;

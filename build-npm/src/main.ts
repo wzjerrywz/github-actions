@@ -4,6 +4,7 @@ import * as exec from '@actions/exec';
 
 import { InputParamsType } from './types/InputParamsType';
 import { Step } from './step/Step';
+import path from 'path';
 
 
 function validateInputs(params: Partial<InputParamsType>): InputParamsType {
@@ -26,30 +27,11 @@ async function run(): Promise<void> {
     const step = new Step();
     await step.npmVersion(inputs);
     await step.nrmInstall(inputs);
+    await step.projectInstall(inputs);
+    await step.build(inputs);
 
-    // 查看 npm 版本
-    await exec.exec('npm', ['-v']);
-    // 查看 nrm 配置
-    await exec.exec('nrm', ['ls']);
-
-  //  // 安装 nrm
-
-  //  // 配置 nrm
-  //  await exec.exec('nrm', ['use', inputs.nrmSpeed]);
-
-  //  // 查看 nrm 配置
-  //  await exec.exec('nrm', ['ls']);
-
-  //   const projectPath = path.resolve(inputs.projectPath);
-
-  //   console.log(`projectPath: ${projectPath}`);
-  //   process.chdir(projectPath);
-
-  //   await exec.exec('npm', ['install']);
-  //   await exec.exec('npm', ['run', `${inputs.buildCommand}`]);
-
-    
-  //   await exec.exec('ls', ['-l', './']);
+    // 查看项目目录
+    await exec.exec('ls', ['-l', path.resolve(inputs.projectPath!)]);
 
   } catch (error: any) {
        core.setFailed(error instanceof Error ? error.message : 'Unknown error') ;

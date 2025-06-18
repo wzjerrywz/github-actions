@@ -41,6 +41,27 @@ export class Step {
     };
 
 
+    async projectInstall(inputs: Partial<InputParamsType>) {
+        const title = ` 项目安装依赖 ： npm install ` ;
+        await this.groupWrapper(inputs, title, async ({ projectPath }) => {
+            // 切换到项目目录
+            process.chdir(path.resolve(projectPath!));
+            // 安装依赖
+            await exec.exec('npm', [ INSTALL ]);
+        });
+    };
+
+
+    async build(inputs: Partial<InputParamsType>) {
+        const title = ` 项目打包 ： npm run ${inputs.buildCommand} ` ;
+        await this.groupWrapper(inputs, title, async ({ projectPath, buildCommand }) => {
+            // 切换到项目目录
+            process.chdir(path.resolve(projectPath!));
+            // 项目打包
+            await exec.exec('npm', [ 'run', buildCommand! ]);
+        });
+    };
+
 
     // 组装函数
     async  groupWrapper(inputs: Partial<InputParamsType>, title: string, fn: (inputs: Partial<InputParamsType>) => Promise<void>) {
