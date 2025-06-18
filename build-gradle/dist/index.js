@@ -25820,6 +25820,8 @@ class Step {
             await exec.exec('pwd');
             // 查看当前目录下的文件
             await exec.exec('ls', ['-l', './']);
+            // 查看当前目录下的文件
+            await exec.exec('ls', ['-l', './build']);
         });
     }
     ;
