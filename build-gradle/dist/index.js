@@ -25701,8 +25701,6 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
 const core = __importStar(__nccwpck_require__(6618));
-const path = __importStar(__nccwpck_require__(6928));
-const exec = __importStar(__nccwpck_require__(3274));
 const Step_1 = __nccwpck_require__(3460);
 const Const_1 = __nccwpck_require__(1560);
 const { _VERSION, INSTALL } = Const_1.Const;
@@ -25717,12 +25715,7 @@ async function run() {
             buildCmd: core.getInput('build-cmd', { required: true }),
         });
         const step = new Step_1.Step();
-        // 
-        process.chdir(path.resolve(inputs.workDir));
-        // 查看当前目录
-        await exec.exec('pwd');
-        // 查看当前目录下的文件
-        await exec.exec('ls', ['-l', './']);
+        await step.init0(inputs);
     }
     catch (error) {
         core.setFailed(String(error));
@@ -25777,6 +25770,8 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Step = void 0;
 const core = __importStar(__nccwpck_require__(6618));
+const exec = __importStar(__nccwpck_require__(3274));
+const path = __importStar(__nccwpck_require__(6928));
 const Const_1 = __nccwpck_require__(1560);
 const { __VERSION, INSTALL } = Const_1.Const;
 class Step {
@@ -25788,6 +25783,15 @@ class Step {
         ['7.6.5', '20250614030244'],
         ['7.6.4', '20250526080545']
     ]);
+    async init0(inputs) {
+        const title = `init0：`;
+        await this.groupWrapper(inputs, title, async ({}) => {
+            process.chdir(path.resolve(inputs.workDir));
+            await exec.exec('pwd');
+            await exec.exec('ls', ['-l', './']);
+        });
+    }
+    ;
     // step1. 下载 gradle
     async downloadGradle(inputs) {
         const title = `下载 gradle , 版本号：`;

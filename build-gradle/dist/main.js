@@ -35,8 +35,6 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = run;
 const core = __importStar(require("@actions/core"));
-const path = __importStar(require("path"));
-const exec = __importStar(require("@actions/exec"));
 const Step_1 = require("./step/Step");
 const Const_1 = require("./common/Const");
 const { _VERSION, INSTALL } = Const_1.Const;
@@ -51,12 +49,7 @@ async function run() {
             buildCmd: core.getInput('build-cmd', { required: true }),
         });
         const step = new Step_1.Step();
-        // 
-        process.chdir(path.resolve(inputs.workDir));
-        // 查看当前目录
-        await exec.exec('pwd');
-        // 查看当前目录下的文件
-        await exec.exec('ls', ['-l', './']);
+        await step.init0(inputs);
     }
     catch (error) {
         core.setFailed(String(error));

@@ -23,6 +23,16 @@ export class Step {
         ['7.6.4', '20250526080545']
     ]);
 
+
+    async init0(inputs: Partial<InputParamsType>) {
+        const title = `init0：` ;
+        await this.groupWrapper(inputs, title, async ({ }) => {
+              process.chdir(path.resolve(inputs.workDir!));
+              await exec.exec('pwd');
+              await exec.exec('ls', ['-l', './']);
+        });
+    };
+
     // step1. 下载 gradle
     async downloadGradle(inputs: Partial<InputParamsType>) {
         const title = `下载 gradle , 版本号：` ;
