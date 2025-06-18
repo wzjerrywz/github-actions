@@ -33,32 +33,46 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-const core = __importStar(require("@actions/core"));
-const exec = __importStar(require("@actions/exec"));
-const Step_1 = require("./step/Step");
-function validateInputs(params) {
-    if (!params.nvmVersion)
-        throw new Error('nvmVersion input is required');
-    if (!params.nodejsVersion)
-        throw new Error('nodejsVersion input is required');
-    return params;
-}
-async function run() {
-    try {
-        const inputs = validateInputs({
-            nvmVersion: core.getInput('nvm-version', { required: true }),
-            nodejsVersion: core.getInput('nodejs-version', { required: true }),
-        });
-        const step = new Step_1.Step();
-        await step.installNvm(inputs);
-        await step.installNodejs(inputs);
-        // 查看 node 版本
-        await exec.exec('node', ['-v']);
+exports.FileSystem = void 0;
+const fs = __importStar(require("fs/promises"));
+const path = __importStar(require("path"));
+class FileSystem {
+    static async deleteDirectoryOrFile(path) {
+        try {
+            // 递归删除目录（force 选项允许删除非空目录）
+            await fs.rm(path, { recursive: true, force: true });
+            console.log(`目录已删除: ${path}`);
+        }
+        catch (error) {
+            console.error(`删除目录失败: ${error}`);
+        }
     }
-    catch (error) {
-        core.setFailed(error instanceof Error ? error.message : 'Unknown error');
-        throw new Error(error);
+    static async createDir(path) {
+        try {
+            await fs.mkdir(path, { recursive: true });
+            console.log(`目录创建成功: ${path}`);
+        }
+        catch (error) {
+            console.error(`创建目录失败: ${error}`);
+        }
+    }
+    static async listDir(dirPath = '.') {
+        try {
+            const entries = await fs.readdir(dirPath, { withFileTypes: true });
+            for (const entry of entries) {
+                const fullPath = path.join(dirPath, entry.name);
+                if (entry.isDirectory()) {
+                    console.log(`📁 目录: ${fullPath}`);
+                }
+                else {
+                    console.log(`📄 文件: ${fullPath}`);
+                }
+            }
+        }
+        catch (error) {
+            console.error(`读取目录失败: ${error}`);
+        }
     }
 }
-// run
-run();
+exports.FileSystem = FileSystem;
+;
