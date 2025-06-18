@@ -25717,14 +25717,12 @@ async function run() {
         });
         const step = new Step_1.Step();
         await step.npmVersion(inputs);
+        await step.nrmInstall(inputs);
         // 查看 npm 版本
         await exec.exec('npm', ['-v']);
-        //  //  安装指定的 npm 版本
-        //  await exec.exec('npm', ['install', '-g', `npm@${inputs.npmVersion}`]);
-        //  // 查看 npm 版本
-        //  await exec.exec('npm', ['-v']);
+        // 查看 nrm 配置
+        await exec.exec('nrm', ['ls']);
         //  // 安装 nrm
-        //  await exec.exec('npm', ['install', '-g', `nrm@${inputs.nrmVersion}`]);
         //  // 配置 nrm
         //  await exec.exec('nrm', ['use', inputs.nrmSpeed]);
         //  // 查看 nrm 配置
@@ -25796,6 +25794,25 @@ class Step {
         const title = ` 设置 npm 版本 ： ${inputs.npmVersion} `;
         await this.groupWrapper(inputs, title, async ({ npmVersion }) => {
             await exec.exec('npm', [INSTALL, '-g', `npm@${npmVersion}`]);
+        });
+    }
+    ;
+    async nrmInstall(inputs) {
+        const title = ` 安装 nrm ： ${inputs.nrmVersion}  ， 指定镜像： ${inputs.nrmSpeed} `;
+        await this.groupWrapper(inputs, title, async ({ nrmVersion, nrmSpeed }) => {
+            await exec.exec('npm', [INSTALL, '-g', `nrm@${nrmVersion}`]);
+            // nrm add company-registry https://registry.your-company.com
+            const nrmMap = new Map([
+                ['company1', 'https://registry.your-company-01.com'],
+                ['company2', 'https://registry.your-company-02.com'],
+                ['company3', 'https://registry.your-company-03.com']
+            ]);
+            // 添加 nrm
+            nrmMap.forEach(async (value, key) => {
+                await exec.exec('nrm', ['add', key, value]);
+            });
+            // 配置 nrm
+            await exec.exec('nrm', ['use', nrmSpeed]);
         });
     }
     ;

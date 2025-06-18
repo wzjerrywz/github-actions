@@ -21,6 +21,26 @@ export class Step {
     };
 
 
+    async nrmInstall(inputs: Partial<InputParamsType>) {
+        const title = ` 安装 nrm ： ${inputs.nrmVersion}  ， 指定镜像： ${inputs.nrmSpeed} ` ;
+        await this.groupWrapper(inputs, title, async ({ nrmVersion, nrmSpeed }) => {
+              await exec.exec('npm', [ INSTALL , '-g', `nrm@${nrmVersion}` ]);
+              // nrm add company-registry https://registry.your-company.com
+              const nrmMap: Map<string, string> = new Map([
+                ['company1', 'https://registry.your-company-01.com'],
+                ['company2', 'https://registry.your-company-02.com'],
+                ['company3', 'https://registry.your-company-03.com']
+              ]);
+              // 添加 nrm
+              nrmMap.forEach(async (value, key) => {
+                await exec.exec('nrm', ['add', key, value]);
+              });
+              // 配置 nrm
+              await exec.exec('nrm', ['use', nrmSpeed!]);
+        });
+    };
+
+
 
     // 组装函数
     async  groupWrapper(inputs: Partial<InputParamsType>, title: string, fn: (inputs: Partial<InputParamsType>) => Promise<void>) {
