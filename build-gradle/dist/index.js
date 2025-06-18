@@ -25718,6 +25718,7 @@ async function run() {
         });
         const step = new Step_1.Step();
         await step.build(inputs);
+        await step.see(inputs);
     }
     catch (error) {
         core.setFailed(String(error));
