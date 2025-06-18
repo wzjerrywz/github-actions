@@ -50,14 +50,12 @@ async function run() {
         });
         const step = new Step_1.Step();
         await step.npmVersion(inputs);
+        await step.nrmInstall(inputs);
         // 查看 npm 版本
         await exec.exec('npm', ['-v']);
-        //  //  安装指定的 npm 版本
-        //  await exec.exec('npm', ['install', '-g', `npm@${inputs.npmVersion}`]);
-        //  // 查看 npm 版本
-        //  await exec.exec('npm', ['-v']);
+        // 查看 nrm 配置
+        await exec.exec('nrm', ['ls']);
         //  // 安装 nrm
-        //  await exec.exec('npm', ['install', '-g', `nrm@${inputs.nrmVersion}`]);
         //  // 配置 nrm
         //  await exec.exec('nrm', ['use', inputs.nrmSpeed]);
         //  // 查看 nrm 配置
