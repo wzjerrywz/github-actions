@@ -37,6 +37,7 @@ export async function run(): Promise<void> {
 
     // await exec.exec('ls', ['-l', './demo-gradle-groovy-build']);
     // const hello = '/home/runner/work/myts-action/myts-action';
+    // 查看当前目录
 
     // await exec.exec('ls', ['-l', hello]);
 
