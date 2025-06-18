@@ -52,7 +52,7 @@ async function run() {
         });
         const step = new Step_1.Step();
         // 
-        process.chdir(path.resolve('./'));
+        process.chdir(path.resolve(inputs.workDir));
         // 查看当前目录
         await exec.exec('pwd');
         // 查看当前目录下的文件
