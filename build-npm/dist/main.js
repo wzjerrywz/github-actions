@@ -32,10 +32,14 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const exec = __importStar(require("@actions/exec"));
 const Step_1 = require("./step/Step");
+const path_1 = __importDefault(require("path"));
 function validateInputs(params) {
     return params;
 }
@@ -51,21 +55,10 @@ async function run() {
         const step = new Step_1.Step();
         await step.npmVersion(inputs);
         await step.nrmInstall(inputs);
-        // 查看 npm 版本
-        await exec.exec('npm', ['-v']);
-        // 查看 nrm 配置
-        await exec.exec('nrm', ['ls']);
-        //  // 安装 nrm
-        //  // 配置 nrm
-        //  await exec.exec('nrm', ['use', inputs.nrmSpeed]);
-        //  // 查看 nrm 配置
-        //  await exec.exec('nrm', ['ls']);
-        //   const projectPath = path.resolve(inputs.projectPath);
-        //   console.log(`projectPath: ${projectPath}`);
-        //   process.chdir(projectPath);
-        //   await exec.exec('npm', ['install']);
-        //   await exec.exec('npm', ['run', `${inputs.buildCommand}`]);
-        //   await exec.exec('ls', ['-l', './']);
+        await step.projectInstall(inputs);
+        await step.build(inputs);
+        // 查看项目目录
+        await exec.exec('ls', ['-l', path_1.default.resolve(inputs.projectPath)]);
     }
     catch (error) {
         core.setFailed(error instanceof Error ? error.message : 'Unknown error');

@@ -36,6 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Step = void 0;
 const core = __importStar(require("@actions/core"));
 const exec = __importStar(require("@actions/exec"));
+const path = __importStar(require("path"));
 const Const_1 = require("../common/Const");
 const { __VERSION, INSTALL } = Const_1.Const;
 class Step {
@@ -62,6 +63,26 @@ class Step {
             });
             // 配置 nrm
             await exec.exec('nrm', ['use', nrmSpeed]);
+        });
+    }
+    ;
+    async projectInstall(inputs) {
+        const title = ` 项目安装依赖 ： npm install `;
+        await this.groupWrapper(inputs, title, async ({ projectPath }) => {
+            // 切换到项目目录
+            process.chdir(path.resolve(projectPath));
+            // 安装依赖
+            await exec.exec('npm', [INSTALL]);
+        });
+    }
+    ;
+    async build(inputs) {
+        const title = ` 项目打包 ： npm run ${inputs.buildCommand} `;
+        await this.groupWrapper(inputs, title, async ({ projectPath, buildCommand }) => {
+            // 切换到项目目录
+            process.chdir(path.resolve(projectPath));
+            // 项目打包
+            await exec.exec('npm', ['run', buildCommand]);
         });
     }
     ;
