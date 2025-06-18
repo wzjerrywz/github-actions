@@ -62,9 +62,7 @@ export class Step {
              await exec.exec('ls', ['-l', './build']);
              // 查看当前目录下的文件
              await exec.exec('ls', ['-l', './build/libs']);
-             // 查看当前目录下的文件
-             await exec.exec('ls', ['-l', './build/libs/demo-gradle-groovy-build-1.0.0.jar']);
-             // 查看当前目录下的文件
+  
         });
     };
 
