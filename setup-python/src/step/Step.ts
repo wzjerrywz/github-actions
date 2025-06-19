@@ -87,44 +87,29 @@ export async function activateEnv() {
 
 
   // 切换虚拟环境
-     core.startGroup(`切换虚拟环境 `);
+//      core.startGroup(`切换虚拟环境 `);
 
     
-// 初始化 Conda
-await exec.exec(`conda`, ['init', 'bash']);
 
-const condaBinDir = path.join(condaDir, 'bin');
-
-
-// 强制设置 Conda 环境变量（即使 init 没有修改 .bashrc）
-const envFile = process.env['GITHUB_ENV'] || '';
-if (envFile) {
-  // 添加 Conda 初始化脚本到 BASH_ENV
-  fs.appendFileSync(envFile, `BASH_ENV=${condaBinDir}/etc/profile.d/conda.sh\n`);
-  
-  // 也可以直接设置 PATH
-  fs.appendFileSync(envFile, `PATH=${condaBinDir}:$PATH\n`);
-}
-
-     await exec.exec('conda', [
-      'activate',
-      envName
-     ]);
-      // end 
-     core.endGroup();
-}
+//      await exec.exec('conda', [
+//       'activate',
+//       envName
+//      ]);
+//       // end 
+//      core.endGroup();
+// }
 
 export async function validVersion() {
   const envName = 'github_actions_env';
   
   core.startGroup('验证 Python 版本 和 pip 版本');
 
- // 验证 Python 安装
-  // await exec.exec(`conda run -n ${envName} python --version`, [ ]);
-  // await exec.exec(`conda run -n ${envName} pip --version`, [ ]);
+//  验证 Python 安装
+  await exec.exec(`conda run -n ${envName} python --version`, [ ]);
+  await exec.exec(`conda run -n ${envName} pip --version`, [ ]);
 
-  await exec.exec(`python --version`, [ ]);
-  await exec.exec(`pip --version`, [ ]);
+  // await exec.exec(`python --version`, [ ]);
+  // await exec.exec(`pip --version`, [ ]);
 
   core.endGroup();
 }
