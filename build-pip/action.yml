@@ -10,6 +10,14 @@ inputs:
     description: 'pip 版本'
     required: false,
     default: '23.1.0'
+  pkg-mode:
+    description: '打包方式'
+    required: false,
+    default: 'setup'    
+  work-dir:
+    description: '工作目录'
+    required: false,
+    default: './demo-python312-pip'  
 outputs:
   virtual-env:
     description: '虚拟环境名称'

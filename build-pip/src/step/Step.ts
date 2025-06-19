@@ -56,10 +56,9 @@ export class Step {
 
     async projectSetup(inputs: Partial<InputParamsType>) {
         const title = ` python  setup ` ;
-        await this.groupWrapper(inputs, title, async ({ virtualEnv, pipVersion }) => {
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, workDir }) => {
                 // 切换目录
-                const workDir = './demo-python312-pip';
-                process.chdir(path.resolve(workDir));
+                process.chdir(path.resolve(workDir!));
 
                 // pip install wheel setuptools
                 await exec.exec(`conda run -n ${virtualEnv} pip`, [ INSTALL, 'wheel', 'setuptools' ]);
@@ -75,10 +74,9 @@ export class Step {
 
     async projectBuild(inputs: Partial<InputParamsType>) {
         const title = ` python  build ` ;
-        await this.groupWrapper(inputs, title, async ({ virtualEnv, pipVersion }) => {
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, workDir }) => {
                 // 切换目录
-                const workDir = './demo-python312-pip';
-                process.chdir(path.resolve(workDir));
+                process.chdir(path.resolve(workDir!));
 
                 // pip install build
                 await exec.exec(`conda run -n ${virtualEnv} pip`, [ INSTALL, 'build' ]);
@@ -95,17 +93,16 @@ export class Step {
 
     async projectPyinstaller(inputs: Partial<InputParamsType>) {
         const title = ` python  pyinstaller ` ;
-        await this.groupWrapper(inputs, title, async ({ virtualEnv }) => {
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, workDir }) => {
                 // 切换目录
-                const workDir = './demo-python312-pip';
-                process.chdir(path.resolve(workDir));
+                process.chdir(path.resolve(workDir!));
 
                 const vvv = `conda run -n ${virtualEnv} `;
                 // pip install pyinstaller
                 await exec.exec(`${vvv}pip`, [ INSTALL, 'pyinstaller' ]);
 
                 // pip install -r requirements.txt --progress-bar=pretty
-                await exec.exec(`${vvv}pip`, [ INSTALL, '-r', 'requirements.txt', '--progress-bar=' + 'on' ]);
+                await exec.exec(`${vvv}pip`, [ INSTALL, '-r', './requirements.txt', '--progress-bar=' + 'on' ]);
 
                 // pyinstaller app.py
                 const app = 'app.py';
