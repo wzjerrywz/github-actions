@@ -15,8 +15,8 @@ inputs:
     required: false,
     default: 'virenv'    
 outputs:
-  report:
-    description: 'Generated output'
+  virtual-env:
+    description: '虚拟环境名称'
 runs:
   using: 'node20'
   main: 'dist/index.js'
