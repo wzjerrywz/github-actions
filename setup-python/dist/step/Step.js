@@ -40,6 +40,7 @@ exports.downloadConda = downloadConda;
 exports.configConda = configConda;
 exports.createVirtualEnv = createVirtualEnv;
 exports.activateEnv = activateEnv;
+exports.validVersion = validVersion;
 const core = __importStar(require("@actions/core"));
 const tc = __importStar(require("@actions/tool-cache"));
 const exec = __importStar(require("@actions/exec"));
@@ -113,15 +114,14 @@ async function activateEnv() {
     //      ]);
     //       // end 
     //      core.endGroup();
-    // }
-    export async function validVersion() {
-        const envName = 'github_actions_env';
-        core.startGroup('验证 Python 版本 和 pip 版本');
-        //  验证 Python 安装
-        await exec.exec(`conda run -n ${envName} python --version`, []);
-        await exec.exec(`conda run -n ${envName} pip --version`, []);
-        // await exec.exec(`python --version`, [ ]);
-        // await exec.exec(`pip --version`, [ ]);
-        core.endGroup();
-    }
+}
+async function validVersion() {
+    const envName = 'github_actions_env';
+    core.startGroup('验证 Python 版本 和 pip 版本');
+    //  验证 Python 安装
+    await exec.exec(`conda run -n ${envName} python --version`, []);
+    await exec.exec(`conda run -n ${envName} pip --version`, []);
+    // await exec.exec(`python --version`, [ ]);
+    // await exec.exec(`pip --version`, [ ]);
+    core.endGroup();
 }

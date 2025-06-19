@@ -97,7 +97,7 @@ export async function activateEnv() {
 //      ]);
 //       // end 
 //      core.endGroup();
-// }
+}
 
 export async function validVersion() {
   const envName = 'github_actions_env';
