@@ -50,7 +50,7 @@ async function run() {
         console.log("inputs: ", inputs);
         // steps
         const step = new Step_1.Step();
-        step.pipVersionInstall(inputs);
+        await step.pipVersionInstall(inputs);
         // 验证 conda 版本
         await exec.exec(`conda run -n ${inputs.virtualEnv} pip`, [__VERSION]);
     }
