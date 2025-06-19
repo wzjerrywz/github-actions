@@ -25716,9 +25716,9 @@ async function run() {
         console.log("inputs: ", inputs);
         // steps
         const step = new Step_1.Step();
-        step.pipValidateVersion(inputs);
+        step.pipVersionInstall(inputs);
         // 验证 conda 版本
-        await exec.exec(`conda`, [__VERSION]);
+        await exec.exec(`conda run -n ${inputs.virtualEnv} pip`, [__VERSION]);
     }
     catch (error) {
         core.setFailed(String(error));
@@ -25776,13 +25776,26 @@ const exec = __importStar(__nccwpck_require__(3274));
 const Const_1 = __nccwpck_require__(1560);
 const { __VERSION, INSTALL } = Const_1.Const;
 class Step {
-    async pipValidateVersion(inputs) {
-        const title = ` 验证 pip 版本 ： ${inputs.pipVersion} `;
-        await this.groupWrapper(inputs, title, async ({ virtualEnv }) => {
-            // 验证
-            //  验证 Python 安装
-            await exec.exec(`conda run -n ${virtualEnv} python`, [__VERSION]);
-            await exec.exec(`conda run -n ${virtualEnv} pip`, [__VERSION]);
+    // async pipValidateVersion(inputs: Partial<InputParamsType>) {
+    //     const title = ` 验证 pip 版本 ： ${inputs.pipVersion} ` ;
+    //     await this.groupWrapper(inputs, title, async ({ virtualEnv }) => {
+    //             // 验证
+    //             //  验证 Python 安装
+    //             await exec.exec(`conda run -n ${virtualEnv} python`, [ __VERSION ]);
+    //             await exec.exec(`conda run -n ${virtualEnv} pip`, [ __VERSION ]);
+    //     });
+    // };
+    async pipVersionInstall(inputs) {
+        const title = ` 安装指定的 pip  版本： ${inputs.pipVersion} `;
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, pipVersion }) => {
+            //   pip 安装 pip install --no-cache-dir --force-reinstall pip==23.1.2
+            const params = [
+                INSTALL,
+                '--no-cache-dir',
+                '--force-reinstall',
+                `pip==${pipVersion}`
+            ];
+            await exec.exec(`conda run -n ${virtualEnv} pip`, params);
         });
     }
     ;
