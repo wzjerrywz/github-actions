@@ -28349,7 +28349,7 @@ async function configConda() {
     // 添加 Conda 到 PATH
     core.addPath(condaBinDir);
     // 初始化 Conda
-    await exec.exec(`${condaBinDir}/conda`, ['init', 'bash']);
+    await exec.exec(`conda`, ['init', 'bash']);
     // 设置环境变量供后续步骤使用
     core.exportVariable('CONDA_HOME', condaDir);
     // 验证 Conda 安装
@@ -28383,6 +28383,8 @@ async function activateEnv() {
     const condaDir = path_1.default.join(os_1.default.homedir(), 'miniconda3');
     // init conda 
     await exec.exec('ls', ['-l', condaDir]);
+    // 初始化 Conda
+    await exec.exec(`conda`, ['init', 'bash']);
     // 切换虚拟环境
     core.startGroup(`切换虚拟环境 `);
     await exec.exec('conda', [

@@ -41,7 +41,7 @@ const condaBinDir = path.join(condaDir, 'bin');
 core.addPath(condaBinDir);
     
 // 初始化 Conda
-await exec.exec(`${condaBinDir}/conda`, ['init', 'bash']);
+await exec.exec(`conda`, ['init', 'bash']);
 
 // 设置环境变量供后续步骤使用
 core.exportVariable('CONDA_HOME', condaDir);
@@ -84,6 +84,8 @@ export async function activateEnv() {
   // init conda 
   await exec.exec('ls', ['-l', condaDir]);
 
+  // 初始化 Conda
+await exec.exec(`conda`, ['init', 'bash']);
 
   // 切换虚拟环境
      core.startGroup(`切换虚拟环境 `);
