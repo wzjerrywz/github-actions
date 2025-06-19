@@ -104,7 +104,7 @@ export class Step {
                 await exec.exec(`conda run -n ${virtualEnv} pip`, [ INSTALL, 'pyinstaller' ]);
 
                 // pip install -r requirements.txt --progress-bar=pretty
-                await exec.exec(`conda run -n ${virtualEnv} pip`, [ INSTALL, '-r', 'requirements.txt', '--progress-bar=pretty' ]);
+                await exec.exec(`conda run -n ${virtualEnv} pip`, [ INSTALL, '-r', 'requirements.txt', '--progress-bar=' + 'on' ]);
 
                 // pyinstaller app.py
                 const app = 'app.py';
