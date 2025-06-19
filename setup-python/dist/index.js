@@ -28321,6 +28321,7 @@ const tc = __importStar(__nccwpck_require__(486));
 const exec = __importStar(__nccwpck_require__(3274));
 const path_1 = __importDefault(__nccwpck_require__(6928));
 const os_1 = __importDefault(__nccwpck_require__(857));
+const fs = __importStar(__nccwpck_require__(9896));
 async function downloadConda() {
     const condaVersion = 'py39_25.3.1-1';
     const condaUrl = `https://repo.anaconda.com/miniconda/Miniconda3-${condaVersion}-Linux-x86_64.sh`;
@@ -28350,6 +28351,14 @@ async function configConda() {
     core.addPath(condaBinDir);
     // 初始化 Conda
     await exec.exec(`conda`, ['init', 'bash']);
+    // 强制设置 Conda 环境变量（即使 init 没有修改 .bashrc）
+    const envFile = process.env['GITHUB_ENV'] || '';
+    if (envFile) {
+        // 添加 Conda 初始化脚本到 BASH_ENV
+        fs.appendFileSync(envFile, `BASH_ENV=${condaBinDir}/etc/profile.d/conda.sh\n`);
+        // 也可以直接设置 PATH
+        fs.appendFileSync(envFile, `PATH=${condaBinDir}:$PATH\n`);
+    }
     // 设置环境变量供后续步骤使用
     core.exportVariable('CONDA_HOME', condaDir);
     // 验证 Conda 安装
@@ -28383,8 +28392,6 @@ async function activateEnv() {
     const condaDir = path_1.default.join(os_1.default.homedir(), 'miniconda3');
     // init conda 
     await exec.exec('ls', ['-l', condaDir]);
-    // 初始化 Conda
-    await exec.exec(`conda`, ['init', 'bash']);
     // 切换虚拟环境
     core.startGroup(`切换虚拟环境 `);
     await exec.exec('conda', [
