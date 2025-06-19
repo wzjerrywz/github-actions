@@ -113,17 +113,18 @@ class Step {
             // 切换目录
             const workDir = './demo-python312-pip';
             process.chdir(path.resolve(workDir));
+            const vvv = `conda run -n ${virtualEnv} `;
             // pip install pyinstaller
-            await exec.exec(`conda run -n ${virtualEnv} pip`, [INSTALL, 'pyinstaller']);
+            await exec.exec(`${vvv}pip`, [INSTALL, 'pyinstaller']);
             // pip install -r requirements.txt --progress-bar=pretty
-            await exec.exec(`conda run -n ${virtualEnv} pip`, [INSTALL, '-r', 'requirements.txt', '--progress-bar=' + 'on']);
+            await exec.exec(`${vvv}pip`, [INSTALL, '-r', 'requirements.txt', '--progress-bar=' + 'on']);
             // pyinstaller app.py
             const app = 'app.py';
             const params = [];
-            await exec.exec(`conda run -n ${virtualEnv} pyinstaller`, [app, ...params]);
+            await exec.exec(`${vvv}pyinstaller`, [app, ...params]);
             // pwd 
             await exec.exec(`pwd`);
-            await exec.exec(`ls -lh ./`);
+            await exec.exec(`ls -lh ./dist`);
         });
     }
     ;
