@@ -81,6 +81,10 @@ class Step {
             // 切换目录
             const workDir = './demo-python312-pip';
             process.chdir(path.resolve(workDir));
+            // pip install wheel setuptools
+            await exec.exec(`conda run -n ${virtualEnv} pip`, [INSTALL, 'wheel', 'setuptools']);
+            // python setup.py sdist bdist_wheel
+            await exec.exec(`conda run -n ${virtualEnv} python`, ['setup.py', 'sdist', 'bdist_wheel']);
             // pwd 
             await exec.exec(`pwd`);
             await exec.exec(`ls -lh ./`);
