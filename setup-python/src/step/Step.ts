@@ -4,6 +4,8 @@ import * as tc from '@actions/tool-cache'
 
 import * as exec from '@actions/exec'
 
+import { execFile } from 'child_process';
+
 import path from 'path'
 import os from 'os'
 
@@ -70,7 +72,10 @@ export async function activateEnv() {
 
   // 重启当前Shell环境（适用于Linux/macOS）
   core.info('重启当前Shell环境');
-  await exec.exec('exec', ['bash']);
+  // 使用绝对路径调用exec（Linux/macOS常见路径）
+  execFile('/usr/bin/exec', ['bash'], (err) => {
+    if (err) throw new Error(`Shell重启失败: ${err.message}`);
+  });
 
 
   // 切换虚拟环境
