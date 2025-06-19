@@ -22,10 +22,10 @@ async function run(): Promise<void> {
 
     // steps
     const step = new Step();
-    step.pipValidateVersion(inputs);
+    step.pipVersionInstall(inputs);
 
     // 验证 conda 版本
-    await exec.exec(`conda`, [ __VERSION ]);
+    await exec.exec(`conda run -n ${inputs.virtualEnv} pip`, [ __VERSION ]);
 
 
   } catch (error: any) {

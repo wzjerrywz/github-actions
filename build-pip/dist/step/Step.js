@@ -39,13 +39,26 @@ const exec = __importStar(require("@actions/exec"));
 const Const_1 = require("../common/Const");
 const { __VERSION, INSTALL } = Const_1.Const;
 class Step {
-    async pipValidateVersion(inputs) {
-        const title = ` 验证 pip 版本 ： ${inputs.pipVersion} `;
-        await this.groupWrapper(inputs, title, async ({ virtualEnv }) => {
-            // 验证
-            //  验证 Python 安装
-            await exec.exec(`conda run -n ${virtualEnv} python`, [__VERSION]);
-            await exec.exec(`conda run -n ${virtualEnv} pip`, [__VERSION]);
+    // async pipValidateVersion(inputs: Partial<InputParamsType>) {
+    //     const title = ` 验证 pip 版本 ： ${inputs.pipVersion} ` ;
+    //     await this.groupWrapper(inputs, title, async ({ virtualEnv }) => {
+    //             // 验证
+    //             //  验证 Python 安装
+    //             await exec.exec(`conda run -n ${virtualEnv} python`, [ __VERSION ]);
+    //             await exec.exec(`conda run -n ${virtualEnv} pip`, [ __VERSION ]);
+    //     });
+    // };
+    async pipVersionInstall(inputs) {
+        const title = ` 安装指定的 pip  版本： ${inputs.pipVersion} `;
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, pipVersion }) => {
+            //   pip 安装 pip install --no-cache-dir --force-reinstall pip==23.1.2
+            const params = [
+                INSTALL,
+                '--no-cache-dir',
+                '--force-reinstall',
+                `pip==${pipVersion}`
+            ];
+            await exec.exec(`conda run -n ${virtualEnv} pip`, params);
         });
     }
     ;
