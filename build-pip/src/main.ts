@@ -22,6 +22,7 @@ async function run(): Promise<void> {
 
     // steps
     const step = new Step();
+    await step.registerSpeedup(inputs);
     await step.pipVersionInstall(inputs);
 
     // 验证 conda 版本

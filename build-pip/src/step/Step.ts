@@ -14,7 +14,7 @@ const { __VERSION, INSTALL } = Const;
 
 export class Step {
 
- 
+    
 
     // async pipValidateVersion(inputs: Partial<InputParamsType>) {
     //     const title = ` 验证 pip 版本 ： ${inputs.pipVersion} ` ;
@@ -26,6 +26,18 @@ export class Step {
     //     });
     // };
 
+    // 清华镜像
+    INDEX_URL = 'https://pypi.tuna.tsinghua.edu.cn/simple';
+
+    async registerSpeedup(inputs: Partial<InputParamsType>) {
+        const title = ` 注册加速镜像 ` ;
+        await this.groupWrapper(inputs, title, async ({ virtualEnv }) => {
+            // 注册加速镜像
+            // pip config set global.index-url 
+            const params = [ 'config', 'set', 'global.index-url', this.INDEX_URL ];
+            await exec.exec(`conda run -n ${virtualEnv} pip`, params);
+        });
+    };
 
     async pipVersionInstall(inputs: Partial<InputParamsType>) {
         const title = ` 安装指定的 pip  版本： ${inputs.pipVersion} ` ;
