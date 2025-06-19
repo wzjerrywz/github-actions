@@ -10,6 +10,10 @@ inputs:
     description: 'python 版本'
     required: false,
     default: '3.9.18'
+  virtual-env:
+    description: '虚拟环境名称'
+    required: false,
+    default: 'virenv'    
 outputs:
   report:
     description: 'Generated output'

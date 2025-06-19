@@ -1,16 +1,14 @@
 import * as core from '@actions/core'
 
 import * as exec from '@actions/exec'
+import { InputParamsType } from './types/InputParamsType';
+import { Step } from './step/Step';
+import { Const } from './common/Const';
 
-import { downloadConda, configConda, createVirtualEnv , validVersion } from './step/Step';
+const { __VERSION } = Const;
 
-type InputParams = {
-  condaVersion: string,
-  pythonVersion: string,
-}
-
-function validateInputs(params: Partial<InputParams>): InputParams {
-  return params as InputParams
+function validateInputs(params: Partial<InputParamsType>): InputParamsType {
+  return params as InputParamsType
 }
 
 async function run(): Promise<void> {
@@ -19,22 +17,17 @@ async function run(): Promise<void> {
     const inputs = validateInputs({
       condaVersion: core.getInput('conda-version', { required: true }),
       pythonVersion: core.getInput('python-version', { required: true }),
+      virtualEnv: core.getInput('virtual-env', { required: true }),
     })
-    console.log(inputs);
+    console.log("inputs: ", inputs);
 
-    // step1 下载安装包
-    await downloadConda();
+    // steps
+    const step = new Step();
+    await step.condaDownload(inputs);
 
-    // step2 安装 nvm
-    await configConda();
-   
-    // step3. 创建虚拟环境
-    await createVirtualEnv();
-   
+    // 验证版本
+    await exec.exec(`conda`, [ __VERSION ]);
 
-
-    // step5. 验证版本
-    await validVersion();
 
   } catch (error: any) {
        core.setFailed(String(error)) ;

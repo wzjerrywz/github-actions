@@ -34,7 +34,10 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
+const exec = __importStar(require("@actions/exec"));
 const Step_1 = require("./step/Step");
+const Const_1 = require("./common/Const");
+const { __VERSION } = Const_1.Const;
 function validateInputs(params) {
     return params;
 }
@@ -43,16 +46,14 @@ async function run() {
         const inputs = validateInputs({
             condaVersion: core.getInput('conda-version', { required: true }),
             pythonVersion: core.getInput('python-version', { required: true }),
+            virtualEnv: core.getInput('virtual-env', { required: true }),
         });
-        console.log(inputs);
-        // step1 下载安装包
-        await (0, Step_1.downloadConda)();
-        // step2 安装 nvm
-        await (0, Step_1.configConda)();
-        // step3. 创建虚拟环境
-        await (0, Step_1.createVirtualEnv)();
-        // step5. 验证版本
-        await (0, Step_1.validVersion)();
+        console.log("inputs: ", inputs);
+        // steps
+        const step = new Step_1.Step();
+        await step.condaDownload(inputs);
+        // 验证版本
+        await exec.exec(`conda`, [__VERSION]);
     }
     catch (error) {
         core.setFailed(String(error));
