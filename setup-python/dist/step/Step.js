@@ -44,7 +44,6 @@ exports.validVersion = validVersion;
 const core = __importStar(require("@actions/core"));
 const tc = __importStar(require("@actions/tool-cache"));
 const exec = __importStar(require("@actions/exec"));
-const child_process_1 = require("child_process");
 const path_1 = __importDefault(require("path"));
 const os_1 = __importDefault(require("os"));
 async function downloadConda() {
@@ -69,6 +68,15 @@ async function configConda() {
         '-p',
         condaDir
     ]);
+    // 配置环境变量
+    const condaBinDir = path_1.default.join(condaDir, 'bin');
+    // 
+    // 添加 Conda 到 PATH
+    core.addPath(condaBinDir);
+    // 初始化 Conda
+    await exec.exec(`${condaBinDir}/conda`, ['init', 'bash']);
+    // 设置环境变量供后续步骤使用
+    core.exportVariable('CONDA_HOME', condaDir);
     // 验证 Conda 安装
     await exec.exec('conda', ['--version']);
     core.endGroup();
@@ -100,13 +108,6 @@ async function activateEnv() {
     const condaDir = path_1.default.join(os_1.default.homedir(), 'miniconda3');
     // init conda 
     await exec.exec('ls', ['-l', condaDir]);
-    // 重启当前Shell环境（适用于Linux/macOS）
-    core.info('重启当前Shell环境');
-    // 使用绝对路径调用exec（Linux/macOS常见路径）
-    (0, child_process_1.execFile)('/bin/exec', ['bash'], (err) => {
-        if (err)
-            throw new Error(`Shell重启失败: ${err.message}`);
-    });
     // 切换虚拟环境
     core.startGroup(`切换虚拟环境 `);
     await exec.exec('conda', [
