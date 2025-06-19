@@ -115,8 +115,8 @@ class Step {
             process.chdir(path.resolve(workDir));
             // pip install pyinstaller
             await exec.exec(`conda run -n ${virtualEnv} pip`, [INSTALL, 'pyinstaller']);
-            // pip install -r requirements.txt
-            await exec.exec(`conda run -n ${virtualEnv} pip`, [INSTALL, '-r', 'requirements.txt']);
+            // pip install -r requirements.txt --progress-bar=pretty
+            await exec.exec(`conda run -n ${virtualEnv} pip`, [INSTALL, '-r', 'requirements.txt', '--progress-bar=pretty']);
             // pyinstaller app.py
             const app = 'app.py';
             const params = [];
