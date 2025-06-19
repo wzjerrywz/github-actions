@@ -25716,6 +25716,7 @@ async function run() {
         console.log("inputs: ", inputs);
         // steps
         const step = new Step_1.Step();
+        await step.registerSpeedup(inputs);
         await step.pipVersionInstall(inputs);
         // 验证 conda 版本
         await exec.exec(`conda run -n ${inputs.virtualEnv} pip`, [__VERSION]);
@@ -25785,6 +25786,18 @@ class Step {
     //             await exec.exec(`conda run -n ${virtualEnv} pip`, [ __VERSION ]);
     //     });
     // };
+    // 清华镜像
+    INDEX_URL = 'https://pypi.tuna.tsinghua.edu.cn/simple';
+    async registerSpeedup(inputs) {
+        const title = ` 注册加速镜像 `;
+        await this.groupWrapper(inputs, title, async ({ virtualEnv }) => {
+            // 注册加速镜像
+            // pip config set global.index-url 
+            const params = ['config', 'set', 'global.index-url', this.INDEX_URL];
+            await exec.exec(`conda run -n ${virtualEnv} pip`, params);
+        });
+    }
+    ;
     async pipVersionInstall(inputs) {
         const title = ` 安装指定的 pip  版本： ${inputs.pipVersion} `;
         await this.groupWrapper(inputs, title, async ({ virtualEnv, pipVersion }) => {
