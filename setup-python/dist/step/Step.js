@@ -39,7 +39,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.downloadConda = downloadConda;
 exports.configConda = configConda;
 exports.createVirtualEnv = createVirtualEnv;
-exports.activateEnv = activateEnv;
 exports.validVersion = validVersion;
 const core = __importStar(require("@actions/core"));
 const tc = __importStar(require("@actions/tool-cache"));
@@ -101,27 +100,17 @@ async function createVirtualEnv() {
     // end 
     core.endGroup();
 }
-async function activateEnv() {
-    const envName = 'github_actions_env';
-    const condaDir = path_1.default.join(os_1.default.homedir(), 'miniconda3');
-    // init conda 
-    await exec.exec('ls', ['-l', condaDir]);
-    // 切换虚拟环境
-    //      core.startGroup(`切换虚拟环境 `);
-    //      await exec.exec('conda', [
-    //       'activate',
-    //       envName
-    //      ]);
-    //       // end 
-    //      core.endGroup();
-}
 async function validVersion() {
     const envName = 'github_actions_env';
     core.startGroup('验证 Python 版本 和 pip 版本');
     //  验证 Python 安装
     await exec.exec(`conda run -n ${envName} python --version`, []);
     await exec.exec(`conda run -n ${envName} pip --version`, []);
-    // await exec.exec(`python --version`, [ ]);
-    // await exec.exec(`pip --version`, [ ]);
+    // 起别名
+    await exec.exec('alias', ['python', `conda run -n ${envName} python`]);
+    await exec.exec('alias', ['pip', `conda run -n ${envName} pip`]);
+    // 验证
+    await exec.exec(`python --version`, []);
+    await exec.exec(`pip --version`, []);
     core.endGroup();
 }
