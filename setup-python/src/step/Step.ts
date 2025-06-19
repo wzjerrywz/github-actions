@@ -68,6 +68,10 @@ export async function activateEnv() {
   // init conda 
   await exec.exec('ls', ['-l', condaDir]);
 
+  // 重启当前Shell环境（适用于Linux/macOS）
+  core.info('重启当前Shell环境');
+  await exec.exec('exec', ['bash']);
+
 
   // 切换虚拟环境
      core.startGroup(`切换虚拟环境 `);
