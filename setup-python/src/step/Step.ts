@@ -32,6 +32,20 @@ export async function configConda() {
        '-p', 
        condaDir
      ]);
+
+// 配置环境变量
+const condaBinDir = path.join(condaDir, 'bin');
+
+// 
+// 添加 Conda 到 PATH
+core.addPath(condaBinDir);
+    
+// 初始化 Conda
+await exec.exec(`${condaBinDir}/conda`, ['init', 'bash']);
+
+// 设置环境变量供后续步骤使用
+core.exportVariable('CONDA_HOME', condaDir);
+
     // 验证 Conda 安装
     await exec.exec('conda', ['--version']);
     core.endGroup();
@@ -69,13 +83,6 @@ export async function activateEnv() {
 
   // init conda 
   await exec.exec('ls', ['-l', condaDir]);
-
-  // 重启当前Shell环境（适用于Linux/macOS）
-  core.info('重启当前Shell环境');
-  // 使用绝对路径调用exec（Linux/macOS常见路径）
-  execFile('/bin/exec', ['bash'], (err) => {
-    if (err) throw new Error(`Shell重启失败: ${err.message}`);
-  });
 
 
   // 切换虚拟环境
