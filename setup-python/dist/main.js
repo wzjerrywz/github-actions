@@ -52,7 +52,10 @@ async function run() {
         // steps
         const step = new Step_1.Step();
         await step.condaDownload(inputs);
-        // 验证版本
+        await step.condaConfigPath(inputs);
+        await step.pythonCreateEnv(inputs);
+        await step.pythonValidateVersion(inputs);
+        // 验证 conda 版本
         await exec.exec(`conda`, [__VERSION]);
     }
     catch (error) {

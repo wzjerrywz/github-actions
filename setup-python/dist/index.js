@@ -28271,7 +28271,10 @@ async function run() {
         // steps
         const step = new Step_1.Step();
         await step.condaDownload(inputs);
-        // 验证版本
+        await step.condaConfigPath(inputs);
+        await step.pythonCreateEnv(inputs);
+        await step.pythonValidateVersion(inputs);
+        // 验证 conda 版本
         await exec.exec(`conda`, [__VERSION]);
     }
     catch (error) {
@@ -28326,7 +28329,10 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Step = void 0;
 const core = __importStar(__nccwpck_require__(6618));
+const exec = __importStar(__nccwpck_require__(3274));
 const tc = __importStar(__nccwpck_require__(486));
+const path = __importStar(__nccwpck_require__(6928));
+const os = __importStar(__nccwpck_require__(857));
 const Const_1 = __nccwpck_require__(1560);
 const { __VERSION, INSTALL } = Const_1.Const;
 class Step {
@@ -28339,6 +28345,49 @@ class Step {
             const downloadPath = './soft/conda.sh';
             const condaInstallerPath = await tc.downloadTool(url, downloadPath);
             core.info(`Conda  ${condaVersion} 安装程序已下载到 :   ${condaInstallerPath}`);
+        });
+    }
+    ;
+    async condaConfigPath(inputs) {
+        const title = ` 配置 conda , 版本 ： ${inputs.condaVersion} `;
+        await this.groupWrapper(inputs, title, async ({}) => {
+            const down = './soft/conda.sh';
+            const condaDir = path.join(os.homedir(), 'miniconda3');
+            // 配置
+            await exec.exec('bash', [down, '-b', '-p', condaDir]);
+            // 配置环境变量
+            const condaBinDir = path.join(condaDir, 'bin');
+            // 添加 Conda 到 PATH
+            core.addPath(condaBinDir);
+            // 设置环境变量供后续步骤使用
+            core.exportVariable('CONDA_HOME', condaDir);
+        });
+    }
+    ;
+    async pythonCreateEnv(inputs) {
+        const title = ` 创建虚拟环境 , python 版本 ： ${inputs.pythonVersion} `;
+        await this.groupWrapper(inputs, title, async ({ pythonVersion, virtualEnv }) => {
+            // 创建虚拟环境
+            await exec.exec('conda', [
+                'create',
+                '-y',
+                '-q',
+                '-n',
+                virtualEnv,
+                `python=${pythonVersion}`
+            ]);
+            // 显示
+            core.info(`Python ${pythonVersion} 已安装到环境 ${virtualEnv}`);
+        });
+    }
+    ;
+    async pythonValidateVersion(inputs) {
+        const title = ` 验证 python 版本 ： ${inputs.pythonVersion} `;
+        await this.groupWrapper(inputs, title, async ({ virtualEnv }) => {
+            // 验证
+            //  验证 Python 安装
+            await exec.exec(`conda run -n ${virtualEnv} python`, [__VERSION]);
+            await exec.exec(`conda run -n ${virtualEnv} pip`, [__VERSION]);
         });
     }
     ;

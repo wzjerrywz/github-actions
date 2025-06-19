@@ -24,8 +24,11 @@ async function run(): Promise<void> {
     // steps
     const step = new Step();
     await step.condaDownload(inputs);
+    await step.condaConfigPath(inputs);
+    await step.pythonCreateEnv(inputs);
+    await step.pythonValidateVersion(inputs);
 
-    // 验证版本
+    // 验证 conda 版本
     await exec.exec(`conda`, [ __VERSION ]);
 
 
