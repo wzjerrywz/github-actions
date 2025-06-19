@@ -25712,17 +25712,29 @@ async function run() {
         const inputs = validateInputs({
             virtualEnv: core.getInput('virtual-env', { required: true }),
             pipVersion: core.getInput('pip-version', { required: true }),
+            pkgMode: core.getInput('pkg-mode', { required: true }),
+            workDir: core.getInput('work-dir', { required: true }),
         });
         console.log("inputs: ", inputs);
         // steps
         const step = new Step_1.Step();
         await step.registerSpeedup(inputs);
         await step.pipVersionInstall(inputs);
-        // await step.projectSetup(inputs);
-        // await step.projectBuild(inputs);
-        await step.projectPyinstaller(inputs);
+        // 根据打包方式执行不同的步骤
+        switch (inputs.pkgMode) {
+            case 'setup':
+                await step.projectSetup(inputs);
+                break;
+            case 'build':
+                await step.projectBuild(inputs);
+                break;
+            case 'pyinstaller':
+                await step.projectPyinstaller(inputs);
+                break;
+        }
         // 验证 conda 版本
-        await exec.exec(`conda run -n ${inputs.virtualEnv} pip`, [__VERSION]);
+        const vvv = `conda run -n ${inputs.virtualEnv} `;
+        await exec.exec(`${vvv}pip`, [__VERSION]);
     }
     catch (error) {
         core.setFailed(String(error));
@@ -25818,9 +25830,8 @@ class Step {
     ;
     async projectSetup(inputs) {
         const title = ` python  setup `;
-        await this.groupWrapper(inputs, title, async ({ virtualEnv, pipVersion }) => {
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, workDir }) => {
             // 切换目录
-            const workDir = './demo-python312-pip';
             process.chdir(path.resolve(workDir));
             // pip install wheel setuptools
             await exec.exec(`conda run -n ${virtualEnv} pip`, [INSTALL, 'wheel', 'setuptools']);
@@ -25834,9 +25845,8 @@ class Step {
     ;
     async projectBuild(inputs) {
         const title = ` python  build `;
-        await this.groupWrapper(inputs, title, async ({ virtualEnv, pipVersion }) => {
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, workDir }) => {
             // 切换目录
-            const workDir = './demo-python312-pip';
             process.chdir(path.resolve(workDir));
             // pip install build
             await exec.exec(`conda run -n ${virtualEnv} pip`, [INSTALL, 'build']);
@@ -25850,15 +25860,14 @@ class Step {
     ;
     async projectPyinstaller(inputs) {
         const title = ` python  pyinstaller `;
-        await this.groupWrapper(inputs, title, async ({ virtualEnv }) => {
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, workDir }) => {
             // 切换目录
-            const workDir = './demo-python312-pip';
             process.chdir(path.resolve(workDir));
             const vvv = `conda run -n ${virtualEnv} `;
             // pip install pyinstaller
             await exec.exec(`${vvv}pip`, [INSTALL, 'pyinstaller']);
             // pip install -r requirements.txt --progress-bar=pretty
-            await exec.exec(`${vvv}pip`, [INSTALL, '-r', 'requirements.txt', '--progress-bar=' + 'on']);
+            await exec.exec(`${vvv}pip`, [INSTALL, '-r', './requirements.txt', '--progress-bar=' + 'on']);
             // pyinstaller app.py
             const app = 'app.py';
             const params = [];
