@@ -106,11 +106,5 @@ async function validVersion() {
     //  验证 Python 安装
     await exec.exec(`conda run -n ${envName} python --version`, []);
     await exec.exec(`conda run -n ${envName} pip --version`, []);
-    // 起别名
-    await exec.exec('alias', [`python='conda run -n ${envName} python'`]);
-    await exec.exec('alias', [`pip='conda run -n ${envName} pip'`]);
-    // 验证
-    await exec.exec(`python --version`, []);
-    await exec.exec(`pip --version`, []);
     core.endGroup();
 }
