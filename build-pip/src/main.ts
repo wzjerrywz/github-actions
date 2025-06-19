@@ -19,6 +19,7 @@ async function run(): Promise<void> {
       pipVersion: core.getInput('pip-version', { required: true }),
       pkgMode: core.getInput('pkg-mode', { required: true }),
       workDir: core.getInput('work-dir', { required: true }),
+      requireFile: core.getInput('require-file', { required: true }),
     })
     console.log("inputs: ", inputs);
 

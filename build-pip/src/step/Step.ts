@@ -8,6 +8,7 @@ import * as exec from '@actions/exec';
 import * as tc from '@actions/tool-cache';
 import * as path from 'path';
 import * as os from 'os';
+import * as fs from 'fs';
 
 import { Const } from '../common/Const';
 const { __VERSION, INSTALL } = Const;
@@ -93,7 +94,7 @@ export class Step {
 
     async projectPyinstaller(inputs: Partial<InputParamsType>) {
         const title = ` python  pyinstaller ` ;
-        await this.groupWrapper(inputs, title, async ({ virtualEnv, workDir }) => {
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, workDir, requireFile }) => {
                 // 切换目录
                 process.chdir(path.resolve(workDir!));
 
@@ -102,7 +103,7 @@ export class Step {
                 await exec.exec(`${vvv}pip`, [ INSTALL, 'pyinstaller' ]);
 
                 // pip install -r requirements.txt --progress-bar=pretty
-                await exec.exec(`${vvv}pip`, [ INSTALL, '-r', './requirements.txt', '--progress-bar=' + 'on' ]);
+                await exec.exec(`${vvv}pip`, [ INSTALL, '-r', requireFile! ]);
 
                 // pyinstaller app.py
                 const app = 'app.py';
@@ -124,6 +125,7 @@ export class Step {
         // end group
         core.endGroup();
     };
+
 
 
 }
