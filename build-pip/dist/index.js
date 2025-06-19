@@ -25718,6 +25718,7 @@ async function run() {
         const step = new Step_1.Step();
         await step.registerSpeedup(inputs);
         await step.pipVersionInstall(inputs);
+        await step.projectSetup(inputs);
         // 验证 conda 版本
         await exec.exec(`conda run -n ${inputs.virtualEnv} pip`, [__VERSION]);
     }
@@ -25774,6 +25775,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Step = void 0;
 const core = __importStar(__nccwpck_require__(6618));
 const exec = __importStar(__nccwpck_require__(3274));
+const path = __importStar(__nccwpck_require__(6928));
 const Const_1 = __nccwpck_require__(1560);
 const { __VERSION, INSTALL } = Const_1.Const;
 class Step {
@@ -25809,6 +25811,19 @@ class Step {
                 `pip==${pipVersion}`
             ];
             await exec.exec(`conda run -n ${virtualEnv} pip`, params);
+        });
+    }
+    ;
+    async projectSetup(inputs) {
+        const title = ` python  setup `;
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, pipVersion }) => {
+            // 切换目录
+            const workDir = './demo-python312-pip';
+            process.chdir(path.resolve(workDir));
+            // pwd 
+            await exec.exec(`pwd`);
+            await exec.exec(`ls -lh ./`);
+            // await exec.exec(`conda run -n ${virtualEnv} pip`, params);
         });
     }
     ;

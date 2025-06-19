@@ -24,6 +24,7 @@ async function run(): Promise<void> {
     const step = new Step();
     await step.registerSpeedup(inputs);
     await step.pipVersionInstall(inputs);
+    await step.projectSetup(inputs);
 
     // 验证 conda 版本
     await exec.exec(`conda run -n ${inputs.virtualEnv} pip`, [ __VERSION ]);

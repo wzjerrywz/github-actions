@@ -36,6 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Step = void 0;
 const core = __importStar(require("@actions/core"));
 const exec = __importStar(require("@actions/exec"));
+const path = __importStar(require("path"));
 const Const_1 = require("../common/Const");
 const { __VERSION, INSTALL } = Const_1.Const;
 class Step {
@@ -71,6 +72,19 @@ class Step {
                 `pip==${pipVersion}`
             ];
             await exec.exec(`conda run -n ${virtualEnv} pip`, params);
+        });
+    }
+    ;
+    async projectSetup(inputs) {
+        const title = ` python  setup `;
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, pipVersion }) => {
+            // 切换目录
+            const workDir = './demo-python312-pip';
+            process.chdir(path.resolve(workDir));
+            // pwd 
+            await exec.exec(`pwd`);
+            await exec.exec(`ls -lh ./`);
+            // await exec.exec(`conda run -n ${virtualEnv} pip`, params);
         });
     }
     ;
