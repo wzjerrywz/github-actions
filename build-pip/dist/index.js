@@ -25719,7 +25719,8 @@ async function run() {
         await step.registerSpeedup(inputs);
         await step.pipVersionInstall(inputs);
         // await step.projectSetup(inputs);
-        await step.projectBuild(inputs);
+        // await step.projectBuild(inputs);
+        await step.projectPyinstaller(inputs);
         // 验证 conda 版本
         await exec.exec(`conda run -n ${inputs.virtualEnv} pip`, [__VERSION]);
     }
@@ -25841,6 +25842,26 @@ class Step {
             await exec.exec(`conda run -n ${virtualEnv} pip`, [INSTALL, 'build']);
             // python -m build
             await exec.exec(`conda run -n ${virtualEnv} python`, ['-m', 'build']);
+            // pwd 
+            await exec.exec(`pwd`);
+            await exec.exec(`ls -lh ./`);
+        });
+    }
+    ;
+    async projectPyinstaller(inputs) {
+        const title = ` python  pyinstaller `;
+        await this.groupWrapper(inputs, title, async ({ virtualEnv }) => {
+            // 切换目录
+            const workDir = './demo-python312-pip';
+            process.chdir(path.resolve(workDir));
+            // pip install pyinstaller
+            await exec.exec(`conda run -n ${virtualEnv} pip`, [INSTALL, 'pyinstaller']);
+            // pip install -r requirements.txt
+            await exec.exec(`conda run -n ${virtualEnv} pip`, [INSTALL, '-r', 'requirements.txt']);
+            // pyinstaller app.py
+            const app = 'app.py';
+            const params = [];
+            await exec.exec(`conda run -n ${virtualEnv} pyinstaller`, [app, ...params]);
             // pwd 
             await exec.exec(`pwd`);
             await exec.exec(`ls -lh ./`);

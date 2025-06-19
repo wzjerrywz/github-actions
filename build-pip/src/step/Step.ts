@@ -92,6 +92,31 @@ export class Step {
     };
 
 
+
+    async projectPyinstaller(inputs: Partial<InputParamsType>) {
+        const title = ` python  pyinstaller ` ;
+        await this.groupWrapper(inputs, title, async ({ virtualEnv }) => {
+                // 切换目录
+                const workDir = './demo-python312-pip';
+                process.chdir(path.resolve(workDir));
+
+                // pip install pyinstaller
+                await exec.exec(`conda run -n ${virtualEnv} pip`, [ INSTALL, 'pyinstaller' ]);
+
+                // pip install -r requirements.txt
+                await exec.exec(`conda run -n ${virtualEnv} pip`, [ INSTALL, '-r', 'requirements.txt' ]);
+
+                // pyinstaller app.py
+                const app = 'app.py';
+                const params: string[] = [  ];
+                await exec.exec(`conda run -n ${virtualEnv} pyinstaller`, [ app, ...params ]);
+
+                // pwd 
+                await exec.exec(`pwd`);
+                await exec.exec(`ls -lh ./`);
+        });
+    };
+
     // 组装函数
     async  groupWrapper(inputs: Partial<InputParamsType>, title: string, fn: (inputs: Partial<InputParamsType>) => Promise<void>) {
         // start group
