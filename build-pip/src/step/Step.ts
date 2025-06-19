@@ -54,6 +54,21 @@ export class Step {
     };
 
 
+    async projectSetup(inputs: Partial<InputParamsType>) {
+        const title = ` python  setup ` ;
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, pipVersion }) => {
+                // 切换目录
+                const workDir = './demo-python312-pip';
+                process.chdir(path.resolve(workDir));
+
+                // pwd 
+                await exec.exec(`pwd`);
+                await exec.exec(`ls -lh ./`);
+                // await exec.exec(`conda run -n ${virtualEnv} pip`, params);
+        });
+    };
+
+
     // 组装函数
     async  groupWrapper(inputs: Partial<InputParamsType>, title: string, fn: (inputs: Partial<InputParamsType>) => Promise<void>) {
         // start group
