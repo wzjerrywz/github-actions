@@ -84,6 +84,8 @@ class Step {
             ]);
             // 显示
             core.info(`Python ${pythonVersion} 已安装到环境 ${virtualEnv}`);
+            // 设置到 output
+            core.setOutput('virtual-env', virtualEnv);
         });
     }
     ;
