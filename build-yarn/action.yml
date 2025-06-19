@@ -1,0 +1,22 @@
+
+name: 'build yarn'
+description: 'yarn'
+inputs:
+  project-path:
+    description: '项目路径'
+    required: true
+    default: './demo-vue3-yarn'
+  build-command:
+    description: '构建命令'
+    required: true
+    default: 'build'  
+  yarn-version:
+    description: 'yarn 版本'
+    required: true
+    default: '1.22.22'
+outputs:
+  report:
+    description: 'Generated output'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
