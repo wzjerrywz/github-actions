@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 
 import * as exec from '@actions/exec'
 
-import { downloadConda, configConda, createVirtualEnv , activateEnv, validVersion } from './step/Step';
+import { downloadConda, configConda, createVirtualEnv , validVersion } from './step/Step';
 
 type InputParams = {
   condaVersion: string,
@@ -31,8 +31,7 @@ async function run(): Promise<void> {
     // step3. 创建虚拟环境
     await createVirtualEnv();
    
-    // step4. 激活虚拟环境
-    await activateEnv();
+
 
     // step5. 验证版本
     await validVersion();

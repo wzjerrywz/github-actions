@@ -51,8 +51,6 @@ async function run() {
         await (0, Step_1.configConda)();
         // step3. 创建虚拟环境
         await (0, Step_1.createVirtualEnv)();
-        // step4. 激活虚拟环境
-        await (0, Step_1.activateEnv)();
         // step5. 验证版本
         await (0, Step_1.validVersion)();
     }
