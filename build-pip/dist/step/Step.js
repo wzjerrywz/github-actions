@@ -107,14 +107,14 @@ class Step {
     ;
     async projectPyinstaller(inputs) {
         const title = ` python  pyinstaller `;
-        await this.groupWrapper(inputs, title, async ({ virtualEnv, workDir }) => {
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, workDir, requireFile }) => {
             // 切换目录
             process.chdir(path.resolve(workDir));
             const vvv = `conda run -n ${virtualEnv} `;
             // pip install pyinstaller
             await exec.exec(`${vvv}pip`, [INSTALL, 'pyinstaller']);
             // pip install -r requirements.txt --progress-bar=pretty
-            await exec.exec(`${vvv}pip`, [INSTALL, '-r', './requirements.txt', '--progress-bar=' + 'on']);
+            await exec.exec(`${vvv}pip`, [INSTALL, '-r', requireFile]);
             // pyinstaller app.py
             const app = 'app.py';
             const params = [];
