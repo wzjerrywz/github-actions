@@ -2,18 +2,14 @@
 name: 'setup python action'
 description: 'python'
 inputs:
-  conda-version:
-    description: 'conda 版本'
-    required: true,
-    default: 'py39_25.3.1-1'
-  python-version:
-    description: 'python 版本'
-    required: false,
-    default: '3.9.18'
   virtual-env:
     description: '虚拟环境名称'
     required: false,
-    default: 'virenv'    
+    default: 'virenv'   
+  pip-version:
+    description: 'pip 版本'
+    required: false,
+    default: '23.1.0'
 outputs:
   virtual-env:
     description: '虚拟环境名称'
