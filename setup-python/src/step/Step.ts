@@ -40,19 +40,7 @@ const condaBinDir = path.join(condaDir, 'bin');
 // 
 // 添加 Conda 到 PATH
 core.addPath(condaBinDir);
-    
-// 初始化 Conda
-await exec.exec(`conda`, ['init', 'bash']);
 
-// 强制设置 Conda 环境变量（即使 init 没有修改 .bashrc）
-const envFile = process.env['GITHUB_ENV'] || '';
-if (envFile) {
-  // 添加 Conda 初始化脚本到 BASH_ENV
-  fs.appendFileSync(envFile, `BASH_ENV=${condaBinDir}/etc/profile.d/conda.sh\n`);
-  
-  // 也可以直接设置 PATH
-  fs.appendFileSync(envFile, `PATH=${condaBinDir}:$PATH\n`);
-}
 
 
 // 设置环境变量供后续步骤使用
@@ -100,6 +88,24 @@ export async function activateEnv() {
 
   // 切换虚拟环境
      core.startGroup(`切换虚拟环境 `);
+
+    
+// 初始化 Conda
+await exec.exec(`conda`, ['init', 'bash']);
+
+const condaBinDir = path.join(condaDir, 'bin');
+
+
+// 强制设置 Conda 环境变量（即使 init 没有修改 .bashrc）
+const envFile = process.env['GITHUB_ENV'] || '';
+if (envFile) {
+  // 添加 Conda 初始化脚本到 BASH_ENV
+  fs.appendFileSync(envFile, `BASH_ENV=${condaBinDir}/etc/profile.d/conda.sh\n`);
+  
+  // 也可以直接设置 PATH
+  fs.appendFileSync(envFile, `PATH=${condaBinDir}:$PATH\n`);
+}
+
      await exec.exec('conda', [
       'activate',
       envName
