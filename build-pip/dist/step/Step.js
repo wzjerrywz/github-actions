@@ -88,7 +88,22 @@ class Step {
             // pwd 
             await exec.exec(`pwd`);
             await exec.exec(`ls -lh ./`);
-            // await exec.exec(`conda run -n ${virtualEnv} pip`, params);
+        });
+    }
+    ;
+    async projectBuild(inputs) {
+        const title = ` python  build `;
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, pipVersion }) => {
+            // 切换目录
+            const workDir = './demo-python312-pip';
+            process.chdir(path.resolve(workDir));
+            // pip install build
+            await exec.exec(`conda run -n ${virtualEnv} pip`, [INSTALL, 'build']);
+            // python -m build
+            await exec.exec(`conda run -n ${virtualEnv} python`, ['-m', 'build']);
+            // pwd 
+            await exec.exec(`pwd`);
+            await exec.exec(`ls -lh ./`);
         });
     }
     ;

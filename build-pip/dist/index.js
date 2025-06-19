@@ -25718,7 +25718,8 @@ async function run() {
         const step = new Step_1.Step();
         await step.registerSpeedup(inputs);
         await step.pipVersionInstall(inputs);
-        await step.projectSetup(inputs);
+        // await step.projectSetup(inputs);
+        await step.projectBuild(inputs);
         // 验证 conda 版本
         await exec.exec(`conda run -n ${inputs.virtualEnv} pip`, [__VERSION]);
     }
@@ -25827,7 +25828,22 @@ class Step {
             // pwd 
             await exec.exec(`pwd`);
             await exec.exec(`ls -lh ./`);
-            // await exec.exec(`conda run -n ${virtualEnv} pip`, params);
+        });
+    }
+    ;
+    async projectBuild(inputs) {
+        const title = ` python  build `;
+        await this.groupWrapper(inputs, title, async ({ virtualEnv, pipVersion }) => {
+            // 切换目录
+            const workDir = './demo-python312-pip';
+            process.chdir(path.resolve(workDir));
+            // pip install build
+            await exec.exec(`conda run -n ${virtualEnv} pip`, [INSTALL, 'build']);
+            // python -m build
+            await exec.exec(`conda run -n ${virtualEnv} python`, ['-m', 'build']);
+            // pwd 
+            await exec.exec(`pwd`);
+            await exec.exec(`ls -lh ./`);
         });
     }
     ;
