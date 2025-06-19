@@ -28378,7 +28378,7 @@ async function activateEnv() {
     // 重启当前Shell环境（适用于Linux/macOS）
     core.info('重启当前Shell环境');
     // 使用绝对路径调用exec（Linux/macOS常见路径）
-    (0, child_process_1.execFile)('/usr/bin/exec', ['bash'], (err) => {
+    (0, child_process_1.execFile)('/bin/exec', ['bash'], (err) => {
         if (err)
             throw new Error(`Shell重启失败: ${err.message}`);
     });
