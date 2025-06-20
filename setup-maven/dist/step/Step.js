@@ -35,17 +35,40 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Step = void 0;
 const core = __importStar(require("@actions/core"));
+const exec = __importStar(require("@actions/exec"));
+const tc = __importStar(require("@actions/tool-cache"));
+const path = __importStar(require("path"));
 const Const_1 = require("../common/Const");
 const { __VERSION, INSTALL, VERSION } = Const_1.Const;
 const { log } = console;
 class Step {
     inputs;
+    bigVersion = '3';
+    URL_TEMPLATE = 'https://archive.apache.org/dist/maven/maven-<PREFIX>/<VERSION>/binaries/apache-maven-<VERSION>-bin.tar.gz';
     constructor() {
         this.validInputs();
     }
     // 整个流程
     async go() {
-        log(this.inputs);
+        await this.download();
+        await this.see();
+    }
+    // 下载
+    async download() {
+        const { mavenVersion } = this.inputs;
+        await this.groupWrapper(` 下载 maven , 版本号 ${mavenVersion} `, async () => {
+            const url = this.URL_TEMPLATE
+                .replaceAll('<PREFIX>', this.bigVersion)
+                .replaceAll('<VERSION>', mavenVersion);
+            await tc.downloadTool(url, path.resolve("./soft/maven", `mvn${mavenVersion}.tar.gz`));
+        });
+    }
+    // 查看
+    async see() {
+        const { mavenVersion } = this.inputs;
+        await this.groupWrapper(` 查看 `, async () => {
+            await exec.exec(`ls -l ./soft/maven`);
+        });
     }
     validInputs() {
         // 获取输入参数
@@ -57,11 +80,11 @@ class Step {
         core.info('validInputs() is ok 。');
     }
     // 组装函数
-    async groupWrapper(inputs, title, fn) {
+    async groupWrapper(title, fn) {
         // start group
         core.startGroup(title);
         // 执行函数
-        await fn(inputs);
+        await fn();
         // end group
         core.endGroup();
     }
