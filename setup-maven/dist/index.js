@@ -28342,11 +28342,22 @@ class Step {
             await tc.downloadTool(url, path.resolve("./soft/maven", `mvn${mavenVersion}.tar.gz`));
         });
     }
+    // 解压
+    async tar() {
+        const { mavenVersion } = this.inputs;
+        await this.groupWrapper(` 解压 `, async () => {
+            // 切换目录
+            process.chdir(path.resolve("./soft/maven"));
+            // 解压
+            const name = `mvn${mavenVersion}.tar.gz`;
+            await exec.exec(`sudo tar -zxvf ${name} -C ./`);
+        });
+    }
     // 查看
     async see() {
-        const { mavenVersion } = this.inputs;
         await this.groupWrapper(` 查看 `, async () => {
-            await exec.exec(`ls -l ./soft/maven`);
+            await exec.exec(`pwd`);
+            await exec.exec(`ls -l ./`);
         });
     }
     validInputs() {
