@@ -36,8 +36,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = run;
 const core = __importStar(require("@actions/core"));
 const Step_1 = require("./step/Step");
-const Const_1 = require("./common/Const");
-const { VERSION, INSTALL } = Const_1.Const;
 function validateInputs(params) {
     return params;
 }
@@ -45,12 +43,9 @@ async function run() {
     try {
         // 验证输入
         const inputs = validateInputs({
-            monoVersion: core.getInput('mono-version', { required: true }),
+            monoVersion: core.getInput('mono-version', { required: true })
         });
-        const step = new Step_1.Step();
-        await step.configRepo(inputs);
-        await step.install(inputs);
-        await step.checkVersion(inputs);
+        await new Step_1.Step(inputs).go();
     }
     catch (error) {
         core.setFailed(String(error));

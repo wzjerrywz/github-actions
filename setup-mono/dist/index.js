@@ -25703,8 +25703,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
 const core = __importStar(__nccwpck_require__(6618));
 const Step_1 = __nccwpck_require__(3460);
-const Const_1 = __nccwpck_require__(1560);
-const { VERSION, INSTALL } = Const_1.Const;
 function validateInputs(params) {
     return params;
 }
@@ -25712,12 +25710,9 @@ async function run() {
     try {
         // 验证输入
         const inputs = validateInputs({
-            monoVersion: core.getInput('mono-version', { required: true }),
+            monoVersion: core.getInput('mono-version', { required: true })
         });
-        const step = new Step_1.Step();
-        await step.configRepo(inputs);
-        await step.install(inputs);
-        await step.checkVersion(inputs);
+        await new Step_1.Step(inputs).go();
     }
     catch (error) {
         core.setFailed(String(error));
@@ -25776,61 +25771,26 @@ const exec = __importStar(__nccwpck_require__(3274));
 const Const_1 = __nccwpck_require__(1560);
 const { __VERSION } = Const_1.Const;
 class Step {
-    // step1. 配置 mono 源
-    async configRepo(inputs) {
-        const title = `配置 mono 源：${inputs.monoVersion}`;
-        await this.groupWrapper(inputs, title, async ({ monoVersion }) => {
-            // const cmd1 = URL_1.replaceAll('<KEY_SERVER>', KEY_SERVER)
-            //                    .replaceAll('<RECV_KEYS>', RECV_KEYS);
-            // const cmd2 = URL_2.replaceAll('<DOWNLOAD_URL>', DOWNLOAD_URL)
-            //                    .replaceAll('<MONO_VERSION>', monoVersion!)
-            //                    .replaceAll('<ETC_CONFIG>', ETC_CONFIG);
-            // // 执行
-            // await exec.exec(cmd1);
-            // await exec.exec(cmd2);
-            // update
-            const list = [
-                'sudo apt update && sudo apt upgrade -y',
-                'sudo apt install -y build-essential autoconf automake libtool bison pkg-config',
-                'sudo apt install -y libgdiplus libc6-dev'
-            ];
-            // 执行
-            list.forEach(async (item) => {
-                await exec.exec(item);
-            });
-        });
+    inputs;
+    constructor(inputs) {
+        this.inputs = inputs;
     }
-    ;
-    // step2. 安装 mono 
-    async install(inputs) {
-        const title = `安装 mono : ${inputs.monoVersion}`;
-        await this.groupWrapper(inputs, title, async ({ monoVersion }) => {
-            // 安装 Mono
-            // sudo apt install -y mono-complete=6.12.0.122*
-            // const params = [ INSTALL , '-y', `mono-complete=${monoVersion!}*`];
-            // await exec.exec('sudo apt', params);
-            const list = ['ls -l ./'];
-            // 执行
-            list.forEach(async (item) => {
-                await exec.exec(item);
-            });
-        });
+    async go() {
+        await this.configRepo();
     }
-    ;
-    // step3. 查看 mono 版本
-    async checkVersion(inputs) {
-        const title = `查看 mono 版本`;
-        await this.groupWrapper(inputs, title, async ({}) => {
+    async configRepo() {
+        const title = `配置 mono 源： ${this.inputs.monoVersion}`;
+        await this.groupWrapper(title, async () => {
             await exec.exec('ls -l ./');
+            await exec.exec('pwd');
         });
     }
-    ;
     // 组装函数
-    async groupWrapper(inputs, title, fn) {
+    async groupWrapper(title, fn) {
         // start group
         core.startGroup(title);
         // 执行函数
-        await fn(inputs);
+        await fn();
         // end group
         core.endGroup();
     }
