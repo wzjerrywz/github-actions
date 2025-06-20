@@ -86,7 +86,7 @@ class Step {
             const mvnHome = path.resolve("./soft/maven", `apache-maven-${mavenVersion}`);
             core.exportVariable(this.ENV_NAME, mvnHome);
             // 添加 bin 到 path
-            core.addPath(path.resolve(mvnHome, 'bin'));
+            core.addPath(mvnHome + '/bin');
             await exec.exec(`pwd`);
             await exec.exec(`ls -l ./`);
             await exec.exec(`mvn -v`);
