@@ -28255,7 +28255,6 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = run;
 const core = __importStar(__nccwpck_require__(6618));
-const exec = __importStar(__nccwpck_require__(3274));
 const Step_1 = __nccwpck_require__(3460);
 const Const_1 = __nccwpck_require__(1560);
 const { VERSION, INSTALL } = Const_1.Const;
@@ -28272,8 +28271,7 @@ async function run() {
         const step = new Step_1.Step();
         await step.downloadGo(inputs);
         await step.tarForEnv(inputs);
-        // 查看版本
-        await exec.exec('go', [VERSION]);
+        await step.checkGoVersion(inputs);
     }
     catch (error) {
         core.setFailed(String(error));
@@ -28332,7 +28330,7 @@ const exec = __importStar(__nccwpck_require__(3274));
 const tc = __importStar(__nccwpck_require__(486));
 const path = __importStar(__nccwpck_require__(6928));
 const Const_1 = __nccwpck_require__(1560);
-const { __VERSION, INSTALL } = Const_1.Const;
+const { __VERSION, INSTALL, VERSION } = Const_1.Const;
 class Step {
     URL_TEMPLATE = 'https://go.dev/dl/go<VERSION>.linux-amd64.tar.gz';
     // step1. 下载 go
@@ -28359,13 +28357,19 @@ class Step {
             process.chdir(`${path.resolve(installPath)}`);
             await exec.exec(`sudo tar -zxvf ${tarName} -C ./ `);
             // 配置环境变量
-            await exec.exec(`pwd`);
-            await exec.exec(`ls -l ./`);
-            //   const gradleHome = path.resolve('./', `go-${gradleVersion}-${signature!}+0000`);
-            //   core.info(`gradleHome: ${gradleHome}`);
-            //   core.exportVariable('GRADLE_HOME', gradleHome);
+            const goHome = path.resolve('./', `go`);
+            core.info(`goHome: ${goHome}`);
+            core.exportVariable('GO_HOME', goHome);
             // path
-            //   core.addPath(path.join(gradleHome, 'bin'));
+            core.addPath(path.join(goHome, 'bin'));
+        });
+    }
+    ;
+    // step3. 查看 go 版本
+    async checkGoVersion(inputs) {
+        const title = `查看 go 版本`;
+        await this.groupWrapper(inputs, title, async ({ goVersion, installPath }) => {
+            await exec.exec('go', [VERSION]);
         });
     }
     ;

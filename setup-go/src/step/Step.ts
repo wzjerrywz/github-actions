@@ -9,7 +9,7 @@ import * as tc from '@actions/tool-cache';
 import * as path from 'path';
 
 import { Const } from '../common/Const';
-const { __VERSION, INSTALL } = Const;
+const { __VERSION, INSTALL, VERSION } = Const;
 
 export class Step {
 
@@ -42,13 +42,19 @@ export class Step {
                   process.chdir(`${path.resolve(installPath!)}`);
                   await exec.exec(`sudo tar -zxvf ${tarName} -C ./ `);
                   // 配置环境变量
-                  await exec.exec(`pwd`);
-                  await exec.exec(`ls -l ./`);
-                //   const gradleHome = path.resolve('./', `go-${gradleVersion}-${signature!}+0000`);
-                //   core.info(`gradleHome: ${gradleHome}`);
-                //   core.exportVariable('GRADLE_HOME', gradleHome);
+                  const goHome = path.resolve('./', `go`);
+                  core.info(`goHome: ${goHome}`);
+                  core.exportVariable('GO_HOME', goHome);
                   // path
-                //   core.addPath(path.join(gradleHome, 'bin'));
+                  core.addPath(path.join(goHome, 'bin'));
+            });
+        };
+
+        // step3. 查看 go 版本
+        async checkGoVersion(inputs: Partial<InputParamsType>) {
+            const title = `查看 go 版本` ;
+            await this.groupWrapper(inputs, title, async ({ goVersion, installPath }) => {
+                await exec.exec('go', [VERSION]);
             });
         };
 
