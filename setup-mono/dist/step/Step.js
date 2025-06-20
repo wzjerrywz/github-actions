@@ -84,7 +84,7 @@ class Step {
     async checkVersion(inputs) {
         const title = `查看 mono 版本`;
         await this.groupWrapper(inputs, title, async ({}) => {
-            await exec.exec('mono', [__VERSION]);
+            await exec.exec('sudo /usr/bin/mono', [__VERSION]);
         });
     }
     ;
