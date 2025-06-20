@@ -32,6 +32,7 @@ export class Step {
     // 下载
     async download() {
         const { mavenVersion } = this.inputs as InputParamsType;
+        core.info(` 下载 maven , 版本号 ${mavenVersion} `);
         await this.groupWrapper(` 下载 maven , 版本号 ${mavenVersion} `,  async () => {
             const url = this.URL_TEMPLATE
                             .replaceAll('<PREFIX>', this.bigVersion)
