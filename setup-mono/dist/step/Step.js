@@ -75,8 +75,8 @@ class Step {
         await this.groupWrapper(inputs, title, async ({ monoVersion }) => {
             // 安装 Mono
             // sudo apt install -y mono-complete=6.12.0.122*
-            const params = [INSTALL, '-y', `mono-complete=${monoVersion}*`];
-            await exec.exec('sudo apt', params);
+            // const params = [ INSTALL , '-y', `mono-complete=${monoVersion!}*`];
+            // await exec.exec('sudo apt', params);
         });
     }
     ;
