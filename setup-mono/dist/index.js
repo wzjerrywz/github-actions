@@ -28372,9 +28372,7 @@ class Step {
         await this.groupWrapper(`安装 mono ： ${monoVersion}`, async () => {
             process.chdir(`./mono-${monoVersion}`);
             const list = [
-                './configure --prefix=/usr/local',
-                'make',
-                'make install'
+                './configure --prefix=/usr/local && make && make install'
             ];
             list.forEach(async (item) => {
                 await exec.exec(item);
