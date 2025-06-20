@@ -25643,27 +25643,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ 9329:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Conf = void 0;
-class Conf {
-    static KEY_SERVER = 'hkp://keyserver.ubuntu.com:80';
-    static RECV_KEYS = '3FA7E0328081BFF6A14DA29AA6A19B38D3D831';
-    static DOWNLOAD_URL = 'https://download.mono-project.com/repo/ubuntu';
-    static ETC_CONFIG = '/etc/apt/sources.list.d/mono-official.list';
-    // 
-    static URL_1 = `sudo apt-key adv --keyserver <KEY_SERVER> --recv-keys <RECV_KEYS>`;
-    static URL_2 = `echo "deb <DOWNLOAD_URL> stable-focal/snapshots/<MONO_VERSION> main" | sudo tee <ETC_CONFIG>`;
-}
-exports.Conf = Conf;
-
-
-/***/ }),
-
 /***/ 1560:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -25795,9 +25774,7 @@ exports.Step = void 0;
 const core = __importStar(__nccwpck_require__(6618));
 const exec = __importStar(__nccwpck_require__(3274));
 const Const_1 = __nccwpck_require__(1560);
-const { __VERSION, INSTALL, VERSION } = Const_1.Const;
-const Conf_1 = __nccwpck_require__(9329);
-const { KEY_SERVER, RECV_KEYS, DOWNLOAD_URL, ETC_CONFIG, URL_1, URL_2 } = Conf_1.Conf;
+const { __VERSION } = Const_1.Const;
 class Step {
     // step1. 配置 mono 源
     async configRepo(inputs) {
@@ -25818,7 +25795,8 @@ class Step {
                 'sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF',
                 `sudo tee /etc/apt/sources.list.d/mono-official-stable.list <<< "deb https://download.mono.project.com/repo/ubuntu $(lsb_release -cs) main"`,
                 'sudo apt update',
-                `sudo apt install -y mono-complete`
+                `sudo apt install -y mono-complete`,
+                'sudo mono --version'
             ];
             // 执行
             list.forEach(async (item) => {
@@ -25840,10 +25818,10 @@ class Step {
     ;
     // step3. 查看 mono 版本
     async checkVersion(inputs) {
-        const title = `查看 mono 版本`;
-        await this.groupWrapper(inputs, title, async ({}) => {
-            await exec.exec('sudo /usr/bin/mono', [__VERSION]);
-        });
+        // const title = `查看 mono 版本` ;
+        // await this.groupWrapper(inputs, title, async ({  }) => {
+        //     await exec.exec('sudo /usr/bin/mono', [__VERSION]);
+        // });
     }
     ;
     // 组装函数

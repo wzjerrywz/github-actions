@@ -1,18 +1,12 @@
 import { InputParamsType } from "../types/InputParamsType";
 
-import * as child_process from 'child_process';
-
 
 import * as core from '@actions/core';
 import * as exec from '@actions/exec';
-import * as tc from '@actions/tool-cache';
-import * as path from 'path';
 
 import { Const } from '../common/Const';
-const { __VERSION, INSTALL, VERSION } = Const;
+const { __VERSION} = Const;
 
-import { Conf } from '../common/Conf';
-const { KEY_SERVER, RECV_KEYS, DOWNLOAD_URL, ETC_CONFIG, URL_1, URL_2 } = Conf;
 
 export class Step {
 
@@ -35,7 +29,8 @@ export class Step {
                 'sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF',
                 `sudo tee /etc/apt/sources.list.d/mono-official-stable.list <<< "deb https://download.mono.project.com/repo/ubuntu $(lsb_release -cs) main"`,
                 'sudo apt update',
-                `sudo apt install -y mono-complete`
+                `sudo apt install -y mono-complete`,
+                'sudo mono --version'
             ] ;
             // 执行
             list.forEach(async (item) => {
@@ -59,10 +54,10 @@ export class Step {
 
         // step3. 查看 mono 版本
         async checkVersion(inputs: Partial<InputParamsType>) {
-            const title = `查看 mono 版本` ;
-            await this.groupWrapper(inputs, title, async ({  }) => {
-                await exec.exec('sudo /usr/bin/mono', [__VERSION]);
-            });
+            // const title = `查看 mono 版本` ;
+            // await this.groupWrapper(inputs, title, async ({  }) => {
+            //     await exec.exec('sudo /usr/bin/mono', [__VERSION]);
+            // });
         };
 
 
