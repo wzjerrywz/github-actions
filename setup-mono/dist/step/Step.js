@@ -85,7 +85,7 @@ class Step {
     async install() {
         const { monoVersion } = this.inputs;
         await this.groupWrapper(`安装 mono ： ${monoVersion}`, async () => {
-            process.chdir(path.resolve("./soft/mono/" + `mono-${monoVersion}`));
+            process.chdir(`./mono-${monoVersion}`);
             const list = [
                 './configure --prefix=/usr/local',
                 'make -j$(nproc)',
