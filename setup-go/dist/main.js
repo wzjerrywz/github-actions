@@ -51,6 +51,7 @@ async function run() {
         });
         const step = new Step_1.Step();
         await step.downloadGo(inputs);
+        await step.tarForEnv(inputs);
         // 查看版本
         await exec.exec('go', [VERSION]);
     }
