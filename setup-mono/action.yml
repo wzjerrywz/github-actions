@@ -5,7 +5,7 @@ inputs:
   mono-version:
     description: 'mono 版本号'
     required: true
-    default: '6.12'
+    default: '4.8.0'
 
 runs:
   using: 'node16'
