@@ -24,6 +24,7 @@ export class Step {
     async go() {
         await this.configRepo();
         await this.downloadMono();
+        await this.extract();
     }
 
     async configRepo() {
@@ -41,6 +42,19 @@ export class Step {
                 await tc.downloadTool(url, path.resolve("./soft/mono"!, `mono-${monoVersion!}.tar.xz`));
                 //
                 process.chdir(path.resolve("./soft/mono", ``));
+                await exec.exec('ls -l ./');
+                await exec.exec('pwd');
+        });
+    }
+
+
+    // 解压
+    async extract() {
+        const { monoVersion } = this.inputs;
+            await this.groupWrapper(`下载 mono ： ${monoVersion}`,  async () => {
+                const name = `mono-${monoVersion!}.tar.xz`
+                await exec.exec(`tar -xvf ${name} -C ./`);
+                //
                 await exec.exec('ls -l ./');
                 await exec.exec('pwd');
         });
