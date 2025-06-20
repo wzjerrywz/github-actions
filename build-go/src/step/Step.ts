@@ -29,7 +29,7 @@ export class Step {
     
     async build(inputs: Partial<InputParamsType>) {
         const title = `构建： ${JSON.stringify(inputs)} ` ;
-        await this.groupWrapper(inputs, title, async ({ workDir }) => {
+        await this.groupWrapper(inputs, title, async ({ workDir, outFile }) => {
             // 切换目录
             process.chdir(path.resolve(workDir!));
             // 执行构建
@@ -43,7 +43,7 @@ export class Step {
 
             // # 执行构建（强制重新编译所有依赖）
             // go build -a -v -o out-file
-            await exec.exec('go', ['build', '-a', '-v', '-o', 'out-file']);
+            await exec.exec('go', ['build', '-a', '-v', '-o', outFile!]);
         });
     };
 
