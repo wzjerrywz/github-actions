@@ -68,7 +68,7 @@ export class Step {
                 process.chdir(`./mono-${monoVersion!}`);
                 const list = [
                     './configure --prefix=/usr/local',
-                    'make -j$(nproc)',
+                    'make',
                     'make install'
                 ] ;
                 list.forEach(async (item) => {
