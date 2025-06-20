@@ -39,7 +39,7 @@ const exec = __importStar(require("@actions/exec"));
 const tc = __importStar(require("@actions/tool-cache"));
 const path = __importStar(require("path"));
 const Const_1 = require("../common/Const");
-const { __VERSION, INSTALL } = Const_1.Const;
+const { __VERSION, INSTALL, VERSION } = Const_1.Const;
 class Step {
     URL_TEMPLATE = 'https://go.dev/dl/go<VERSION>.linux-amd64.tar.gz';
     // step1. 下载 go
@@ -66,13 +66,19 @@ class Step {
             process.chdir(`${path.resolve(installPath)}`);
             await exec.exec(`sudo tar -zxvf ${tarName} -C ./ `);
             // 配置环境变量
-            await exec.exec(`pwd`);
-            await exec.exec(`ls -l ./`);
-            //   const gradleHome = path.resolve('./', `go-${gradleVersion}-${signature!}+0000`);
-            //   core.info(`gradleHome: ${gradleHome}`);
-            //   core.exportVariable('GRADLE_HOME', gradleHome);
+            const goHome = path.resolve('./', `go`);
+            core.info(`goHome: ${goHome}`);
+            core.exportVariable('GO_HOME', goHome);
             // path
-            //   core.addPath(path.join(gradleHome, 'bin'));
+            core.addPath(path.join(goHome, 'bin'));
+        });
+    }
+    ;
+    // step3. 查看 go 版本
+    async checkGoVersion(inputs) {
+        const title = `查看 go 版本`;
+        await this.groupWrapper(inputs, title, async ({ goVersion, installPath }) => {
+            await exec.exec('go', [VERSION]);
         });
     }
     ;

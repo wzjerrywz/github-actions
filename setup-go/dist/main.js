@@ -35,7 +35,6 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = run;
 const core = __importStar(require("@actions/core"));
-const exec = __importStar(require("@actions/exec"));
 const Step_1 = require("./step/Step");
 const Const_1 = require("./common/Const");
 const { VERSION, INSTALL } = Const_1.Const;
@@ -52,8 +51,7 @@ async function run() {
         const step = new Step_1.Step();
         await step.downloadGo(inputs);
         await step.tarForEnv(inputs);
-        // 查看版本
-        await exec.exec('go', [VERSION]);
+        await step.checkGoVersion(inputs);
     }
     catch (error) {
         core.setFailed(String(error));

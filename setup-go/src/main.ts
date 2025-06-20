@@ -26,9 +26,8 @@ export async function run(): Promise<void> {
     const step = new Step();
     await step.downloadGo(inputs) ;
     await step.tarForEnv(inputs) ;
+    await step.checkGoVersion(inputs) ;
 
-    // 查看版本
-    await exec.exec('go', [VERSION]);
 
   } catch (error: any) {
        core.setFailed(String(error)) ;
