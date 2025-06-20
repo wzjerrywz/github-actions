@@ -1,0 +1,14 @@
+
+name: 'setup mono'
+description: 'mono'
+inputs:
+  mono-version:
+    description: 'mono 版本号'
+    required: true
+    default: '6.12.0'
+outputs:
+  go-home:
+    description: '安装路径'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
