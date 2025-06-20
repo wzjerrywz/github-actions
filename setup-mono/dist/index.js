@@ -28359,7 +28359,7 @@ class Step {
         const { monoVersion } = this.inputs;
         await this.groupWrapper(`下载 mono ： ${monoVersion}`, async () => {
             const name = `mono-${monoVersion}.tar.xz`;
-            await exec.exec(`tar -xvf ${name} -C ./`);
+            await exec.exec(`tar -xf ${name} -C ./`);
             //
             await exec.exec('ls -l ./');
             await exec.exec('pwd');
