@@ -1,4 +1,4 @@
 
 export interface InputParamsType {
-    monoVersion: string,
+    monoVersion: string
 }
