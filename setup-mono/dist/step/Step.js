@@ -36,9 +36,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Step = void 0;
 const core = __importStar(require("@actions/core"));
 const exec = __importStar(require("@actions/exec"));
+const tc = __importStar(require("@actions/tool-cache"));
+const path = __importStar(require("path"));
 const Const_1 = require("../common/Const");
 const { __VERSION } = Const_1.Const;
 class Step {
+    DOWNLOAD_URL = 'https://download.mono-project.com/sources/mono/mono-<VERSION>.tar.xz';
     inputs;
     constructor(inputs) {
         this.inputs = inputs;
@@ -49,6 +52,17 @@ class Step {
     async configRepo() {
         const title = `配置 mono 源： ${this.inputs.monoVersion}`;
         await this.groupWrapper(title, async () => {
+            await exec.exec('ls -l ./');
+            await exec.exec('pwd');
+        });
+    }
+    async downloadMono() {
+        const { monoVersion } = this.inputs;
+        await this.groupWrapper(`下载 mono ： ${monoVersion}`, async () => {
+            const url = this.DOWNLOAD_URL.replaceAll('<VERSION>', monoVersion);
+            await tc.downloadTool(url, path.resolve("./soft/mono", `mono-${monoVersion}.tar.xz`));
+            //
+            process.chdir(path.resolve("./soft/mono", ``));
             await exec.exec('ls -l ./');
             await exec.exec('pwd');
         });
