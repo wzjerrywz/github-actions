@@ -23,6 +23,7 @@ export class Step {
 
     async go() {
         await this.configRepo();
+        await this.downloadMono();
     }
 
     async configRepo() {
