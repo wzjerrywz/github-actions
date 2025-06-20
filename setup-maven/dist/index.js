@@ -28332,6 +28332,7 @@ class Step {
     async go() {
         await this.download();
         await this.tar();
+        await this.env();
         await this.see();
     }
     // 下载
