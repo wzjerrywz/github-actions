@@ -19,6 +19,8 @@ export class Step {
 
     URL_TEMPLATE = 'https://archive.apache.org/dist/maven/maven-<PREFIX>/<VERSION>/binaries/apache-maven-<VERSION>-bin.tar.gz' ;
 
+    ENV_NAME = 'MAVEN_HOME';
+
     constructor() {
         this.validInputs();
     }
@@ -51,6 +53,22 @@ export class Step {
             // 解压
             const name = `mvn${mavenVersion}.tar.gz`;
             await exec.exec(`sudo tar -zxvf ${name} -C ./`);
+        });
+    }
+
+    // 配置环境变量
+    async env() {
+        await this.groupWrapper(` 配置环境变量 `,  async () => {
+            // 配置环境变量
+            const { mavenVersion } = this.inputs as InputParamsType;
+            const mvnHome = path.resolve("./soft/maven", `apache-maven-${mavenVersion}`);
+            core.exportVariable(this.ENV_NAME, mvnHome);
+            // 添加 bin 到 path
+            core.addPath(path.resolve(mvnHome, 'bin'));
+
+            await exec.exec(`pwd`);
+            await exec.exec(`ls -l ./`);
+            await exec.exec(`mvn -v`);
         });
     }
 
