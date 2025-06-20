@@ -48,6 +48,7 @@ class Step {
     }
     async go() {
         await this.configRepo();
+        await this.downloadMono();
     }
     async configRepo() {
         const title = `配置 mono 源： ${this.inputs.monoVersion}`;
