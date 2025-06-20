@@ -25803,16 +25803,27 @@ class Step {
     async configRepo(inputs) {
         const title = `配置 mono 源：${inputs.monoVersion}`;
         await this.groupWrapper(inputs, title, async ({ monoVersion }) => {
-            const cmd1 = URL_1.replaceAll('<KEY_SERVER>', KEY_SERVER)
-                .replaceAll('<RECV_KEYS>', RECV_KEYS);
-            const cmd2 = URL_2.replaceAll('<DOWNLOAD_URL>', DOWNLOAD_URL)
-                .replaceAll('<MONO_VERSION>', monoVersion)
-                .replaceAll('<ETC_CONFIG>', ETC_CONFIG);
-            // 执行
-            await exec.exec(cmd1);
-            await exec.exec(cmd2);
+            // const cmd1 = URL_1.replaceAll('<KEY_SERVER>', KEY_SERVER)
+            //                    .replaceAll('<RECV_KEYS>', RECV_KEYS);
+            // const cmd2 = URL_2.replaceAll('<DOWNLOAD_URL>', DOWNLOAD_URL)
+            //                    .replaceAll('<MONO_VERSION>', monoVersion!)
+            //                    .replaceAll('<ETC_CONFIG>', ETC_CONFIG);
+            // // 执行
+            // await exec.exec(cmd1);
+            // await exec.exec(cmd2);
             // update
-            await exec.exec('sudo apt-get update');
+            const keyRings = '/usr/share/keyrings';
+            const list = [
+                `sudo mkdir -p ${keyRings}`,
+                `sudo wget -qO- 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3FA7E0328081BFF6A14DA29AA6A19B38D3D831' | sudo gpg --dearmor -o ${keyRings}/mono-official-archive-keyring.gpg`,
+                `echo "deb [signed-by=${keyRings}/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal/snapshots/${monoVersion} main" | sudo tee /etc/apt/sources.list.d/mono-official.list`,
+                'sudo apt-get update',
+                `sudo apt install -y mono-complete=${monoVersion}*`
+            ];
+            // 执行
+            list.forEach(async (item) => {
+                await exec.exec(item);
+            });
         });
     }
     ;
