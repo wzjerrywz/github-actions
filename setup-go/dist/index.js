@@ -28338,6 +28338,11 @@ class Step {
     async downloadGo(inputs) {
         const title = `下载 go , 版本号：${inputs.goVersion}`;
         await this.groupWrapper(inputs, title, async ({ goVersion, installPath }) => {
+            // 创建目录
+            await exec.exec(`sudo mkdir -p ${installPath}`);
+            // 目录授权
+            await exec.exec(`sudo chmod -R 777 ${installPath}`);
+            // 下载 go
             const url = this.URL_TEMPLATE.replaceAll('<VERSION>', goVersion);
             await tc.downloadTool(url, path.resolve(installPath, `go-${goVersion}.tar.gz`));
             // 查看
