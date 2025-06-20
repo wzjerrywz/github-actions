@@ -1,0 +1,18 @@
+
+name: 'setup maven'
+description: 'maven'
+inputs:
+  go-version:
+    description: 'maven 版本号'
+    required: true
+    default: '3.9.9'
+  install-path:
+    description: '安装路径'
+    required: true
+    default: './soft/maven'
+outputs:
+  maven-home:
+    description: 'MAVEN_HOME'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
