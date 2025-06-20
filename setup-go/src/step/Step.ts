@@ -45,6 +45,8 @@ export class Step {
                   const goHome = path.resolve('./', `go`);
                   core.info(`goHome: ${goHome}`);
                   core.exportVariable('GO_HOME', goHome);
+                  // 设置 outputs
+                  core.setOutput('go-home', goHome);
                   // path
                   core.addPath(path.join(goHome, 'bin'));
             });
