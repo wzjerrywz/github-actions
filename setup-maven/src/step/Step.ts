@@ -26,6 +26,7 @@ export class Step {
     // 整个流程
     async go() {
         await this.download();
+        await this.tar();
         await this.see();
     }
 
