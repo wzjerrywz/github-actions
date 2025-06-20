@@ -20,12 +20,11 @@ export async function run(): Promise<void> {
     // 验证输入
     const inputs = validateInputs({
         workDir: core.getInput('work-dir', { required: true }),
-        buildCmd: core.getInput('build-cmd', { required: true }),
-        skipTest: Boolean(core.getInput('skip-test', { required: true })),
-        otherParams: core.getInput('other-params', { required: false }),
+        outFile: core.getInput('out-file', { required: true }),
     }) ;
 
     const step = new Step();
+    await step.configProxy(inputs);
     await step.build(inputs);
     await step.see(inputs);
 

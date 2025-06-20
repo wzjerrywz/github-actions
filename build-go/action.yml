@@ -6,20 +6,10 @@ inputs:
     description: '工作目录'
     required: true
     default: './'
-  build-cmd:
-    description: '构建指令'
+  out-file:
+    description: '输出文件'
     required: true
-    default: 'clean build'
-  skip-test:
-    description: '跳过测试'
-    required: true
-    type: boolean
-    default: false         
-  other-params:
-    description: '补充参数'
-    required: false
-    type: string
-    default: ''        
+    default: 'app'     
 outputs:
   report:
     description: 'Generated output'

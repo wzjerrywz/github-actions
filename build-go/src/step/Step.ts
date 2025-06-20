@@ -13,39 +13,37 @@ const { __VERSION, INSTALL } = Const;
 
 export class Step {
 
-    URL_TEMPLATE = 'https://services.gradle.org/distributions-snapshots/gradle-<VERSION>-<TIMESTAMP>+0000-bin.zip';
+    PROXY_URL = 'https://goproxy.cn,direct' ;
 
-    gradleVersionMap: Map<string, string> = new Map([
-        ['9.1.0', '20250616002551'],
-        ['9.0.0', '20250615010750'],
-        ['8.14.2', '20250614045138'],
-        ['7.6.5', '20250614030244'],
-        ['7.6.4', '20250526080545']
-    ]);
+    async configProxy(inputs: Partial<InputParamsType>) {
+        const title = `配置代理： ${JSON.stringify(inputs)} ` ;
+        await this.groupWrapper(inputs, title, async ({ }) => {
+            // 配置代理
+            await exec.exec('go', [ 'env', '-w', 'GOPROXY=' + this.PROXY_URL ]);
+            // 查看代理
+            await exec.exec('go', ['env', '|', 'grep', 'GOPROXY']);
+        });
+    };
 
 
+    
     async build(inputs: Partial<InputParamsType>) {
-        const title = `build： ${JSON.stringify(inputs)} ` ;
-        await this.groupWrapper(inputs, title, async ({ workDir, buildCmd, skipTest, otherParams }) => {
-            // 切换指定工作目录  
+        const title = `构建： ${JSON.stringify(inputs)} ` ;
+        await this.groupWrapper(inputs, title, async ({ workDir }) => {
+            // 切换目录
             process.chdir(path.resolve(workDir!));
-            // 组装参数
-            const params = ['clean', buildCmd!];
-            // 跳过测试
-            if (skipTest) {
-                params.push('-x');
-                params.push('test');
-            }
-            // 补充参数
-            if (otherParams && otherParams.trim() !== '') {
-                // 任意多个空格分隔
-                const otherArr = otherParams.split(/\s+/);
-                params.push(...otherArr);
-            }
-            // 查看参数
-            core.info(`gradle// ${params.join(' ')}`);
             // 执行构建
-            await exec.exec('gradle', params);
+            // # 清理所有编译缓存
+            // go clean -modcache
+            await exec.exec('go', ['clean', '-modcache']);
+
+            // # 清理当前项目的构建缓存
+            // go clean -i -r
+            await exec.exec('go', ['clean', '-i', '-r']);
+
+            // # 执行构建（强制重新编译所有依赖）
+            // go build -a -v -o out-file
+            await exec.exec('go', ['build', '-a', '-v', '-o', 'out-file']);
         });
     };
 
@@ -58,16 +56,9 @@ export class Step {
             await exec.exec('pwd');
             // 查看当前目录下的文件
             await exec.exec('ls', ['-l', './']);
-             // 查看当前目录下的文件
-             await exec.exec('ls', ['-l', './build']);
-             // 查看当前目录下的文件
-             await exec.exec('ls', ['-l', './build/libs']);
   
         });
     };
-
-
- 
 
     // 组装函数
     async  groupWrapper(inputs: Partial<InputParamsType>, title: string, fn: (inputs: Partial<InputParamsType>) => Promise<void>) {
