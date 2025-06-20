@@ -25794,9 +25794,7 @@ class Step {
                 'sudo apt install -y dirmngr gnupg apt-transport-https ca-certificates software-properties-common',
                 'sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF',
                 `sudo add-apt-repository 'deb https://download.mono-project.com/repo/ubuntu stable-jammy main'`,
-                'sudo apt update',
-                `sudo apt install -y mono-complete`,
-                'sudo mono --version'
+                'sudo apt update'
             ];
             // 执行
             list.forEach(async (item) => {
@@ -25813,15 +25811,23 @@ class Step {
             // sudo apt install -y mono-complete=6.12.0.122*
             // const params = [ INSTALL , '-y', `mono-complete=${monoVersion!}*`];
             // await exec.exec('sudo apt', params);
+            const list = [
+                `sudo apt install -y mono-complete`,
+                'sudo mono --version'
+            ];
+            // 执行
+            list.forEach(async (item) => {
+                await exec.exec(item);
+            });
         });
     }
     ;
     // step3. 查看 mono 版本
     async checkVersion(inputs) {
-        // const title = `查看 mono 版本` ;
-        // await this.groupWrapper(inputs, title, async ({  }) => {
-        //     await exec.exec('sudo /usr/bin/mono', [__VERSION]);
-        // });
+        const title = `查看 mono 版本`;
+        await this.groupWrapper(inputs, title, async ({}) => {
+            await exec.exec('mono', [__VERSION]);
+        });
     }
     ;
     // 组装函数
