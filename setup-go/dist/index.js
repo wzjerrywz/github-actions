@@ -28271,6 +28271,7 @@ async function run() {
         });
         const step = new Step_1.Step();
         await step.downloadGo(inputs);
+        await step.tarForEnv(inputs);
         // 查看版本
         await exec.exec('go', [VERSION]);
     }
@@ -28347,6 +28348,24 @@ class Step {
             await tc.downloadTool(url, path.resolve(installPath, `go-${goVersion}.tar.gz`));
             // 查看
             await exec.exec('ls', ['-l', installPath]);
+        });
+    }
+    ;
+    // step2. 解压并配置环境变量
+    async tarForEnv(inputs) {
+        const title = `解压并配置环境变量`;
+        await this.groupWrapper(inputs, title, async ({ goVersion, installPath }) => {
+            const tarName = `go-${goVersion}.tar.gz`;
+            process.chdir(`${path.resolve(installPath)}`);
+            await exec.exec(`sudo tar -zxvf ${tarName} -C ./ `);
+            // 配置环境变量
+            await exec.exec(`pwd`);
+            await exec.exec(`ls -l ./`);
+            //   const gradleHome = path.resolve('./', `go-${gradleVersion}-${signature!}+0000`);
+            //   core.info(`gradleHome: ${gradleHome}`);
+            //   core.exportVariable('GRADLE_HOME', gradleHome);
+            // path
+            //   core.addPath(path.join(gradleHome, 'bin'));
         });
     }
     ;

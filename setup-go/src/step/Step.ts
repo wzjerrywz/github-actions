@@ -34,6 +34,25 @@ export class Step {
     };
 
 
+        // step2. 解压并配置环境变量
+        async tarForEnv(inputs: Partial<InputParamsType>) {
+            const title = `解压并配置环境变量` ;
+            await this.groupWrapper(inputs, title, async ({ goVersion, installPath }) => {
+                  const tarName = `go-${goVersion!}.tar.gz` ;
+                  process.chdir(`${path.resolve(installPath!)}`);
+                  await exec.exec(`sudo tar -zxvf ${tarName} -C ./ `);
+                  // 配置环境变量
+                  await exec.exec(`pwd`);
+                  await exec.exec(`ls -l ./`);
+                //   const gradleHome = path.resolve('./', `go-${gradleVersion}-${signature!}+0000`);
+                //   core.info(`gradleHome: ${gradleHome}`);
+                //   core.exportVariable('GRADLE_HOME', gradleHome);
+                  // path
+                //   core.addPath(path.join(gradleHome, 'bin'));
+            });
+        };
+
+
     // 组装函数
     async  groupWrapper(inputs: Partial<InputParamsType>, title: string, fn: (inputs: Partial<InputParamsType>) => Promise<void>) {
         // start group
