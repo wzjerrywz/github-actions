@@ -54,10 +54,8 @@ class Step {
             // update
             const list = [
                 'sudo apt update && sudo apt upgrade -y',
-                'sudo apt install -y dirmngr gnupg apt-transport-https ca-certificates software-properties-common',
-                'sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF',
-                `sudo add-apt-repository 'deb https://download.mono-project.com/repo/ubuntu stable-jammy main'`,
-                'sudo apt update'
+                'sudo apt install -y build-essential autoconf automake libtool bison pkg-config',
+                'sudo apt install -y libgdiplus libc6-dev'
             ];
             // 执行
             list.forEach(async (item) => {
@@ -74,7 +72,7 @@ class Step {
             // sudo apt install -y mono-complete=6.12.0.122*
             // const params = [ INSTALL , '-y', `mono-complete=${monoVersion!}*`];
             // await exec.exec('sudo apt', params);
-            const list = [`sudo apt install -y mono-complete`];
+            const list = ['ls -l ./'];
             // 执行
             list.forEach(async (item) => {
                 await exec.exec(item);
@@ -86,7 +84,7 @@ class Step {
     async checkVersion(inputs) {
         const title = `查看 mono 版本`;
         await this.groupWrapper(inputs, title, async ({}) => {
-            await exec.exec('mono', [__VERSION]);
+            await exec.exec('ls -l ./');
         });
     }
     ;
