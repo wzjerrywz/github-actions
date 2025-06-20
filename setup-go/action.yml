@@ -11,7 +11,7 @@ inputs:
     required: true
     default: './soft/go'
 outputs:
-  install-path:
+  go-home:
     description: '安装路径'
 runs:
   using: 'node16'
