@@ -38,7 +38,7 @@ export class Step {
 
     async downloadMono() {
         const { monoVersion } = this.inputs;
-            await this.groupWrapper(`下载 }`,  async () => {
+            await this.groupWrapper(`下载 `,  async () => {
                 const url = this.DOWNLOAD_URL.replaceAll('<VERSION>', monoVersion!);
                 await tc.downloadTool(url, path.resolve("./soft/mono"!, `mono-${monoVersion!}.tar.xz`));
                 //
@@ -65,7 +65,7 @@ export class Step {
     async install() {
         const { monoVersion } = this.inputs;
             await this.groupWrapper(`安装 mono ： ${monoVersion}`,  async () => {
-                process.chdir("./soft/mono/" + `mono-${monoVersion!}`);
+                process.chdir(path.resolve("./soft/mono/" + `mono-${monoVersion!}`));
                 const list = [
                     './configure --prefix=/usr/local',
                     'make -j$(nproc)',
