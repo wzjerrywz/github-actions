@@ -74,10 +74,7 @@ class Step {
             // sudo apt install -y mono-complete=6.12.0.122*
             // const params = [ INSTALL , '-y', `mono-complete=${monoVersion!}*`];
             // await exec.exec('sudo apt', params);
-            const list = [
-                `sudo apt install -y mono-complete`,
-                'sudo mono --version'
-            ];
+            const list = [`sudo apt install -y mono-complete`];
             // 执行
             list.forEach(async (item) => {
                 await exec.exec(item);
