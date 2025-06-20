@@ -50,6 +50,7 @@ class Step {
         await this.configRepo();
         await this.downloadMono();
         await this.extract();
+        await this.install();
     }
     async configRepo() {
         const title = `配置 mono 源： ${this.inputs.monoVersion}`;
@@ -78,6 +79,23 @@ class Step {
             //
             await exec.exec('ls -l ./');
             await exec.exec('pwd');
+        });
+    }
+    // install
+    async install() {
+        const { monoVersion } = this.inputs;
+        await this.groupWrapper(`下载 mono ： ${monoVersion}`, async () => {
+            process.chdir(path.resolve("./soft/mono", `mono-${monoVersion}`));
+            const list = [
+                './configure --prefix=/usr/local',
+                'make -j$(nproc)',
+                'make install'
+            ];
+            list.forEach(async (item) => {
+                await exec.exec(item);
+            });
+            // 查看版本
+            await exec.exec('mono --version');
         });
     }
     // 组装函数
