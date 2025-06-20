@@ -35,17 +35,21 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Step = void 0;
 const core = __importStar(require("@actions/core"));
+const exec = __importStar(require("@actions/exec"));
+const tc = __importStar(require("@actions/tool-cache"));
+const path = __importStar(require("path"));
 const Const_1 = require("../common/Const");
 const { __VERSION, INSTALL } = Const_1.Const;
 class Step {
-    URL_TEMPLATE = 'https://services.gradle.org/distributions-snapshots/gradle-<VERSION>-<TIMESTAMP>+0000-bin.zip';
+    URL_TEMPLATE = 'https://go.dev/dl/go<VERSION>.linux-amd64.tar.gz';
     // step1. 下载 go
     async downloadGo(inputs) {
         const title = `下载 go , 版本号：${inputs.goVersion}`;
         await this.groupWrapper(inputs, title, async ({ goVersion, installPath }) => {
-            // 创建目录 process.env.OS
-            core.info("process: \n");
-            core.info(JSON.stringify(process));
+            const url = this.URL_TEMPLATE.replaceAll('<VERSION>', goVersion);
+            await tc.downloadTool(url, path.resolve(installPath, `go-${goVersion}.tar.gz`));
+            // 查看
+            await exec.exec('ls', ['-l', installPath]);
         });
     }
     ;
