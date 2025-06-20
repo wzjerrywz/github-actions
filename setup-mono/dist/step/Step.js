@@ -61,7 +61,7 @@ class Step {
     }
     async downloadMono() {
         const { monoVersion } = this.inputs;
-        await this.groupWrapper(`下载 mono ： ${monoVersion}`, async () => {
+        await this.groupWrapper(`下载 }`, async () => {
             const url = this.DOWNLOAD_URL.replaceAll('<VERSION>', monoVersion);
             await tc.downloadTool(url, path.resolve("./soft/mono", `mono-${monoVersion}.tar.xz`));
             //
@@ -73,7 +73,7 @@ class Step {
     // 解压
     async extract() {
         const { monoVersion } = this.inputs;
-        await this.groupWrapper(`下载 mono ： ${monoVersion}`, async () => {
+        await this.groupWrapper(`解压  ： .tar.xz `, async () => {
             const name = `mono-${monoVersion}.tar.xz`;
             await exec.exec(`tar -xf ${name} -C ./`);
             //
@@ -84,8 +84,8 @@ class Step {
     // install
     async install() {
         const { monoVersion } = this.inputs;
-        await this.groupWrapper(`下载 mono ： ${monoVersion}`, async () => {
-            process.chdir("./soft/mono" + `mono-${monoVersion}`);
+        await this.groupWrapper(`安装 mono ： ${monoVersion}`, async () => {
+            process.chdir("./soft/mono/" + `mono-${monoVersion}`);
             const list = [
                 './configure --prefix=/usr/local',
                 'make -j$(nproc)',
