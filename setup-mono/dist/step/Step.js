@@ -54,13 +54,9 @@ class Step {
             // await exec.exec(cmd1);
             // await exec.exec(cmd2);
             // update
-            const keyRings = '/usr/share/keyrings';
             const list = [
-                `sudo mkdir -p ${keyRings}`,
-                `sudo wget -qO- 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3FA7E0328081BFF6A14DA29AA6A19B38D3D831' | sudo gpg --dearmor -o ${keyRings}/mono-official-archive-keyring.gpg`,
-                `echo "deb [signed-by=${keyRings}/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal/snapshots/${monoVersion} main" | sudo tee /etc/apt/sources.list.d/mono-official.list`,
+                'sudo apt install dirmngr gnupg apt-transport-https ca-certificates software-properties-common -y',
                 'sudo apt-get update',
-                `sudo apt install -y mono-complete=${monoVersion}*`
             ];
             // 执行
             list.forEach(async (item) => {
