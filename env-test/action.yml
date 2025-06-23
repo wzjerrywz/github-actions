@@ -1,0 +1,15 @@
+
+name: 'env test'
+description: 'env'
+inputs:
+  env-name:
+    description: '环境变量名称'
+    required: true
+    default: 'JD_USER'
+
+outputs:
+  report:
+    description: 'Generated output'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
