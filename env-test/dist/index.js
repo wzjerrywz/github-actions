@@ -25708,7 +25708,8 @@ function validateInputs(params) {
 async function run() {
     try {
         const inputs = validateInputs({
-            envName: core.getInput('env-name', { required: true })
+            envName: core.getInput('env-name', { required: true }),
+            jdUser: core.getInput('jd-user', { required: true })
         });
         const step = new Step_1.Step();
         await step.envNameTest(inputs);

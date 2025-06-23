@@ -15,7 +15,8 @@ async function run(): Promise<void> {
   try {
 
     const inputs = validateInputs({
-      envName: core.getInput('env-name', { required: true })
+      envName: core.getInput('env-name', { required: true }),
+      jdUser: core.getInput('jd-user', { required: true })
     }) ;
 
 
