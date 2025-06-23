@@ -28318,90 +28318,73 @@ const exec = __importStar(__nccwpck_require__(3274));
 const tc = __importStar(__nccwpck_require__(486));
 const path = __importStar(__nccwpck_require__(6928));
 const Const_1 = __nccwpck_require__(1560);
-const { __VERSION, INSTALL, VERSION } = Const_1.Const;
-const { log } = console;
+const { __VERSION, INSTALL, _VERSION } = Const_1.Const;
+const { info } = core;
 class Step {
     inputs;
     bigVersion = '3';
     URL_TEMPLATE = 'https://archive.apache.org/dist/maven/maven-<PREFIX>/<VERSION>/binaries/apache-maven-<VERSION>-bin.tar.gz';
     ENV_NAME = 'MAVEN_HOME';
+    downloadPath = '';
+    extractedPath = '';
     constructor() {
         this.validInputs();
     }
     // 整个流程
     async go() {
         await this.download();
-        // await this.tar();
-        // await this.env();
-        // await this.see();
+        await this.tar();
+        await this.env();
+        await this.settings();
+        await this.see();
     }
     // 下载
     async download() {
-        const { mavenVersion } = this.inputs;
-        core.info(` 下载 maven , 版本号 ${mavenVersion} `);
+        const { mavenVersion, installPath } = this.inputs;
         await this.groupWrapper(` 下载 maven , 版本号 ${mavenVersion} `, async () => {
             const url = this.URL_TEMPLATE
                 .replaceAll('<PREFIX>', this.bigVersion)
                 .replaceAll('<VERSION>', mavenVersion);
             // 创建和授权目录 ./soft/maven
-            await exec.exec(`sudo mkdir -p ./soft/maven`);
-            await exec.exec(`sudo chmod 777 ./soft/maven`);
-            const downloadPath = await tc.downloadTool(url, path.resolve("./soft/maven", `mvn${mavenVersion}.tar.gz`));
-            const extractedPath = await tc.extractTar(downloadPath);
-            const mavenHome = path.join(extractedPath, `apache-maven-${mavenVersion}`);
-            // Add Maven to PATH
-            core.addPath(path.join(mavenHome, 'bin'));
-            core.exportVariable('M2_HOME', mavenHome);
-            core.setOutput('maven-home', mavenHome);
-            // Configure custom settings if provided
-            // if (settingsPath) {
-            //   const mavenSettingsDir = path.join(process.env.HOME || '', '.m2')
-            //   await io.mkdirP(mavenSettingsDir)
-            //   await io.cp(settingsPath, path.join(mavenSettingsDir, 'settings.xml'))
-            // }
-            // Set additional environment variables
-            // if (envVars) {
-            //   const vars = JSON.parse(envVars)
-            //   for (const [key, value] of Object.entries(vars)) {
-            //     core.exportVariable(key, value)
-            //   }
-            // }
-            core.info(`Maven ${mavenVersion} setup complete`);
-            await exec.exec(`pwd`);
-            await exec.exec(`ls -l ./`);
-            await exec.exec(`mvn -v`);
+            await exec.exec(`sudo mkdir -p ${installPath}`);
+            await exec.exec(`sudo chmod 777 ${installPath}`);
+            this.downloadPath = await tc.downloadTool(url, path.resolve(installPath, `mvn${mavenVersion}.tar.gz`));
+            core.info(`downloadPath:   ${this.downloadPath}`);
         });
     }
     // 解压
     async tar() {
-        const { mavenVersion } = this.inputs;
         await this.groupWrapper(` 解压 `, async () => {
-            // 切换目录
-            process.chdir(path.resolve("./soft/maven"));
-            // 解压
-            const name = `mvn${mavenVersion}.tar.gz`;
-            await exec.exec(`sudo tar -zxvf ${name} -C ./`);
+            this.extractedPath = await tc.extractTar(this.downloadPath);
+            core.info(`extractedPath:   ${this.extractedPath}`);
         });
     }
     // 配置环境变量
     async env() {
         await this.groupWrapper(` 配置环境变量 `, async () => {
-            // 配置环境变量
             const { mavenVersion } = this.inputs;
-            const mvnHome = path.resolve("./soft/maven", `apache-maven-${mavenVersion}`);
-            core.exportVariable(this.ENV_NAME, mvnHome);
-            // 添加 bin 到 path
-            core.addPath(mvnHome + '/bin');
-            await exec.exec(`pwd`);
-            await exec.exec(`ls -l ./`);
-            await exec.exec(`mvn -v`);
+            // 配置环境变量
+            const mavenHome = path.join(this.extractedPath, `apache-maven-${mavenVersion}`);
+            // Add Maven to PATH
+            core.addPath(path.join(mavenHome, 'bin'));
+            core.exportVariable('MAVEN_HOME', mavenHome);
+            core.exportVariable('M2_HOME', mavenHome);
+            // 输出 maven-home
+            core.setOutput('maven-home', mavenHome);
+        });
+    }
+    // 配置 settings.xml , 用指定文件覆盖默认的 settings.xml
+    async settings() {
+        await this.groupWrapper(` 覆盖 settings.xml 文件 `, async () => {
+            const { mavenVersion } = this.inputs;
+            core.info(` 覆盖 settings.xml 文件 `);
         });
     }
     // 查看
     async see() {
         await this.groupWrapper(` 查看 `, async () => {
-            await exec.exec(`pwd`);
-            await exec.exec(`ls -l ./`);
+            await exec.exec(`java`, [_VERSION]);
+            await exec.exec(`mvn`, ['-v']);
         });
     }
     validInputs() {
