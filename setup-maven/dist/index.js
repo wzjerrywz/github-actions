@@ -28343,6 +28343,9 @@ class Step {
             const url = this.URL_TEMPLATE
                 .replaceAll('<PREFIX>', this.bigVersion)
                 .replaceAll('<VERSION>', mavenVersion);
+            // 创建和授权目录 ./soft/maven
+            await exec.exec(`mkdir -p ./soft/maven`);
+            await exec.exec(`chmod 777 ./soft/maven`);
             const downloadPath = await tc.downloadTool(url, path.resolve("./soft/maven", `mvn${mavenVersion}.tar.gz`));
             const extractedPath = await tc.extractTar(downloadPath);
             const mavenHome = path.join(extractedPath, `apache-maven-${mavenVersion}`);
