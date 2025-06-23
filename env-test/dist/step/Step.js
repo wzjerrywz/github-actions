@@ -41,6 +41,7 @@ class Step {
     async envNameTest(inputs) {
         const title = ` 查看 env : ${inputs.envName}  jdUser: ${inputs.jdUser} `;
         await this.groupWrapper(inputs, title, async ({ envName }) => {
+            core.info(JSON.stringify(process.env));
             core.info(process.env['hello'] || 'null');
             const env = process.env['hello'][envName];
             core.info(`env vars  :   ${env}`);
