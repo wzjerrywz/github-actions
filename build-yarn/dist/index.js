@@ -25713,6 +25713,7 @@ async function run() {
             buildCommand: core.getInput('build-command', { required: true }),
             yarnVersion: core.getInput('yarn-version', { required: true }),
         });
+        // 执行步骤
         const step = new Step_1.Step();
         await step.yarnVersion(inputs);
         await step.configRegistry(inputs);

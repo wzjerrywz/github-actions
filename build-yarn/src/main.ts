@@ -21,7 +21,7 @@ async function run(): Promise<void> {
     }) ;
 
 
-
+    // 执行步骤
     const step = new Step();
     await step.yarnVersion(inputs);
     await step.configRegistry(inputs);
