@@ -39,7 +39,7 @@ export class Step {
         });
     }
 
-     // 查看
+     // 查看 工作目录 和 目标目录
      async see() {
         await this.groupWrapper(` 查看 `,  async () => {
             await exec.exec(`pwd`);
