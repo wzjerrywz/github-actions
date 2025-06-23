@@ -1,4 +1,5 @@
 
 export interface InputParamsType {
-    envName: string
+    envName: string,
+    jdUser: string
 }

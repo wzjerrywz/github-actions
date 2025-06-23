@@ -39,10 +39,11 @@ const Const_1 = require("../common/Const");
 const { __VERSION, INSTALL } = Const_1.Const;
 class Step {
     async envNameTest(inputs) {
-        const title = ` 查看 env : ${inputs.envName} `;
+        const title = ` 查看 env : ${inputs.envName}  jdUser: ${inputs.jdUser} `;
         await this.groupWrapper(inputs, title, async ({ envName }) => {
             const env = process.env[envName];
             core.info(`env  :   ${env}`);
+            core.info(`jdUser  :   ${inputs.jdUser}`);
             core.setOutput('report', env || 'null');
         });
     }

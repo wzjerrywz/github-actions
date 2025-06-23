@@ -6,6 +6,10 @@ inputs:
     description: '环境变量名称'
     required: true
     default: 'JD_USER'
+  jd-user:
+    description: 'jd 用户名'
+    required: true
+    default: 'hi'    
 
 outputs:
   report:
