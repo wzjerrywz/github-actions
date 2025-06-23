@@ -28331,9 +28331,9 @@ class Step {
     // 整个流程
     async go() {
         await this.download();
-        await this.tar();
-        await this.env();
-        await this.see();
+        // await this.tar();
+        // await this.env();
+        // await this.see();
     }
     // 下载
     async download() {
@@ -28343,7 +28343,30 @@ class Step {
             const url = this.URL_TEMPLATE
                 .replaceAll('<PREFIX>', this.bigVersion)
                 .replaceAll('<VERSION>', mavenVersion);
-            await tc.downloadTool(url, path.resolve("./soft/maven", `mvn${mavenVersion}.tar.gz`));
+            const downloadPath = await tc.downloadTool(url, path.resolve("./soft/maven", `mvn${mavenVersion}.tar.gz`));
+            const extractedPath = await tc.extractTar(downloadPath);
+            const mavenHome = path.join(extractedPath, `apache-maven-${mavenVersion}`);
+            // Add Maven to PATH
+            core.addPath(path.join(mavenHome, 'bin'));
+            core.exportVariable('M2_HOME', mavenHome);
+            core.setOutput('maven-home', mavenHome);
+            // Configure custom settings if provided
+            // if (settingsPath) {
+            //   const mavenSettingsDir = path.join(process.env.HOME || '', '.m2')
+            //   await io.mkdirP(mavenSettingsDir)
+            //   await io.cp(settingsPath, path.join(mavenSettingsDir, 'settings.xml'))
+            // }
+            // Set additional environment variables
+            // if (envVars) {
+            //   const vars = JSON.parse(envVars)
+            //   for (const [key, value] of Object.entries(vars)) {
+            //     core.exportVariable(key, value)
+            //   }
+            // }
+            core.info(`Maven ${mavenVersion} setup complete`);
+            await exec.exec(`pwd`);
+            await exec.exec(`ls -l ./`);
+            await exec.exec(`mvn -v`);
         });
     }
     // 解压
