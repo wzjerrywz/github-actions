@@ -41,7 +41,7 @@ const Const_1 = require("../common/Const");
 const { __VERSION, INSTALL } = Const_1.Const;
 class Step {
     async go() {
-        await this.npmVersion({ npmVersion: '9.11.0' });
+        await this.npmVersion({ npmVersion: '9.11.000' });
     }
     async npmVersion(inputs) {
         const title = ` 设置 npm 版本 ： ${inputs.npmVersion} `;
