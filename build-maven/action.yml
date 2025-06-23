@@ -1,0 +1,19 @@
+
+name: 'setup maven'
+description: 'maven'
+inputs:
+  work-dir:
+    description: '工作目录'
+    required: true
+    default: './demo-maven-build'
+  skip-test:
+    description: '是否跳过测试'
+    required: true
+    type: boolean
+    default: false
+outputs:
+  maven-home:
+    description: 'MAVEN_HOME'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
