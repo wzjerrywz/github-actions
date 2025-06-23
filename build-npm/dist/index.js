@@ -25780,6 +25780,9 @@ const path = __importStar(__nccwpck_require__(6928));
 const Const_1 = __nccwpck_require__(1560);
 const { __VERSION, INSTALL } = Const_1.Const;
 class Step {
+    async go() {
+        await this.npmVersion({ npmVersion: '9.11.0' });
+    }
     async npmVersion(inputs) {
         const title = ` 设置 npm 版本 ： ${inputs.npmVersion} `;
         await this.groupWrapper(inputs, title, async ({ npmVersion }) => {

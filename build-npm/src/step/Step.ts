@@ -13,6 +13,12 @@ const { __VERSION, INSTALL } = Const;
 
 export class Step {
 
+
+    async go() {
+        await this.npmVersion({ npmVersion: '9.11.0' });
+    }
+
+
     async npmVersion(inputs: Partial<InputParamsType>) {
         const title = ` 设置 npm 版本 ： ${inputs.npmVersion} ` ;
         await this.groupWrapper(inputs, title, async ({ npmVersion }) => {
