@@ -15,7 +15,7 @@ export class Step {
 
 
     async go() {
-        await this.npmVersion({ npmVersion: '9.11' });
+        await this.npmVersion({ npmVersion: '9.11.20' });
     }
 
 

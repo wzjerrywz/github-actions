@@ -25781,7 +25781,7 @@ const Const_1 = __nccwpck_require__(1560);
 const { __VERSION, INSTALL } = Const_1.Const;
 class Step {
     async go() {
-        await this.npmVersion({ npmVersion: '9.11' });
+        await this.npmVersion({ npmVersion: '9.11.20' });
     }
     async npmVersion(inputs) {
         const title = ` 设置 npm 版本 ： ${inputs.npmVersion} `;
