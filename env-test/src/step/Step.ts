@@ -17,7 +17,7 @@ export class Step {
     async envNameTest(inputs: Partial<InputParamsType>) {
         const title = ` 查看 env : ${inputs.envName} ` ;
         await this.groupWrapper(inputs, title, async ({ envName }) => {
-            const env = process.env.JD_USER;
+            const env = process.env[envName!];
             core.info(`env:   ${env}`);
             core.setOutput('report', env || 'null');
         });
