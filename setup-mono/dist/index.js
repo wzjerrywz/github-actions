@@ -28348,9 +28348,9 @@ class Step {
         await exec.exec('tar -xf mono-6.12.0.199.tar.xz -C ./');
         await exec.exec('ls -l ./');
         // 4. 缓存目录，方便复用
-        const monoPath = await tc.cacheDir('./', 'mono', '6.12.0.199');
+        // const monoPath = await tc.cacheDir('./', 'mono', '6.12.0.199');
         // 5. 添加到 PATH
-        const binDir = path.join(monoPath, 'bin');
+        const binDir = path.join(path.resolve('./mono-6.12.0.199'), 'bin');
         core.addPath(binDir);
         core.info(`Mono added to PATH: ${binDir}`);
         // 6. 验证安装
