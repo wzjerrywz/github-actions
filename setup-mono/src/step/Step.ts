@@ -36,6 +36,8 @@ export class Step {
             await exec.exec(item);
         });
         // 切换目录
+        await exec.exec('ls -l ./');
+        await exec.exec('pwd');
         process.chdir(path.resolve('./mono'));
         const list2 = [
             './autogen.sh --prefix=/usr/local',
