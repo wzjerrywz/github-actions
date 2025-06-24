@@ -27,11 +27,11 @@ export class Step {
         // await this.extract();
         // await this.install();
         const url = 'https://download.mono-project.com/sources/mono/mono-6.12.0.199.tar.xz';
-
+        await exec.exec('curl -L -o mono-6.12.0.199.tar.xz ' + url);
           // 3. 下载并缓存
-            const downloadPath = await tc.downloadTool(url);
+            // const downloadPath = await tc.downloadTool(url);
             // const extractDir = await tc.extractTar(downloadPath, '-xJ');
-            process.chdir(path.resolve(downloadPath));
+            // process.chdir(downloadPath));
 
             // 解压
             await exec.exec('pwd');
