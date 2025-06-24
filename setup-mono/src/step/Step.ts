@@ -30,7 +30,7 @@ export class Step {
 
           // 3. 下载并缓存
             const downloadPath = await tc.downloadTool(url);
-            const extractDir = await tc.extractTar(downloadPath);
+            const extractDir = await tc.extractTar(downloadPath, '-xJ');
 
             // 4. 缓存目录，方便复用
             const monoPath = await tc.cacheDir(extractDir, 'mono', '6.12.0.199');
