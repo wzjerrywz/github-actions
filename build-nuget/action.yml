@@ -1,27 +1,11 @@
 
-name: 'build npm action'
-description: 'npm'
+name: 'build  nuget'
+description: 'nuget'
 inputs:
-  project-path:
-    description: '项目路径'
+  nuget-version:
+    description: 'nuget 版本'
     required: true
-    default: './react-web'
-  build-command:
-    description: '构建命令'
-    required: true
-    default: 'build'  
-  npm-version:
-    description: 'npm 版本'
-    required: true
-    default: '8.4.1'
-  nrm-version: 
-    description: 'nrm 版本'
-    required: true
-    default: '1.2.5'
-  nrm-speed:
-    description: 'nrm 镜像源'
-    required: true
-    default: 'taobao'
+    default: '6.13.2'
 outputs:
   report:
     description: 'Generated output'
