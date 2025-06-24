@@ -30,10 +30,19 @@ export class Step {
 
           // 3. 下载并缓存
             const downloadPath = await tc.downloadTool(url);
-            const extractDir = await tc.extractTar(downloadPath, '-xJ');
+            // const extractDir = await tc.extractTar(downloadPath, '-xJ');
+            process.chdir(path.resolve(downloadPath));
+
+            // 解压
+            await exec.exec('pwd');
+            await exec.exec('ls -l ./');
+            await exec.exec('tar -xf mono-6.12.0.199.tar.xz -C ./');
+            await exec.exec('ls -l ./');
+
+   
 
             // 4. 缓存目录，方便复用
-            const monoPath = await tc.cacheDir(extractDir, 'mono', '6.12.0.199');
+            const monoPath = await tc.cacheDir('./', 'mono', '6.12.0.199');
 
             // 5. 添加到 PATH
             const binDir = path.join(monoPath, 'bin');
