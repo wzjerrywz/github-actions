@@ -26,31 +26,29 @@ export class Step {
         // await this.downloadMono();
         // await this.extract();
         // await this.install();
+        const url = 'https://download.mono-project.com/sources/mono/mono-6.12.0.199.tar.xz';
 
-        const list = [
-            'sudo apt-get update',
-            'sudo apt-get install -y build-essential cmake ninja-build git',
-            'git clone --depth=1 https://github.com/mono/mono.git'
-        ] ;
-        list.forEach(async (item) => {
-            await exec.exec(item);
-        });
-        // 切换目录
-        await exec.exec('ls -l ./');
-        await exec.exec('pwd');
-        process.chdir(path.resolve('./mono'));
-        const list2 = [
-            'chmod +x ./autogen.sh',
-            './autogen.sh --prefix=/usr/local',
-            'sudo make -j4',
-            'sudo make install',
-            'mono --version'
-        ]; 
-        list2.forEach(async (item) => {
-            await exec.exec(item);
-        });
-        // 查看版本
-        await exec.exec('mono', [__VERSION]);
+          // 3. 下载并缓存
+            const downloadPath = await tc.downloadTool(url);
+            const extractDir = await tc.extractTar(downloadPath);
+
+            // 4. 缓存目录，方便复用
+            const monoPath = await tc.cacheDir(extractDir, 'mono', '6.12.0.199');
+
+            // 5. 添加到 PATH
+            const binDir = path.join(monoPath, 'bin');
+            core.addPath(binDir);
+            core.info(`Mono added to PATH: ${binDir}`);
+
+            // 6. 验证安装
+            let output = '';
+            await exec.exec('mono', ['--version'], {
+            listeners: {
+                stdout: (data: Buffer) => { output += data.toString(); }
+            }
+            });
+            core.info(`mono --version:\n${output}`);
+            
     }
 
     async configRepo() {
