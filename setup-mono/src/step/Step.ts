@@ -50,8 +50,11 @@ export class Step {
     async env() {
         const { monoVersion } = this.inputs;
             await this.groupWrapper(`配置环境变量`,  async () => {
-                const binDir = path.join(path.resolve(`./mono-${monoVersion!}`), 'bin');
+                const monoHome = path.resolve(`./mono-${monoVersion!}`);
+                const binDir = path.join( monoHome, 'bin');
                 core.addPath(binDir);
+                // export
+                core.exportVariable('MONO_HOME', monoHome);
                 // info
                 core.info(`Mono added to PATH: ${binDir}`);
         });
