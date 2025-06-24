@@ -64,6 +64,7 @@ class Step {
         await exec.exec('pwd');
         process.chdir(path.resolve('./mono'));
         const list2 = [
+            'chmod +x ./autogen.sh',
             './autogen.sh --prefix=/usr/local',
             'sudo make -j4',
             'sudo make install',
