@@ -71,6 +71,7 @@ class Step {
         const { monoVersion } = this.inputs;
         await this.groupWrapper(`配置环境变量`, async () => {
             const monoHome = path.resolve(`./mono-${monoVersion}`);
+            await exec.exec(`ls -l ${monoHome}`);
             const binDir = path.join(monoHome, 'bin');
             core.addPath(binDir);
             // export
