@@ -6,6 +6,18 @@ inputs:
     description: 'nuget 版本'
     required: true
     default: '6.13.2'
+  work-dir:
+    description: '工作目录'
+    required: true
+    default: './demo-dotnet-nuget'
+  app-name:
+    description: '应用名称'
+    required: true
+    default: 'MyWebApp'
+  props-value:
+    description: '属性值'
+    required: true
+    default: 'version=1.3.2;author=kaka;id=kaka;description=kaka'        
 outputs:
   report:
     description: 'Generated output'
