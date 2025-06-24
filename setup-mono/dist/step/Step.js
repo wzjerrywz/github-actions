@@ -60,7 +60,7 @@ class Step {
             await exec.exec(item);
         });
         // 切换目录
-        process.chdir('./mono');
+        process.chdir(path.resolve('./mono'));
         const list2 = [
             './autogen.sh --prefix=/usr/local',
             'sudo make -j4',
