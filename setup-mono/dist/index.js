@@ -28332,10 +28332,31 @@ class Step {
         this.inputs = inputs;
     }
     async go() {
-        await this.configRepo();
-        await this.downloadMono();
-        await this.extract();
-        await this.install();
+        // await this.configRepo();
+        // await this.downloadMono();
+        // await this.extract();
+        // await this.install();
+        const list = [
+            'sudo apt-get update',
+            'sudo apt-get install -y build-essential cmake ninja-build git',
+            'git clone --depth=1 https://github.com/mono/mono.git'
+        ];
+        list.forEach(async (item) => {
+            await exec.exec(item);
+        });
+        // 切换目录
+        process.chdir('./mono');
+        const list2 = [
+            './autogen.sh --prefix=/usr/local',
+            'sudo make -j4',
+            'sudo make install',
+            'mono --version'
+        ];
+        list2.forEach(async (item) => {
+            await exec.exec(item);
+        });
+        // 查看版本
+        await exec.exec('mono', [__VERSION]);
     }
     async configRepo() {
         const title = `配置 mono 源： ${this.inputs.monoVersion}`;
